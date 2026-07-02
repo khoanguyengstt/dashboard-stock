@@ -1437,6 +1437,44 @@ const FUNDAMENTALS = {
       {quarter:"Q4/2025",revenue:4213.63,profit:1647.98,yoyRevenue:7.59,yoyProfit:-14.22}
     ]
   },
+  VIX: {
+    currentPE: 5.67, currentPB: null, currentROE: 25.58,
+    warning:"VIX là công ty chứng khoán, lợi nhuận biến động rất mạnh theo diễn biến thị trường (tăng trưởng lợi nhuận nhiều quý trên 800-1000% YoY) theo dữ liệu KAFI — cần thận trọng khi đánh giá.",
+    quarters: [
+      {quarter:"Q2/2024",revenue:378.84,profit:123.79,yoyRevenue:-44.92,yoyProfit:-78.11,pe:15.93,pb:1.84,roe:7.60},
+      {quarter:"Q3/2024",revenue:553.76,profit:265.39,yoyRevenue:71.43,yoyProfit:33.22,pe:11.70,pb:0.87,roe:6.93},
+      {quarter:"Q4/2024",revenue:544.62,profit:112.20,yoyRevenue:59.67,yoyProfit:-41.32,pe:20.61,pb:1.15,roe:5.33},
+      {quarter:"Q1/2025",revenue:979.68,profit:372.28,yoyRevenue:171.69,yoyProfit:129.88,pe:26.50,pb:1.65,roe:6.08},
+      {quarter:"Q2/2025",revenue:1976.15,profit:1301.61,yoyRevenue:421.64,yoyProfit:951.49,pe:28.11,pb:3.38,roe:12.41},
+      {quarter:"Q3/2025",revenue:3221.83,profit:2449.42,yoyRevenue:481.81,yoyProfit:822.97,pe:8.93,pb:1.88,roe:24.08},
+      {quarter:"Q4/2025",revenue:2101.49,profit:1286.71,yoyRevenue:285.86,yoyProfit:1046.80,pe:5.30,pb:2.00,roe:28.85}
+    ]
+  },
+  VJC: {
+    currentPE: 42.38, currentPB: null, currentROE: 10.10,
+    warning:"VJC có biên lợi nhuận rất mỏng, đòn bẩy tài chính cao (Nợ/VCSH ~4.5 lần) và P/E hiện tại rất cao theo dữ liệu KAFI — cần thận trọng khi đánh giá.",
+    quarters: [
+      {quarter:"Q2/2024",revenue:16237.95,profit:294.64,yoyRevenue:-2.21,yoyProfit:894.44,pe:51.53,pb:3.41,roe:6.90},
+      {quarter:"Q3/2024",revenue:18164.23,profit:571.59,yoyRevenue:27.61,yoyProfit:323.02,pe:35.36,pb:3.24,roe:9.43},
+      {quarter:"Q4/2024",revenue:19851.12,profit:0.75,yoyRevenue:5.61,yoyProfit:-99.40,pe:32.67,pb:2.75,roe:8.87},
+      {quarter:"Q1/2025",revenue:17952.15,profit:640.46,yoyRevenue:0.90,yoyProfit:19.45,pe:43.18,pb:3.94,roe:8.86},
+      {quarter:"Q2/2025",revenue:17885.30,profit:652.38,yoyRevenue:10.15,yoyProfit:121.42,pe:56.93,pb:4.87,roe:9.91},
+      {quarter:"Q3/2025",revenue:16931.45,profit:319.28,yoyRevenue:-6.79,yoyProfit:-44.14,pe:56.62,pb:3.98,roe:7.78},
+      {quarter:"Q4/2025",revenue:29324.05,profit:510.42,yoyRevenue:47.72,yoyProfit:67799.95,pe:48.29,pb:4.30,roe:10.14}
+    ]
+  },
+  VND: {
+    currentPE: 12.54, currentPB: null, currentROE: 10.59,
+    quarters: [
+      {quarter:"Q2/2024",revenue:1458.23,profit:344.89,yoyRevenue:-9.07,yoyProfit:-19.60,pe:8.25,pb:1.31,roe:14.54},
+      {quarter:"Q3/2024",revenue:1269.58,profit:505.15,yoyRevenue:-27.83,yoyProfit:-20.97,pe:6.96,pb:0.93,roe:13.00},
+      {quarter:"Q4/2024",revenue:1212.34,profit:251.32,yoyRevenue:-37.27,yoyProfit:-69.36,pe:12.69,pb:1.21,roe:7.49},
+      {quarter:"Q1/2025",revenue:1257.98,profit:382.53,yoyRevenue:-9.16,yoyProfit:-38.01,pe:18.18,pb:1.41,roe:7.75},
+      {quarter:"Q2/2025",revenue:1740.49,profit:368.51,yoyRevenue:19.36,yoyProfit:6.85,pe:22.06,pb:1.70,roe:7.64},
+      {quarter:"Q3/2025",revenue:2214.25,profit:929.05,yoyRevenue:74.41,yoyProfit:83.92,pe:15.45,pb:1.45,roe:9.66},
+      {quarter:"Q4/2025",revenue:1427.51,profit:342.00,yoyRevenue:17.75,yoyProfit:36.08,pe:12.57,pb:1.22,roe:9.96}
+    ]
+  },
   VCB: {
     currentPE: 14.46, currentPB: null, currentROE: 16.07,
     isBank:true,
