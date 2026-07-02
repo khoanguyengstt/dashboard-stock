@@ -774,6 +774,54 @@ const FUNDAMENTALS = {
       {quarter:"Q4/2025",revenue:1597.58,profit:2.64,yoyRevenue:101.87,yoyProfit:-92.75,pe:12.13,pb:0.67,roe:5.69}
     ]
   },
+  FRT: {
+    currentPE: 23.88, currentPB: 6.02, currentROE: 25.08,
+    quarters: [
+      {quarter:"Q2/2024",revenue:9271.97,profit:26.74,yoyRevenue:28.77,yoyProfit:112.23,pe:-413.15,pb:14.01,roe:-3.42},
+      {quarter:"Q3/2024",revenue:10409.52,profit:140.91,yoyRevenue:25.94,yoyProfit:768.27,pe:256.24,pb:14.98,roe:6.29},
+      {quarter:"Q4/2024",revenue:11492.34,profit:111.10,yoyRevenue:31.76,yoyProfit:210.13,pe:72.00,pb:11.96,roe:18.09},
+      {quarter:"Q1/2025",revenue:11699.60,profit:167.96,yoyRevenue:29.02,yoyProfit:333.30,pe:58.29,pb:12.52,roe:23.95},
+      {quarter:"Q2/2025",revenue:11425.72,profit:118.66,yoyRevenue:23.23,yoyProfit:343.69,pe:45.85,pb:8.61,roe:24.87},
+      {quarter:"Q3/2025",revenue:13147.24,profit:218.73,yoyRevenue:26.30,yoyProfit:55.23,pe:45.58,pb:9.11,roe:24.80},
+      {quarter:"Q4/2025",revenue:14959.49,profit:289.51,yoyRevenue:30.17,yoyProfit:160.59,pe:31.60,pb:6.02,roe:26.13}
+    ]
+  },
+  FTS: {
+    currentPE: 25.24, currentPB: 2.16, currentROE: 9.24,
+    quarters: [
+      {quarter:"Q2/2024",revenue:305.24,profit:160.50,yoyRevenue:17.48,yoyProfit:14.56,pe:23.88,pb:3.46,roe:14.85},
+      {quarter:"Q3/2024",revenue:224.63,profit:80.68,yoyRevenue:-30.91,yoyProfit:-56.07,pe:27.47,pb:3.16,roe:11.80},
+      {quarter:"Q4/2024",revenue:318.67,profit:159.51,yoyRevenue:75.53,yoyProfit:279.54,pe:21.08,pb:2.93,roe:14.62},
+      {quarter:"Q1/2025",revenue:312.06,profit:152.97,yoyRevenue:4.29,yoyProfit:-8.20,pe:24.98,pb:3.34,roe:13.65},
+      {quarter:"Q2/2025",revenue:239.14,profit:60.62,yoyRevenue:-21.65,yoyProfit:-62.23,pe:25.49,pb:2.81,roe:10.94},
+      {quarter:"Q3/2025",revenue:284.41,profit:55.11,yoyRevenue:26.61,yoyProfit:-31.69,pe:26.34,pb:2.68,roe:10.12},
+      {quarter:"Q4/2025",revenue:370.19,profit:128.06,yoyRevenue:16.17,yoyProfit:-19.72,pe:23.73,pb:2.16,roe:9.29}
+    ]
+  },
+  GAS: {
+    currentPE: 16.22, currentPB: 2.85, currentROE: 17.32,
+    quarters: [
+      {quarter:"Q2/2024",revenue:30071.15,profit:3320.82,yoyRevenue:25.07,yoyProfit:5.24,pe:15.13,pb:2.38,roe:16.71},
+      {quarter:"Q3/2024",revenue:25256.62,profit:2521.79,yoyRevenue:14.01,yoyProfit:6.08,pe:14.36,pb:2.73,roe:17.14},
+      {quarter:"Q4/2024",revenue:24960.85,profit:2044.10,yoyRevenue:10.43,yoyProfit:-24.93,pe:13.13,pb:2.27,roe:16.73},
+      {quarter:"Q1/2025",revenue:25675.43,profit:2756.53,yoyRevenue:10.12,yoyProfit:9.75,pe:14.95,pb:2.52,roe:16.96},
+      {quarter:"Q2/2025",revenue:30103.97,profit:4747.61,yoyRevenue:41.39,yoyProfit:42.96,pe:11.93,pb:2.14,roe:19.40},
+      {quarter:"Q3/2025",revenue:35711.04,profit:2549.12,yoyRevenue:41.39,yoyProfit:1.08,pe:23.34,pb:4.35,roe:18.93},
+      {quarter:"Q4/2025",revenue:43706.10,profit:1361.08,yoyRevenue:75.10,yoyProfit:-33.41,pe:16.55,pb:2.85,roe:18.04}
+    ]
+  },
+  GEG: {
+    currentPE: 11.42, currentPB: 1.16, currentROE: 10.70,
+    quarters: [
+      {quarter:"Q2/2024",revenue:487.63,profit:21.46,yoyRevenue:1.53,yoyProfit:146.46,pe:27.70,pb:1.09,roe:4.00},
+      {quarter:"Q3/2024",revenue:543.14,profit:-27.34,yoyRevenue:-4.02,yoyProfit:-299.23,pe:36.01,pb:1.09,roe:3.05},
+      {quarter:"Q4/2024",revenue:555.33,profit:31.04,yoyRevenue:-2.36,yoyProfit:-38.62,pe:50.23,pb:1.29,roe:2.62},
+      {quarter:"Q1/2025",revenue:1112.76,profit:378.24,yoyRevenue:50.53,yoyProfit:321.85,pe:18.38,pb:1.51,roe:8.92},
+      {quarter:"Q2/2025",revenue:624.34,profit:165.82,yoyRevenue:28.03,yoyProfit:672.70,pe:11.92,pb:1.29,roe:11.79},
+      {quarter:"Q3/2025",revenue:671.33,profit:74.65,yoyRevenue:23.60,yoyProfit:373.05,pe:9.46,pb:1.19,roe:13.55},
+      {quarter:"Q4/2025",revenue:590.44,profit:89.81,yoyRevenue:6.32,yoyProfit:189.36,pe:8.52,pb:1.16,roe:15.09}
+    ]
+  },
   VCB: {
     currentPE: 14.46, currentPB: null, currentROE: 16.07,
     isBank:true,
