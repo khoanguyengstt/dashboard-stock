@@ -1475,6 +1475,44 @@ const FUNDAMENTALS = {
       {quarter:"Q4/2025",revenue:1427.51,profit:342.00,yoyRevenue:17.75,yoyProfit:36.08,pe:12.57,pb:1.22,roe:9.96}
     ]
   },
+  VPI: {
+    currentPE: 71.82, currentPB: null, currentROE: 5.36,
+    warning:"VPI có doanh thu/lợi nhuận biến động rất mạnh theo quý (đặc thù ghi nhận doanh thu BĐS, Q2/2025 lợi nhuận gần như bằng 0) theo dữ liệu KAFI — cần thận trọng khi đánh giá.",
+    quarters: [
+      {quarter:"Q2/2024",revenue:167.01,profit:24.56,yoyRevenue:-72.61,yoyProfit:-77.23,pe:84.69,pb:4.32,roe:5.17},
+      {quarter:"Q3/2024",revenue:854.61,profit:109.97,yoyRevenue:217.27,yoyProfit:178.75,pe:65.78,pb:4.77,roe:6.93},
+      {quarter:"Q4/2024",revenue:749.17,profit:101.92,yoyRevenue:456.76,yoyProfit:154.16,pe:47.83,pb:3.50,roe:7.64},
+      {quarter:"Q1/2025",revenue:248.73,profit:140.79,yoyRevenue:96.55,yoyProfit:52.98,pe:43.00,pb:3.43,roe:8.54},
+      {quarter:"Q2/2025",revenue:179.40,profit:3.90,yoyRevenue:-53.71,yoyProfit:-84.10,pe:49.30,pb:3.63,roe:7.58},
+      {quarter:"Q3/2025",revenue:395.57,profit:118.16,yoyRevenue:7.42,yoyProfit:7.45,pe:46.92,pb:3.37,roe:7.30},
+      {quarter:"Q4/2025",revenue:1152.66,profit:127.79,yoyRevenue:53.86,yoyProfit:25.39,pe:50.30,pb:3.74,roe:7.73}
+    ]
+  },
+  VRE: {
+    currentPE: 9.35, currentPB: null, currentROE: 14.60,
+    quarters: [
+      {quarter:"Q2/2024",revenue:2478.60,profit:1021.47,yoyRevenue:14.07,yoyProfit:2.09,pe:9.19,pb:1.03,roe:9.27},
+      {quarter:"Q3/2024",revenue:2077.72,profit:906.40,yoyRevenue:-37.65,yoyProfit:-31.16,pe:9.08,pb:0.91,roe:7.66},
+      {quarter:"Q4/2024",revenue:2128.16,profit:1085.33,yoyRevenue:-9.16,yoyProfit:1.67,pe:12.82,pb:1.25,roe:7.41},
+      {quarter:"Q1/2025",revenue:2131.42,profit:1177.40,yoyRevenue:-5.47,yoyProfit:8.76,pe:15.18,pb:1.48,roe:6.95},
+      {quarter:"Q2/2025",revenue:2142.63,profit:1233.26,yoyRevenue:-13.55,yoyProfit:20.73,pe:18.99,pb:1.89,roe:6.96},
+      {quarter:"Q3/2025",revenue:2251.00,profit:1376.43,yoyRevenue:8.34,yoyProfit:51.86,pe:14.46,pb:1.54,roe:6.91},
+      {quarter:"Q4/2025",revenue:2312.33,profit:2658.84,yoyRevenue:8.65,yoyProfit:144.98,pe:10.15,pb:1.35,roe:14.28}
+    ]
+  },
+  VSH: {
+    currentPE: 11.60, currentPB: null, currentROE: 17.45,
+    warning:"VSH là thủy điện, lợi nhuận biến động mạnh theo mùa nước/thời tiết (tăng trưởng lợi nhuận một số quý trên 15000% YoY) theo dữ liệu KAFI — cần thận trọng khi đánh giá.",
+    quarters: [
+      {quarter:"Q2/2024",revenue:412.54,profit:67.15,yoyRevenue:-37.23,yoyProfit:-74.35,pe:36.48,pb:2.54,roe:6.86},
+      {quarter:"Q3/2024",revenue:396.33,profit:77.81,yoyRevenue:3.71,yoyProfit:203.97,pe:31.36,pb:2.49,roe:8.10},
+      {quarter:"Q4/2024",revenue:666.75,profit:301.94,yoyRevenue:4.11,yoyProfit:31.31,pe:27.66,pb:2.65,roe:9.66},
+      {quarter:"Q1/2025",revenue:624.62,profit:268.69,yoyRevenue:78.71,yoyProfit:15077.78,pe:16.14,pb:2.39,roe:15.13},
+      {quarter:"Q2/2025",revenue:501.57,profit:166.26,yoyRevenue:21.58,yoyProfit:147.57,pe:12.73,pb:2.08,roe:16.93},
+      {quarter:"Q3/2025",revenue:556.00,profit:211.28,yoyRevenue:40.29,yoyProfit:171.54,pe:11.09,pb:2.12,roe:19.47},
+      {quarter:"Q4/2025",revenue:621.89,profit:216.38,yoyRevenue:-6.73,yoyProfit:-28.34,pe:11.87,pb:2.07,roe:17.91}
+    ]
+  },
   VCB: {
     currentPE: 14.46, currentPB: null, currentROE: 16.07,
     isBank:true,
