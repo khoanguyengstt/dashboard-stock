@@ -1126,6 +1126,55 @@ const FUNDAMENTALS = {
       {quarter:"Q4/2025",revenue:498.98,profit:32.26,yoyRevenue:-20.53,yoyProfit:-85.60,pe:17.34,pb:2.06,roe:12.31}
     ]
   },
+  PLX: {
+    currentPE: 26.75, currentPB: null, currentROE: 6.95,
+    quarters: [
+      {quarter:"Q2/2024",revenue:73584.64,profit:1205.68,yoyRevenue:11.87,yoyProfit:48.28,pe:14.38,pb:2.07,roe:14.12},
+      {quarter:"Q3/2024",revenue:64352.15,profit:65.87,yoyRevenue:-11.16,yoyProfit:-91.08,pe:16.81,pb:1.97,roe:11.51},
+      {quarter:"Q4/2024",revenue:71055.34,profit:545.27,yoyRevenue:3.45,yoyProfit:-14.94,pe:14.91,pb:1.66,roe:11.12},
+      {quarter:"Q1/2025",revenue:67890.17,profit:133.41,yoyRevenue:-9.64,yoyProfit:-87.57,pe:23.65,pb:1.76,roe:7.57},
+      {quarter:"Q2/2025",revenue:76568.08,profit:1366.41,yoyRevenue:4.05,yoyProfit:827.07,pe:20.80,pb:1.75,roe:8.22},
+      {quarter:"Q3/2025",revenue:83655.31,profit:610.70,yoyRevenue:30.00,yoyProfit:13.33,pe:28.18,pb:2.92,roe:10.33},
+      {quarter:"Q4/2025",revenue:81871.62,profit:564.74,yoyRevenue:15.22,yoyProfit:3.57,pe:17.64,pb:1.80,roe:10.24}
+    ]
+  },
+  PNJ: {
+    currentPE: 8.84, currentPB: null, currentROE: 28.03,
+    quarters: [
+      {quarter:"Q2/2024",revenue:9605.15,profit:428.40,yoyRevenue:42.60,yoyProfit:26.90,pe:15.02,pb:2.93,roe:20.30},
+      {quarter:"Q3/2024",revenue:7225.79,profit:215.84,yoyRevenue:3.35,yoyProfit:-14.80,pe:16.13,pb:3.13,roe:19.40},
+      {quarter:"Q4/2024",revenue:8698.35,profit:730.87,yoyRevenue:-11.82,yoyProfit:15.65,pe:11.27,pb:2.13,roe:20.06},
+      {quarter:"Q1/2025",revenue:9759.65,profit:677.73,yoyRevenue:-23.17,yoyProfit:-8.14,pe:14.09,pb:2.48,roe:18.57},
+      {quarter:"Q2/2025",revenue:7664.65,profit:437.00,yoyRevenue:-20.20,yoyProfit:2.01,pe:15.53,pb:2.70,roe:18.13},
+      {quarter:"Q3/2025",revenue:8235.61,profit:495.70,yoyRevenue:13.98,yoyProfit:129.67,pe:18.39,pb:3.61,roe:19.95},
+      {quarter:"Q4/2025",revenue:9750.68,profit:1218.07,yoyRevenue:12.10,yoyProfit:66.66,pe:12.12,pb:2.59,roe:23.06}
+    ]
+  },
+  POW: {
+    currentPE: 13.02, currentPB: null, currentROE: 9.15,
+    quarters: [
+      {quarter:"Q2/2024",revenue:9382.19,profit:391.76,yoyRevenue:11.30,yoyProfit:211.09,pe:26.02,pb:0.89,roe:3.46},
+      {quarter:"Q3/2024",revenue:6061.16,profit:396.35,yoyRevenue:6.72,yoyProfit:379.50,pe:19.26,pb:0.84,roe:4.43},
+      {quarter:"Q4/2024",revenue:8619.18,profit:45.84,yoyRevenue:34.43,yoyProfit:-86.21,pe:24.97,pb:0.87,roe:3.95},
+      {quarter:"Q1/2025",revenue:8150.31,profit:445.09,yoyRevenue:30.55,yoyProfit:60.32,pe:26.55,pb:1.05,roe:4.00},
+      {quarter:"Q2/2025",revenue:9398.77,profit:602.42,yoyRevenue:0.18,yoyProfit:53.77,pe:22.32,pb:1.01,roe:4.61},
+      {quarter:"Q3/2025",revenue:7855.19,profit:809.30,yoyRevenue:29.60,yoyProfit:104.19,pe:20.43,pb:1.25,roe:5.06},
+      {quarter:"Q4/2025",revenue:8901.87,profit:569.85,yoyRevenue:3.28,yoyProfit:1143.15,pe:14.90,pb:1.13,roe:7.33}
+    ]
+  },
+  PPC: {
+    currentPE: 14.71, currentPB: null, currentROE: 4.62,
+    warning:"PPC có lợi nhuận biến động mạnh theo quý (một số quý gần lỗ) theo dữ liệu KAFI — cần thận trọng khi đánh giá.",
+    quarters: [
+      {quarter:"Q2/2024",revenue:2469.24,profit:93.83,yoyRevenue:76.76,yoyProfit:-41.88,pe:8.42,pb:0.89,roe:10.34},
+      {quarter:"Q3/2024",revenue:1465.47,profit:-5.31,yoyRevenue:9.64,yoyProfit:-106.31,pe:9.03,pb:0.78,roe:8.68},
+      {quarter:"Q4/2024",revenue:1750.28,profit:181.15,yoyRevenue:-1.09,yoyProfit:20.76,pe:8.71,pb:0.82,roe:8.96},
+      {quarter:"Q1/2025",revenue:1536.11,profit:52.33,yoyRevenue:-23.04,yoyProfit:-66.75,pe:11.55,pb:0.81,roe:7.03},
+      {quarter:"Q2/2025",revenue:1940.20,profit:6.09,yoyRevenue:-21.43,yoyProfit:-93.51,pe:14.30,pb:0.74,roe:5.14},
+      {quarter:"Q3/2025",revenue:1496.74,profit:-14.29,yoyRevenue:2.13,yoyProfit:-169.10,pe:14.73,pb:0.74,roe:4.97},
+      {quarter:"Q4/2025",revenue:1592.77,profit:121.05,yoyRevenue:-9.00,yoyProfit:-33.18,pe:19.70,pb:0.73,roe:3.67}
+    ]
+  },
   VCB: {
     currentPE: 14.46, currentPB: null, currentROE: 16.07,
     isBank:true,
