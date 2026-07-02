@@ -1324,6 +1324,44 @@ const FUNDAMENTALS = {
       {quarter:"Q4/2025",revenue:2451.87,profit:104.29,yoyRevenue:1.07,yoyProfit:-91.46}
     ]
   },
+  SZC: {
+    currentPE: 17.38, currentPB: null, currentROE: 7.43,
+    quarters: [
+      {quarter:"Q2/2024",revenue:262.43,profit:102.23,yoyRevenue:-8.93,yoyProfit:6.52,pe:18.56,pb:2.29,roe:11.90},
+      {quarter:"Q3/2024",revenue:164.77,profit:59.59,yoyRevenue:-20.83,yoyProfit:8.17,pe:22.72,pb:2.51,roe:10.57},
+      {quarter:"Q4/2024",revenue:231.66,profit:71.71,yoyRevenue:-10.39,yoyProfit:27.91,pe:16.97,pb:1.78,roe:12.48},
+      {quarter:"Q1/2025",revenue:414.23,profit:126.35,yoyRevenue:93.81,yoyProfit:94.15,pe:18.34,pb:2.08,roe:11.78},
+      {quarter:"Q2/2025",revenue:217.84,profit:94.93,yoyRevenue:-16.99,yoyProfit:-7.14,pe:16.43,pb:1.87,roe:11.41},
+      {quarter:"Q3/2025",revenue:86.48,profit:20.82,yoyRevenue:-47.51,yoyProfit:-65.06,pe:17.70,pb:1.79,roe:10.07},
+      {quarter:"Q4/2025",revenue:379.42,profit:102.70,yoyRevenue:63.79,yoyProfit:43.23,pe:15.14,pb:1.63,roe:10.93}
+    ]
+  },
+  TCB: {
+    currentPE: 9.33, currentPB: null, currentROE: 15.56,
+    isBank:true,
+    quarters: [
+      {quarter:"Q2/2024",revenue:9477.93,profit:6193.36,yoyRevenue:50.57,yoyProfit:39.02},
+      {quarter:"Q3/2024",revenue:8928.68,profit:5737.51,yoyRevenue:22.78,yoyProfit:24.38},
+      {quarter:"Q4/2024",revenue:8601.82,profit:3371.07,yoyRevenue:13.22,yoyProfit:-24.06},
+      {quarter:"Q1/2025",revenue:8305.39,profit:5947.96,yoyRevenue:-2.28,yoyProfit:-4.39},
+      {quarter:"Q2/2025",revenue:9137.08,profit:6247.36,yoyRevenue:-3.60,yoyProfit:0.87},
+      {quarter:"Q3/2025",revenue:9924.64,profit:6419.34,yoyRevenue:11.15,yoyProfit:11.88},
+      {quarter:"Q4/2025",revenue:10787.98,profit:6675.56,yoyRevenue:25.42,yoyProfit:98.03}
+    ]
+  },
+  TCH: {
+    currentPE: 61.21, currentPB: null, currentROE: 1.79,
+    warning:"TCH có doanh thu và lợi nhuận suy giảm liên tục nhiều quý gần đây (P/E hiện tại rất cao do lợi nhuận co lại) theo dữ liệu KAFI — cần thận trọng khi đánh giá.",
+    quarters: [
+      {quarter:"Q2/2024",revenue:828.39,profit:141.01,yoyRevenue:161.46,yoyProfit:32.70,pe:12.04,pb:1.16,roe:9.98},
+      {quarter:"Q3/2024",revenue:1418.79,profit:219.75,yoyRevenue:458.29,yoyProfit:295.81,pe:9.06,pb:1.01,roe:11.52},
+      {quarter:"Q4/2024",revenue:1560.97,profit:306.56,yoyRevenue:-3.23,yoyProfit:13.65,pe:11.73,pb:1.20,roe:11.64},
+      {quarter:"Q1/2025",revenue:858.84,profit:187.68,yoyRevenue:-46.96,yoyProfit:-39.91,pe:19.23,pb:1.69,roe:9.09},
+      {quarter:"Q2/2025",revenue:390.36,profit:37.87,yoyRevenue:-52.88,yoyProfit:-73.14,pe:20.30,pb:2.09,roe:7.95},
+      {quarter:"Q3/2025",revenue:345.93,profit:40.21,yoyRevenue:-75.62,yoyProfit:-81.70,pe:19.30,pb:1.24,roe:5.73},
+      {quarter:"Q4/2025",revenue:317.03,profit:52.43,yoyRevenue:-79.69,yoyProfit:-82.90,pe:43.06,pb:1.43,roe:3.04}
+    ]
+  },
   VCB: {
     currentPE: 14.46, currentPB: null, currentROE: 16.07,
     isBank:true,
