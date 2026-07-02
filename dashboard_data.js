@@ -1211,6 +1211,43 @@ const FUNDAMENTALS = {
       {quarter:"Q4/2025",revenue:4444.13,profit:265.90,yoyRevenue:36.00,yoyProfit:27.19,pe:9.96,pb:1.19,roe:12.66}
     ]
   },
+  REE: {
+    currentPE: 11.81, currentPB: null, currentROE: 12.83,
+    quarters: [
+      {quarter:"Q2/2024",revenue:2182.95,profit:353.86,yoyRevenue:0.31,yoyProfit:-27.63,pe:17.10,pb:1.73,roe:10.33},
+      {quarter:"Q3/2024",revenue:2031.36,profit:479.85,yoyRevenue:3.38,yoyProfit:6.72,pe:16.81,pb:1.68,roe:10.29},
+      {quarter:"Q4/2024",revenue:2338.10,profit:678.29,yoyRevenue:13.14,yoyProfit:34.55,pe:16.28,pb:1.72,roe:11.01},
+      {quarter:"Q1/2025",revenue:2073.50,profit:611.40,yoyRevenue:12.56,yoyProfit:27.25,pe:17.03,pb:1.85,roe:11.42},
+      {quarter:"Q2/2025",revenue:2516.32,profit:622.93,yoyRevenue:15.27,yoyProfit:76.04,pe:14.74,pb:1.79,roe:12.55},
+      {quarter:"Q3/2025",revenue:2555.16,profit:674.23,yoyRevenue:25.79,yoyProfit:40.51,pe:13.00,pb:1.65,roe:13.20},
+      {quarter:"Q4/2025",revenue:2880.57,profit:619.99,yoyRevenue:23.20,yoyProfit:-8.60,pe:12.85,pb:1.55,roe:12.69}
+    ]
+  },
+  SAB: {
+    currentPE: 12.88, currentPB: null, currentROE: 22.01,
+    quarters: [
+      {quarter:"Q2/2024",revenue:8135.10,profit:1248.29,yoyRevenue:-2.94,yoyProfit:7.68,pe:16.71,pb:2.97,roe:17.21},
+      {quarter:"Q3/2024",revenue:7737.39,profit:1119.10,yoyRevenue:3.11,yoyProfit:7.15,pe:16.00,pb:2.77,roe:17.56},
+      {quarter:"Q4/2024",revenue:9048.63,profit:965.46,yoyRevenue:5.45,yoyProfit:1.99,pe:15.17,pb:2.82,roe:18.23},
+      {quarter:"Q1/2025",revenue:5899.50,profit:793.11,yoyRevenue:-18.55,yoyProfit:-20.47,pe:15.26,pb:2.62,roe:17.17},
+      {quarter:"Q2/2025",revenue:6867.33,profit:1207.50,yoyRevenue:-15.58,yoyProfit:-3.27,pe:14.27,pb:2.73,roe:16.07},
+      {quarter:"Q3/2025",revenue:6509.18,profit:1360.54,yoyRevenue:-15.87,yoyProfit:21.57,pe:14.91,pb:2.84,roe:16.36},
+      {quarter:"Q4/2025",revenue:6972.99,profit:1062.39,yoyRevenue:-22.94,yoyProfit:10.04,pe:13.98,pb:2.92,roe:17.46}
+    ]
+  },
+  SAM: {
+    currentPE: 23.64, currentPB: null, currentROE: 2.47,
+    warning:"SAM có lợi nhuận rất mỏng và biến động cực mạnh theo quý (P/E dao động 26-126 lần) theo dữ liệu KAFI — cần thận trọng khi đánh giá.",
+    quarters: [
+      {quarter:"Q2/2024",revenue:1635.06,profit:42.29,yoyRevenue:231.60,yoyProfit:3843.32,pe:33.65,pb:0.62,roe:1.85},
+      {quarter:"Q3/2024",revenue:918.83,profit:2.57,yoyRevenue:75.42,yoyProfit:-60.33,pe:36.37,pb:0.63,roe:1.75},
+      {quarter:"Q4/2024",revenue:871.94,profit:18.51,yoyRevenue:16.51,yoyProfit:422.92,pe:27.89,pb:0.58,roe:2.12},
+      {quarter:"Q1/2025",revenue:1163.69,profit:3.52,yoyRevenue:86.68,yoyProfit:-83.23,pe:46.13,pb:0.77,roe:1.67},
+      {quarter:"Q2/2025",revenue:1403.79,profit:31.11,yoyRevenue:-14.14,yoyProfit:-26.43,pe:49.18,pb:0.68,roe:1.38},
+      {quarter:"Q3/2025",revenue:1540.11,profit:12.26,yoyRevenue:67.62,yoyProfit:377.71,pe:41.95,pb:0.68,roe:1.62},
+      {quarter:"Q4/2025",revenue:2018.60,profit:49.51,yoyRevenue:131.51,yoyProfit:167.54,pe:26.45,pb:0.62,roe:2.37}
+    ]
+  },
   VCB: {
     currentPE: 14.46, currentPB: null, currentROE: 16.07,
     isBank:true,
