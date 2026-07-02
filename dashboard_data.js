@@ -388,18 +388,24 @@ const TOP_ANALYSIS = {
 // ---------------------------------------------------------------
 // DỮ LIỆU CƠ BẢN THEO QUÝ (Doanh thu / LNST / %YoY / P/E / P/B)
 // Nguồn: KAFI X (nền tảng giao dịch, dữ liệu FiinTrade/FiinGroup) — mục
-// "Phân tích tài chính > Chỉ số Tài Chính" của từng mã, người dùng tự truy cập
-// bằng tài khoản KAFI cá nhân. Đây là dữ liệu tổng hợp chuẩn từ FiinGroup,
-// đáng tin cậy hơn nhiều so với số ước tính từ tin tức trước đây.
-// Ghi chú: các ngân hàng (VCB, VPB, HDB, EIB, STB) không có P/E, P/B theo quý
-// trong mẫu chỉ số của KAFI/FiinTrade (chỉ MBB trong nhóm NH có đủ P/E, P/B).
-// "revenue" với ngân hàng là Thu nhập lãi thuần (không hoàn toàn tương đương
-// doanh thu của DN phi tài chính). Một số quý cũ nhất không có số liệu do
-// nguồn chưa công bố (hiển thị null/--).
+// "Phân tích tài chính > Chỉ số Tài Chính" của từng mã (bảng theo quý) và mục
+// "Báo cáo Doanh nghiệp" (P/E hiện tại, real-time theo giá khớp lệnh mới nhất),
+// người dùng tự truy cập bằng tài khoản KAFI cá nhân.
+// currentPE: lấy trực tiếp từ ô "P/E (lần)" ở tab "Báo cáo Doanh nghiệp" —
+// đây là P/E thực tính theo giá thị trường hiện tại (không phải P/E cuối quý).
+// currentPB: KAFI không hiển thị P/B real-time riêng biệt (kể cả với NH và
+// phi NH) nên lấy P/B của quý gần nhất có dữ liệu trong bảng "quarters" bên
+// dưới — có thể lệch nhẹ so với P/B tức thời nếu giá đã biến động từ cuối quý.
+// Ghi chú: các ngân hàng (VCB, VPB, HDB, EIB, STB) không có P/B ở bất kỳ đâu
+// trong KAFI/FiinTrade (kể cả bảng quý lẫn tab tổng quan) — hiển thị null/--
+// (chỉ MBB trong nhóm NH có đủ P/E, P/B theo quý). "revenue" với ngân hàng là
+// Thu nhập lãi thuần (không hoàn toàn tương đương doanh thu của DN phi tài
+// chính). Một số quý cũ nhất không có số liệu do nguồn chưa công bố.
+// Cập nhật currentPE lần gần nhất: 02/07/2026 16:10-16:23 (giờ hệ thống).
 // ---------------------------------------------------------------
 const FUNDAMENTALS = {
   HPG: {
-    currentPE: 9.38, currentPB: 1.42,
+    currentPE: 9.32, currentPB: 1.42,
     quarters: [
       {quarter:"Q2/2023",revenue:29799.50,profit:1460.04,yoyRevenue:-20.99,yoyProfit:-63.79,pe:-71.16,pb:1.39},
       {quarter:"Q3/2023",revenue:28765.72,profit:2004.75,yoyRevenue:-16.48,yoyProfit:213.00,pe:87.03,pb:1.63},
@@ -416,7 +422,7 @@ const FUNDAMENTALS = {
     ]
   },
   VNM: {
-    currentPE: 13.53, currentPB: 4.15,
+    currentPE: 11.15, currentPB: 4.15,
     quarters: [
       {quarter:"Q2/2023",revenue:15212.94,profit:2198.81,yoyRevenue:1.69,yoyProfit:5.56,pe:17.18,pb:4.22},
       {quarter:"Q3/2023",revenue:15681.49,profit:2492.25,yoyRevenue:-2.56,yoyProfit:8.43,pe:16.61,pb:4.56},
@@ -433,7 +439,7 @@ const FUNDAMENTALS = {
     ]
   },
   MWG: {
-    currentPE: 17.93, currentPB: 3.86,
+    currentPE: 14.07, currentPB: 3.86,
     quarters: [
       {quarter:"Q2/2023",revenue:29725.05,profit:17.41,yoyRevenue:-14.34,yoyProfit:-98.46,pe:37.90,pb:2.55},
       {quarter:"Q3/2023",revenue:30520.84,profit:38.74,yoyRevenue:-5.57,yoyProfit:-95.73,pe:95.39,pb:2.85},
@@ -449,7 +455,7 @@ const FUNDAMENTALS = {
     ]
   },
   VCB: {
-    currentPE: null, currentPB: null,
+    currentPE: 14.46, currentPB: null,
     isBank:true,
     quarters: [
       {quarter:"Q2/2023",revenue:14020.58,profit:7422.82,yoyRevenue:9.56,yoyProfit:25.03},
@@ -466,7 +472,7 @@ const FUNDAMENTALS = {
     ]
   },
   VPB: {
-    currentPE: null, currentPB: null,
+    currentPE: 8.15, currentPB: null,
     isBank:true,
     quarters: [
       {quarter:"Q2/2023",revenue:8762.15,profit:3061.79,yoyRevenue:-16.28,yoyProfit:-12.72},
@@ -483,7 +489,7 @@ const FUNDAMENTALS = {
     ]
   },
   HDB: {
-    currentPE: null, currentPB: null,
+    currentPE: 7.29, currentPB: null,
     isBank:true,
     quarters: [
       {quarter:"Q2/2024",revenue:7719.88,profit:3114.89,yoyRevenue:55.82,yoyProfit:44.30},
@@ -497,7 +503,7 @@ const FUNDAMENTALS = {
     ]
   },
   EIB: {
-    currentPE: null, currentPB: null,
+    currentPE: 52.32, currentPB: null,
     isBank:true,
     quarters: [
       {quarter:"Q3/2023",revenue:868.74,profit:241.81,yoyRevenue:-41.77,yoyProfit:-76.38},
@@ -514,7 +520,7 @@ const FUNDAMENTALS = {
     ]
   },
   STB: {
-    currentPE: null, currentPB: null,
+    currentPE: 30.07, currentPB: null,
     isBank:true,
     quarters: [
       {quarter:"Q3/2023",revenue:4851.11,profit:1634.59,yoyRevenue:-15.81,yoyProfit:34.91},
@@ -530,7 +536,7 @@ const FUNDAMENTALS = {
     ]
   },
   CTR: {
-    currentPE: 16.38, currentPB: 4.75,
+    currentPE: 15.45, currentPB: 4.75,
     quarters: [
       {quarter:"Q2/2023",revenue:2701.36,profit:124.14,yoyRevenue:21.48,yoyProfit:20.61,pe:17.13,pb:4.98},
       {quarter:"Q3/2023",revenue:3083.43,profit:140.59,yoyRevenue:18.34,yoyProfit:9.64,pe:21.33,pb:5.81},
@@ -546,7 +552,7 @@ const FUNDAMENTALS = {
     ]
   },
   GVR: {
-    currentPE: 24.82, currentPB: 2.34,
+    currentPE: 20.86, currentPB: 2.34,
     quarters: [
       {quarter:"Q2/2023",revenue:4161.20,profit:558.18,yoyRevenue:-25.39,yoyProfit:-45.12,pe:25.22,pb:1.45},
       {quarter:"Q3/2023",revenue:6199.49,profit:312.83,yoyRevenue:5.91,yoyProfit:-62.54,pe:39.36,pb:1.82},
@@ -562,7 +568,7 @@ const FUNDAMENTALS = {
     ]
   },
   FPT: {
-    currentPE: 13.31, currentPB: 3.43,
+    currentPE: 12.34, currentPB: 3.43,
     quarters: [
       {quarter:"Q2/2023",revenue:12484.52,profit:1509.22,yoyRevenue:23.65,yoyProfit:20.66,pe:20.02,pb:4.84},
       {quarter:"Q3/2023",revenue:13761.83,profit:1739.34,yoyRevenue:23.44,yoyProfit:19.65,pe:19.73,pb:5.10},
@@ -578,7 +584,7 @@ const FUNDAMENTALS = {
     ]
   },
   MBB: {
-    currentPE: 8.03, currentPB: 1.58,
+    currentPE: 7.32, currentPB: 1.58,
     isBank:true,
     quarters: [
       {quarter:"Q2/2023",revenue:9481.37,profit:4893.50,yoyRevenue:5.71,yoyProfit:5.85,pe:5.25,pb:1.16},
@@ -595,7 +601,7 @@ const FUNDAMENTALS = {
     ]
   },
   VHM: {
-    currentPE: 14.80, currentPB: 2.61,
+    currentPE: 9.63, currentPB: 2.61,
     quarters: [
       {quarter:"Q2/2023",revenue:32613.84,profit:9687.70,yoyRevenue:629.54,yoyProfit:1353.57,pe:4.31,pb:1.16},
       {quarter:"Q3/2023",revenue:32724.10,profit:10694.76,yoyRevenue:83.79,yoyProfit:-26.21,pe:4.44,pb:1.03},
@@ -611,7 +617,7 @@ const FUNDAMENTALS = {
     ]
   },
   VIC: {
-    currentPE: 153.62, currentPB: 11.80,
+    currentPE: 146.06, currentPB: 11.80,
     quarters: [
       {quarter:"Q2/2023",revenue:47284.62,profit:1824.14,yoyRevenue:253.28,yoyProfit:-46.23,pe:31.12,pb:1.47},
       {quarter:"Q3/2023",revenue:47955.86,profit:-669.04,yoyRevenue:66.56,yoyProfit:-170.66,pe:43.71,pb:1.33},
@@ -627,7 +633,7 @@ const FUNDAMENTALS = {
     ]
   },
   ANV: {
-    currentPE: 6.43, currentPB: 1.82,
+    currentPE: 5.32, currentPB: 1.82,
     quarters: [
       {quarter:"Q2/2023",revenue:1090.88,profit:-51.04,yoyRevenue:-16.46,yoyProfit:-121.21,pe:16.23,pb:1.50},
       {quarter:"Q3/2023",revenue:1100.74,profit:1.04,yoyRevenue:-11.80,yoyProfit:-99.13,pe:26.01,pb:1.32},
