@@ -1090,6 +1090,42 @@ const FUNDAMENTALS = {
       {quarter:"Q4/2025",revenue:4411.81,profit:269.77,yoyRevenue:0.09,yoyProfit:9.84,pe:9.81,pb:1.24,roe:12.92}
     ]
   },
+  PC1: {
+    currentPE: 7.93, currentPB: 1.30, currentROE: 18.79,
+    quarters: [
+      {quarter:"Q2/2024",revenue:3141.08,profit:158.96,yoyRevenue:113.35,yoyProfit:1362.01,pe:22.33,pb:1.58,roe:7.17},
+      {quarter:"Q3/2024",revenue:2232.11,profit:159.59,yoyRevenue:3.22,yoyProfit:17379.76,pe:17.50,pb:1.51,roe:8.87},
+      {quarter:"Q4/2024",revenue:2550.89,profit:68.48,yoyRevenue:-0.12,yoyProfit:106.34,pe:15.95,pb:1.35,roe:8.82},
+      {quarter:"Q1/2025",revenue:1860.37,profit:55.28,yoyRevenue:-14.06,yoyProfit:-31.37,pe:19.73,pb:1.56,roe:8.09},
+      {quarter:"Q2/2025",revenue:2934.93,profit:141.89,yoyRevenue:-6.56,yoyProfit:-10.74,pe:19.51,pb:1.46,roe:7.65},
+      {quarter:"Q3/2025",revenue:3278.08,profit:300.87,yoyRevenue:46.86,yoyProfit:88.53,pe:17.57,pb:1.67,roe:9.96},
+      {quarter:"Q4/2025",revenue:5011.42,profit:543.34,yoyRevenue:96.46,yoyProfit:693.42,pe:8.14,pb:1.30,roe:17.30}
+    ]
+  },
+  PDR: {
+    currentPE: 24.38, currentPB: 1.33, currentROE: 4.92,
+    quarters: [
+      {quarter:"Q2/2024",revenue:8.26,profit:49.74,yoyRevenue:237.08,yoyProfit:-81.96,pe:30.87,pb:1.67,roe:5.04},
+      {quarter:"Q3/2024",revenue:2.63,profit:51.24,yoyRevenue:-99.26,yoyProfit:-49.61,pe:32.81,pb:1.48,roe:4.25},
+      {quarter:"Q4/2024",revenue:648.61,profit:1.53,yoyRevenue:852.78,yoyProfit:-99.46,pe:80.23,pb:1.26,roe:1.51},
+      {quarter:"Q1/2025",revenue:437.94,profit:50.61,yoyRevenue:170.01,yoyProfit:-3.76,pe:115.98,pb:1.70,roe:1.39},
+      {quarter:"Q2/2025",revenue:19.93,profit:64.92,yoyRevenue:141.38,yoyProfit:30.52,pe:124.84,pb:1.83,roe:1.50},
+      {quarter:"Q3/2025",revenue:506.53,profit:85.80,yoyRevenue:19175.54,yoyProfit:67.45,pe:84.06,pb:1.49,roe:1.77},
+      {quarter:"Q4/2025",revenue:360.58,profit:313.74,yoyRevenue:-44.41,yoyProfit:20461.76,pe:30.99,pb:1.33,roe:4.41}
+    ]
+  },
+  PHR: {
+    currentPE: 13.00, currentPB: 2.06, currentROE: 16.36,
+    quarters: [
+      {quarter:"Q2/2024",revenue:271.95,profit:64.63,yoyRevenue:145.52,yoyProfit:-46.87,pe:18.40,pb:1.98,roe:11.16},
+      {quarter:"Q3/2024",revenue:411.71,profit:98.28,yoyRevenue:-9.10,yoyProfit:-18.96,pe:18.19,pb:1.80,roe:10.26},
+      {quarter:"Q4/2024",revenue:627.89,profit:224.07,yoyRevenue:35.50,yoyProfit:48.11,pe:13.24,pb:1.63,roe:12.46},
+      {quarter:"Q1/2025",revenue:311.49,profit:95.57,yoyRevenue:-3.67,yoyProfit:30.78,pe:17.41,pb:2.17,roe:12.59},
+      {quarter:"Q2/2025",revenue:367.97,profit:90.97,yoyRevenue:35.31,yoyProfit:40.76,pe:15.04,pb:2.01,roe:13.27},
+      {quarter:"Q3/2025",revenue:616.79,profit:259.44,yoyRevenue:49.81,yoyProfit:163.99,pe:13.00,pb:2.16,roe:17.33},
+      {quarter:"Q4/2025",revenue:498.98,profit:32.26,yoyRevenue:-20.53,yoyProfit:-85.60,pe:17.34,pb:2.06,roe:12.31}
+    ]
+  },
   VCB: {
     currentPE: 14.46, currentPB: null, currentROE: 16.07,
     isBank:true,
