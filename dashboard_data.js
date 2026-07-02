@@ -401,61 +401,72 @@ const TOP_ANALYSIS = {
 // (chỉ MBB trong nhóm NH có đủ P/E, P/B theo quý). "revenue" với ngân hàng là
 // Thu nhập lãi thuần (không hoàn toàn tương đương doanh thu của DN phi tài
 // chính). Một số quý cũ nhất không có số liệu do nguồn chưa công bố.
-// Cập nhật currentPE lần gần nhất: 02/07/2026 16:10-16:23 (giờ hệ thống).
+// currentROE: ROE (TTM, real-time) lấy từ ô "ROE (%)" ở tab "Báo cáo Doanh
+// nghiệp" — có ở TẤT CẢ các mã kể cả ngân hàng (khác với P/B). roe (theo quý,
+// trong "quarters"): lấy từ bảng "Chỉ số Tài Chính" tab "Phân tích tài chính"
+// — CHỈ có với DN phi ngân hàng (bảng ratio của NH dùng NIM/LDR/Nợ xấu thay
+// vì ROE/ROIC/ROA nên không có ROE theo quý cho nhóm NH).
+// QUAN TRỌNG: tính đến 02/07/2026, bảng "Chỉ số Tài Chính" (ratio theo quý)
+// của KAFI/FiinTrade CHƯA cập nhật cột Q1/2026 cho bất kỳ mã nào đã kiểm tra
+// (HPG, VNM, STB...) — dữ liệu Q1/2026 mới nhất trong "quarters" bên dưới
+// (khi có) được lấy từ nguồn khác (báo cáo tài chính thô/tin tức), không phải
+// từ bảng ratio này. Đây là giới hạn của nguồn dữ liệu, không phải do dashboard
+// bỏ sót — nhiều mã VN100 sẽ chưa có dòng Q1/2026 cho đến khi FiinTrade cập nhật.
+// Cập nhật currentPE/currentROE lần gần nhất: 02/07/2026 18:20-18:40 (giờ hệ thống).
 // ---------------------------------------------------------------
 const FUNDAMENTALS = {
   HPG: {
-    currentPE: 9.32, currentPB: 1.42,
+    currentPE: 9.32, currentPB: 1.42, currentROE: 16.39,
     quarters: [
-      {quarter:"Q2/2023",revenue:29799.50,profit:1460.04,yoyRevenue:-20.99,yoyProfit:-63.79,pe:-71.16,pb:1.39},
-      {quarter:"Q3/2023",revenue:28765.72,profit:2004.75,yoyRevenue:-16.48,yoyProfit:213.00,pe:87.03,pb:1.63},
-      {quarter:"Q4/2023",revenue:34924.57,profit:2972.78,yoyRevenue:33.24,yoyProfit:249.27,pe:24.29,pb:1.62},
-      {quarter:"Q1/2024",revenue:31092.57,profit:2870.59,yoyRevenue:15.73,yoyProfit:622.17,pe:19.17,pb:1.69},
-      {quarter:"Q2/2024",revenue:39936.27,profit:3319.26,yoyRevenue:34.02,yoyProfit:127.34,pe:15.46,pb:1.59},
-      {quarter:"Q3/2024",revenue:34300.35,profit:3022.95,yoyRevenue:19.24,yoyProfit:50.79,pe:13.94,pb:1.52},
-      {quarter:"Q4/2024",revenue:35232.20,profit:2808.65,yoyRevenue:0.88,yoyProfit:-5.52,pe:13.57,pb:1.43},
-      {quarter:"Q1/2025",revenue:37950.64,profit:3344.28,yoyRevenue:22.06,yoyProfit:16.50,pe:15.60,pb:1.66},
-      {quarter:"Q2/2025",revenue:36286.19,profit:4256.49,yoyRevenue:-9.14,yoyProfit:28.24,pe:15.57,pb:1.72},
-      {quarter:"Q3/2025",revenue:36793.87,profit:3988.32,yoyRevenue:7.27,yoyProfit:31.93,pe:14.29,pb:1.64},
-      {quarter:"Q4/2025",revenue:47301.62,profit:3864.08,yoyRevenue:34.26,yoyProfit:37.58,pe:13.78,pb:1.65},
-      {quarter:"Q1/2026",revenue:53312.91,profit:8994.00,yoyRevenue:40.48,yoyProfit:168.94,pe:9.38,pb:1.42}
+      {quarter:"Q2/2023",revenue:29799.50,profit:1460.04,yoyRevenue:-20.99,yoyProfit:-63.79,pe:-71.16,pb:1.39,roe:-1.97},
+      {quarter:"Q3/2023",revenue:28765.72,profit:2004.75,yoyRevenue:-16.48,yoyProfit:213.00,pe:87.03,pb:1.63,roe:1.92},
+      {quarter:"Q4/2023",revenue:34924.57,profit:2972.78,yoyRevenue:33.24,yoyProfit:249.27,pe:24.29,pb:1.62,roe:6.88},
+      {quarter:"Q1/2024",revenue:31092.57,profit:2870.59,yoyRevenue:15.73,yoyProfit:622.17,pe:19.17,pb:1.69,roe:9.17},
+      {quarter:"Q2/2024",revenue:39936.27,profit:3319.26,yoyRevenue:34.02,yoyProfit:127.34,pe:15.46,pb:1.59,roe:10.72},
+      {quarter:"Q3/2024",revenue:34300.35,profit:3022.95,yoyRevenue:19.24,yoyProfit:50.79,pe:13.94,pb:1.52,roe:11.38},
+      {quarter:"Q4/2024",revenue:35232.20,profit:2808.65,yoyRevenue:0.88,yoyProfit:-5.52,pe:13.57,pb:1.43,roe:11.07},
+      {quarter:"Q1/2025",revenue:37950.64,profit:3344.28,yoyRevenue:22.06,yoyProfit:16.50,pe:15.60,pb:1.66,roe:11.05},
+      {quarter:"Q2/2025",revenue:36286.19,profit:4256.49,yoyRevenue:-9.14,yoyProfit:28.24,pe:15.57,pb:1.72,roe:11.55},
+      {quarter:"Q3/2025",revenue:36793.87,profit:3988.32,yoyRevenue:7.27,yoyProfit:31.93,pe:14.29,pb:1.64,roe:12.02},
+      {quarter:"Q4/2025",revenue:47301.62,profit:3864.08,yoyRevenue:34.26,yoyProfit:37.58,pe:13.78,pb:1.65,roe:12.69},
+      {quarter:"Q1/2026",revenue:53312.91,profit:8994.00,yoyRevenue:40.48,yoyProfit:168.94,pe:9.38,pb:1.42,roe:null}
     ]
   },
   VNM: {
-    currentPE: 11.15, currentPB: 4.15,
+    currentPE: 11.15, currentPB: 4.15, currentROE: 31.74,
     quarters: [
-      {quarter:"Q2/2023",revenue:15212.94,profit:2198.81,yoyRevenue:1.69,yoyProfit:5.56,pe:17.18,pb:4.22},
-      {quarter:"Q3/2023",revenue:15681.49,profit:2492.25,yoyRevenue:-2.56,yoyProfit:8.43,pe:16.61,pb:4.56},
-      {quarter:"Q4/2023",revenue:15630.46,profit:2326.01,yoyRevenue:3.65,yoyProfit:24.44,pe:15.31,pb:4.29},
-      {quarter:"Q1/2024",revenue:14124.89,profit:2194.67,yoyRevenue:1.22,yoyProfit:18.20,pe:15.25,pb:4.41},
-      {quarter:"Q2/2024",revenue:16665.24,profit:2670.48,yoyRevenue:9.55,yoyProfit:21.45,pe:14.31,pb:4.03},
-      {quarter:"Q3/2024",revenue:15548.71,profit:2403.52,yoyRevenue:-0.85,yoyProfit:-3.56,pe:13.55,pb:4.14},
-      {quarter:"Q4/2024",revenue:15485.05,profit:2123.65,yoyRevenue:-0.93,yoyProfit:-8.70,pe:12.82,pb:3.73},
-      {quarter:"Q1/2025",revenue:12965.40,profit:1568.48,yoyRevenue:-8.21,yoyProfit:-28.53,pe:15.00,pb:3.90},
-      {quarter:"Q2/2025",revenue:16744.61,profit:2474.59,yoyRevenue:0.48,yoyProfit:-7.34,pe:13.92,pb:3.76},
-      {quarter:"Q3/2025",revenue:16968.08,profit:2526.77,yoyRevenue:9.13,yoyProfit:5.13,pe:16.97,pb:4.33},
-      {quarter:"Q4/2025",revenue:17045.42,profit:2840.37,yoyRevenue:10.08,yoyProfit:33.75,pe:13.53,pb:4.15},
-      {quarter:"Q1/2026",revenue:16147,profit:2429,yoyRevenue:25,yoyProfit:55,pe:null,pb:null}
+      {quarter:"Q2/2023",revenue:15212.94,profit:2198.81,yoyRevenue:1.69,yoyProfit:5.56,pe:17.18,pb:4.22,roe:null},
+      {quarter:"Q3/2023",revenue:15681.49,profit:2492.25,yoyRevenue:-2.56,yoyProfit:8.43,pe:16.61,pb:4.56,roe:null},
+      {quarter:"Q4/2023",revenue:15630.46,profit:2326.01,yoyRevenue:3.65,yoyProfit:24.44,pe:15.31,pb:4.29,roe:29.31},
+      {quarter:"Q1/2024",revenue:14124.89,profit:2194.67,yoyRevenue:1.22,yoyProfit:18.20,pe:15.25,pb:4.41,roe:28.86},
+      {quarter:"Q2/2024",revenue:16665.24,profit:2670.48,yoyRevenue:9.55,yoyProfit:21.45,pe:14.31,pb:4.03,roe:30.13},
+      {quarter:"Q3/2024",revenue:15548.71,profit:2403.52,yoyRevenue:-0.85,yoyProfit:-3.56,pe:13.55,pb:4.14,roe:29.69},
+      {quarter:"Q4/2024",revenue:15485.05,profit:2123.65,yoyRevenue:-0.93,yoyProfit:-8.70,pe:12.82,pb:3.73,roe:29.36},
+      {quarter:"Q1/2025",revenue:12965.40,profit:1568.48,yoyRevenue:-8.21,yoyProfit:-28.53,pe:15.00,pb:3.90,roe:26.63},
+      {quarter:"Q2/2025",revenue:16744.61,profit:2474.59,yoyRevenue:0.48,yoyProfit:-7.34,pe:13.92,pb:3.76,roe:26.55},
+      {quarter:"Q3/2025",revenue:16968.08,profit:2526.77,yoyRevenue:9.13,yoyProfit:5.13,pe:16.97,pb:4.33,roe:26.37},
+      {quarter:"Q4/2025",revenue:17045.42,profit:2840.37,yoyRevenue:10.08,yoyProfit:33.75,pe:13.53,pb:4.15,roe:29.89},
+      {quarter:"Q1/2026",revenue:16147,profit:2429,yoyRevenue:25,yoyProfit:55,pe:null,pb:null,roe:null}
     ]
   },
   MWG: {
-    currentPE: 14.07, currentPB: 3.86,
+    currentPE: 14.07, currentPB: 3.86, currentROE: 25.44,
     quarters: [
-      {quarter:"Q2/2023",revenue:29725.05,profit:17.41,yoyRevenue:-14.34,yoyProfit:-98.46,pe:37.90,pb:2.55},
-      {quarter:"Q3/2023",revenue:30520.84,profit:38.74,yoyRevenue:-5.57,yoyProfit:-95.73,pe:95.39,pb:2.85},
-      {quarter:"Q4/2023",revenue:31653.21,profit:90.26,yoyRevenue:2.51,yoyProfit:-85.42,pe:479.11,pb:3.44},
-      {quarter:"Q1/2024",revenue:31685.02,profit:902.44,yoyRevenue:15.91,yoyProfit:4143.38,pe:86.50,pb:3.59},
-      {quarter:"Q2/2024",revenue:34384.59,profit:1172.28,yoyRevenue:15.68,yoyProfit:6635.03,pe:44.13,pb:3.72},
-      {quarter:"Q3/2024",revenue:34361.57,profit:800.15,yoyRevenue:12.58,yoyProfit:1965.48,pe:29.20,pb:3.21},
-      {quarter:"Q4/2024",revenue:34793.92,profit:847.00,yoyRevenue:9.92,yoyProfit:838.43,pe:23.47,pb:3.18},
-      {quarter:"Q1/2025",revenue:36332.91,profit:1545.94,yoyRevenue:14.67,yoyProfit:71.31,pe:22.39,pb:3.36},
-      {quarter:"Q2/2025",revenue:37844.16,profit:1648.15,yoyRevenue:10.06,yoyProfit:40.59,pe:25.57,pb:4.21},
-      {quarter:"Q3/2025",revenue:40091.34,profit:1770.90,yoyRevenue:16.67,yoyProfit:121.32,pe:23.48,pb:4.34},
-      {quarter:"Q4/2025",revenue:42567.70,profit:2068.75,yoyRevenue:22.34,yoyProfit:144.24,pe:17.93,pb:3.86}
+      {quarter:"Q2/2023",revenue:29725.05,profit:17.41,yoyRevenue:-14.34,yoyProfit:-98.46,pe:37.90,pb:2.55,roe:null},
+      {quarter:"Q3/2023",revenue:30520.84,profit:38.74,yoyRevenue:-5.57,yoyProfit:-95.73,pe:95.39,pb:2.85,roe:null},
+      {quarter:"Q4/2023",revenue:31653.21,profit:90.26,yoyRevenue:2.51,yoyProfit:-85.42,pe:479.11,pb:3.44,roe:null},
+      {quarter:"Q1/2024",revenue:31685.02,profit:902.44,yoyRevenue:15.91,yoyProfit:4143.38,pe:86.50,pb:3.59,roe:null},
+      {quarter:"Q2/2024",revenue:34384.59,profit:1172.28,yoyRevenue:15.68,yoyProfit:6635.03,pe:44.13,pb:3.72,roe:8.99},
+      {quarter:"Q3/2024",revenue:34361.57,profit:800.15,yoyRevenue:12.58,yoyProfit:1965.48,pe:29.20,pb:3.21,roe:11.67},
+      {quarter:"Q4/2024",revenue:34793.92,profit:847.00,yoyRevenue:9.92,yoyProfit:838.43,pe:23.47,pb:3.18,roe:14.57},
+      {quarter:"Q1/2025",revenue:36332.91,profit:1545.94,yoyRevenue:14.67,yoyProfit:71.31,pe:22.39,pb:3.36,roe:15.86},
+      {quarter:"Q2/2025",revenue:37844.16,profit:1648.15,yoyRevenue:10.06,yoyProfit:40.59,pe:25.57,pb:4.21,roe:17.04},
+      {quarter:"Q3/2025",revenue:40091.34,profit:1770.90,yoyRevenue:16.67,yoyProfit:121.32,pe:23.48,pb:4.34,roe:19.68},
+      {quarter:"Q4/2025",revenue:42567.70,profit:2068.75,yoyRevenue:22.34,yoyProfit:144.24,pe:17.93,pb:3.86,roe:23.31}
     ]
   },
   VCB: {
-    currentPE: 14.46, currentPB: null,
+    currentPE: 14.46, currentPB: null, currentROE: 16.07,
     isBank:true,
     quarters: [
       {quarter:"Q2/2023",revenue:14020.58,profit:7422.82,yoyRevenue:9.56,yoyProfit:25.03},
@@ -472,7 +483,7 @@ const FUNDAMENTALS = {
     ]
   },
   VPB: {
-    currentPE: 8.15, currentPB: null,
+    currentPE: 8.15, currentPB: null, currentROE: 16.37,
     isBank:true,
     quarters: [
       {quarter:"Q2/2023",revenue:8762.15,profit:3061.79,yoyRevenue:-16.28,yoyProfit:-12.72},
@@ -489,7 +500,7 @@ const FUNDAMENTALS = {
     ]
   },
   HDB: {
-    currentPE: 7.29, currentPB: null,
+    currentPE: 7.29, currentPB: null, currentROE: 24.03,
     isBank:true,
     quarters: [
       {quarter:"Q2/2024",revenue:7719.88,profit:3114.89,yoyRevenue:55.82,yoyProfit:44.30},
@@ -503,7 +514,7 @@ const FUNDAMENTALS = {
     ]
   },
   EIB: {
-    currentPE: 52.32, currentPB: null,
+    currentPE: 52.32, currentPB: null, currentROE: 2.85,
     isBank:true,
     quarters: [
       {quarter:"Q3/2023",revenue:868.74,profit:241.81,yoyRevenue:-41.77,yoyProfit:-76.38},
@@ -520,7 +531,7 @@ const FUNDAMENTALS = {
     ]
   },
   STB: {
-    currentPE: 30.07, currentPB: null,
+    currentPE: 30.07, currentPB: null, currentROE: 7.59,
     isBank:true,
     quarters: [
       {quarter:"Q3/2023",revenue:4851.11,profit:1634.59,yoyRevenue:-15.81,yoyProfit:34.91},
@@ -536,7 +547,7 @@ const FUNDAMENTALS = {
     ]
   },
   CTR: {
-    currentPE: 15.45, currentPB: 4.75,
+    currentPE: 15.45, currentPB: 4.75, currentROE: 29.78,
     quarters: [
       {quarter:"Q2/2023",revenue:2701.36,profit:124.14,yoyRevenue:21.48,yoyProfit:20.61,pe:17.13,pb:4.98},
       {quarter:"Q3/2023",revenue:3083.43,profit:140.59,yoyRevenue:18.34,yoyProfit:9.64,pe:21.33,pb:5.81},
@@ -552,7 +563,7 @@ const FUNDAMENTALS = {
     ]
   },
   GVR: {
-    currentPE: 20.86, currentPB: 2.34,
+    currentPE: 20.86, currentPB: 2.34, currentROE: 10.95,
     quarters: [
       {quarter:"Q2/2023",revenue:4161.20,profit:558.18,yoyRevenue:-25.39,yoyProfit:-45.12,pe:25.22,pb:1.45},
       {quarter:"Q3/2023",revenue:6199.49,profit:312.83,yoyRevenue:5.91,yoyProfit:-62.54,pe:39.36,pb:1.82},
@@ -568,7 +579,7 @@ const FUNDAMENTALS = {
     ]
   },
   FPT: {
-    currentPE: 12.34, currentPB: 3.43,
+    currentPE: 12.34, currentPB: 3.43, currentROE: 26.82,
     quarters: [
       {quarter:"Q2/2023",revenue:12484.52,profit:1509.22,yoyRevenue:23.65,yoyProfit:20.66,pe:20.02,pb:4.84},
       {quarter:"Q3/2023",revenue:13761.83,profit:1739.34,yoyRevenue:23.44,yoyProfit:19.65,pe:19.73,pb:5.10},
@@ -584,7 +595,7 @@ const FUNDAMENTALS = {
     ]
   },
   MBB: {
-    currentPE: 7.32, currentPB: 1.58,
+    currentPE: 7.32, currentPB: 1.58, currentROE: 20.93,
     isBank:true,
     quarters: [
       {quarter:"Q2/2023",revenue:9481.37,profit:4893.50,yoyRevenue:5.71,yoyProfit:5.85,pe:5.25,pb:1.16},
@@ -601,7 +612,7 @@ const FUNDAMENTALS = {
     ]
   },
   VHM: {
-    currentPE: 9.63, currentPB: 2.61,
+    currentPE: 9.63, currentPB: 2.61, currentROE: 27.83,
     quarters: [
       {quarter:"Q2/2023",revenue:32613.84,profit:9687.70,yoyRevenue:629.54,yoyProfit:1353.57,pe:4.31,pb:1.16},
       {quarter:"Q3/2023",revenue:32724.10,profit:10694.76,yoyRevenue:83.79,yoyProfit:-26.21,pe:4.44,pb:1.03},
@@ -617,7 +628,7 @@ const FUNDAMENTALS = {
     ]
   },
   VIC: {
-    currentPE: 146.06, currentPB: 11.80,
+    currentPE: 146.06, currentPB: 11.80, currentROE: 7.95,
     quarters: [
       {quarter:"Q2/2023",revenue:47284.62,profit:1824.14,yoyRevenue:253.28,yoyProfit:-46.23,pe:31.12,pb:1.47},
       {quarter:"Q3/2023",revenue:47955.86,profit:-669.04,yoyRevenue:66.56,yoyProfit:-170.66,pe:43.71,pb:1.33},
@@ -633,7 +644,7 @@ const FUNDAMENTALS = {
     ]
   },
   ANV: {
-    currentPE: 5.32, currentPB: 1.82,
+    currentPE: 5.32, currentPB: 1.82, currentROE: 30.25,
     quarters: [
       {quarter:"Q2/2023",revenue:1090.88,profit:-51.04,yoyRevenue:-16.46,yoyProfit:-121.21,pe:16.23,pb:1.50},
       {quarter:"Q3/2023",revenue:1100.74,profit:1.04,yoyRevenue:-11.80,yoyProfit:-99.13,pe:26.01,pb:1.32},

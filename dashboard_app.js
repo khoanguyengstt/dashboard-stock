@@ -602,6 +602,9 @@ function renderFundamentals(ticker){
   const yoyRevCells = fd.quarters.map(function(q){ return '<td>' + fmtFundPct(q.yoyRevenue) + '</td>'; }).join("");
   const yoyProfitCells = fd.quarters.map(function(q){ return '<td>' + fmtFundPct(q.yoyProfit) + '</td>'; }).join("");
   const trendCells = trends.map(function(t){ return '<td>' + t + '</td>'; }).join("");
+  const hasROE = fd.quarters.some(function(q){ return q.roe !== undefined && q.roe !== null; });
+  const roeCells = fd.quarters.map(function(q){ return '<td>' + fmtFundPct(q.roe) + '</td>'; }).join("");
+  const roeRow = hasROE ? ('<tr><td>ROE (%)</td>' + roeCells + '</tr>') : "";
 
   // P/E, P/B theo từng quý (chỉ có với các mã không phải NH, và riêng MBB trong nhóm NH)
   const hasQuarterlyPB = fd.quarters.some(function(q){ return q.pe !== undefined && q.pe !== null; });
@@ -610,11 +613,15 @@ function renderFundamentals(ticker){
   const pebRows = hasQuarterlyPB ?
     ('<tr><td>P/E</td>' + peCells + '</tr>' + '<tr><td>P/B</td>' + pbCells + '</tr>') : "";
 
-  const pebHeader = (!hasQuarterlyPB) ?
+  const hasCurrentStats = (fd.currentPE !== undefined && fd.currentPE !== null) ||
+    (fd.currentPB !== undefined && fd.currentPB !== null) ||
+    (fd.currentROE !== undefined && fd.currentROE !== null);
+  const pebHeader = hasCurrentStats ?
     ('<div class="fund-note" style="margin-bottom:8px;font-style:normal;">' +
       'P/E hiện tại: <b style="color:var(--text);">' + (fd.currentPE || "--") + '</b>' +
       ' &nbsp;•&nbsp; P/B hiện tại: <b style="color:var(--text);">' + (fd.currentPB || "--") + '</b>' +
-      ' <span style="opacity:.7;">(ngân hàng này không có P/E, P/B theo quý trong dữ liệu nguồn)</span>' +
+      ' &nbsp;•&nbsp; ROE hiện tại (TTM): <b style="color:var(--text);">' + (fd.currentROE !== undefined && fd.currentROE !== null ? fd.currentROE + "%" : "--") + '</b>' +
+      (hasQuarterlyPB ? '' : ' <span style="opacity:.7;">(ngân hàng này không có P/E, P/B theo quý trong dữ liệu nguồn)</span>') +
     '</div>') : "";
 
   body.innerHTML = pebHeader +
@@ -625,6 +632,7 @@ function renderFundamentals(ticker){
       '<tr><td>LNST (tỷ)</td>' + profitCells + '</tr>' +
       '<tr><td>%YoY DT</td>' + yoyRevCells + '</tr>' +
       '<tr><td>%YoY LN</td>' + yoyProfitCells + '</tr>' +
+      roeRow +
       '<tr><td>Xu hướng LN</td>' + trendCells + '</tr>' +
       pebRows +
     '</tbody></table></div>' +
@@ -632,6 +640,7 @@ function renderFundamentals(ticker){
       (fd.isBank ? 'Chỉ tiêu "doanh thu" của ngân hàng là Thu nhập lãi thuần. ' : '') +
       'Ô "--" là quý nguồn chưa công bố. ' +
       (hasQuarterlyPB ? '' : 'Nhóm ngân hàng này không có P/E, P/B theo quý trong mẫu chỉ số của nguồn — chỉ hiển thị số hiện tại ở trên. ') +
+      (hasROE ? '' : 'Mã này chưa có dữ liệu ROE theo quý. ') +
       '"Tăng tốc/Giảm tốc" so sánh %YoY LNST quý này với quý liền trước.' +
     '</div>';
 }
