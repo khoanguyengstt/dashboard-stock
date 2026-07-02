@@ -1248,6 +1248,43 @@ const FUNDAMENTALS = {
       {quarter:"Q4/2025",revenue:2018.60,profit:49.51,yoyRevenue:131.51,yoyProfit:167.54,pe:26.45,pb:0.62,roe:2.37}
     ]
   },
+  SBT: {
+    currentPE: 25.02, currentPB: null, currentROE: 6.90,
+    quarters: [
+      {quarter:"Q2/2024",revenue:9488.66,profit:194.73,yoyRevenue:38.61,yoyProfit:192.07,pe:12.74,pb:0.93,roe:7.55},
+      {quarter:"Q3/2024",revenue:6832.18,profit:217.20,yoyRevenue:7.16,yoyProfit:11.51,pe:13.35,pb:1.00,roe:7.67},
+      {quarter:"Q4/2024",revenue:7551.15,profit:217.95,yoyRevenue:7.47,yoyProfit:41.47,pe:16.99,pb:1.36,roe:8.10},
+      {quarter:"Q1/2025",revenue:7303.76,profit:216.67,yoyRevenue:18.35,yoyProfit:6.03,pe:24.50,pb:1.96,roe:8.20},
+      {quarter:"Q2/2025",revenue:6857.93,profit:160.66,yoyRevenue:-27.73,yoyProfit:-17.49,pe:26.18,pb:2.07,roe:7.78},
+      {quarter:"Q3/2025",revenue:5386.65,profit:201.08,yoyRevenue:-21.16,yoyProfit:-7.42,pe:25.44,pb:1.92,roe:7.51},
+      {quarter:"Q4/2025",revenue:6749.70,profit:160.87,yoyRevenue:-10.61,yoyProfit:-26.19,pe:24.83,pb:1.66}
+    ]
+  },
+  SCR: {
+    currentPE: 25.01, currentPB: null, currentROE: 1.67,
+    warning:"SCR có lợi nhuận rất mỏng và cực kỳ biến động theo quý (P/E âm hoặc trên 100 lần nhiều quý) theo dữ liệu KAFI — cần thận trọng khi đánh giá.",
+    quarters: [
+      {quarter:"Q2/2024",revenue:75.59,profit:-3.70,yoyRevenue:10.01,yoyProfit:-258.11,pe:312.43,pb:0.43,roe:0.14},
+      {quarter:"Q3/2024",revenue:184.56,profit:0.61,yoyRevenue:49.92,yoyProfit:-38.25,pe:335.79,pb:0.47,roe:0.13},
+      {quarter:"Q4/2024",revenue:470.52,profit:1.11,yoyRevenue:378.07,yoyProfit:-75.55,pe:791.04,pb:0.48,roe:0.06},
+      {quarter:"Q1/2025",revenue:109.90,profit:1.51,yoyRevenue:58.12,yoyProfit:-69.24,pe:-7652.78,pb:0.71,roe:-0.01},
+      {quarter:"Q2/2025",revenue:409.08,profit:29.44,yoyRevenue:441.22,yoyProfit:896.14,pe:108.43,pb:0.70,roe:0.64},
+      {quarter:"Q3/2025",revenue:431.64,profit:1.24,yoyRevenue:133.88,yoyProfit:102.58,pe:91.58,pb:0.59,roe:0.64},
+      {quarter:"Q4/2025",revenue:276.88,profit:44.13,yoyRevenue:-41.15,yoyProfit:3858.80,pe:34.13,pb:0.49,roe:1.45}
+    ]
+  },
+  SCS: {
+    currentPE: 6.66, currentPB: null, currentROE: 47.51,
+    quarters: [
+      {quarter:"Q2/2024",revenue:264.10,profit:189.54,yoyRevenue:53.21,yoyProfit:46.78,pe:13.11,pb:5.66,roe:42.28},
+      {quarter:"Q3/2024",revenue:265.91,profit:185.77,yoyRevenue:54.97,yoyProfit:45.58,pe:12.70,pb:5.25,roe:45.45},
+      {quarter:"Q4/2024",revenue:294.06,profit:170.24,yoyRevenue:47.91,yoyProfit:32.60,pe:8.85,pb:4.28,roe:48.72},
+      {quarter:"Q1/2025",revenue:266.34,profit:169.92,yoyRevenue:25.15,yoyProfit:15.37,pe:9.56,pb:4.23,roe:51.15},
+      {quarter:"Q2/2025",revenue:291.74,profit:189.06,yoyRevenue:10.47,yoyProfit:-0.25,pe:7.89,pb:3.88,roe:48.09},
+      {quarter:"Q3/2025",revenue:311.57,profit:203.97,yoyRevenue:17.17,yoyProfit:9.79,pe:7.55,pb:3.30,roe:48.58},
+      {quarter:"Q4/2025",revenue:327.00,profit:188.11,yoyRevenue:11.20,yoyProfit:10.50,pe:7.35,pb:3.45,roe:50.62}
+    ]
+  },
   VCB: {
     currentPE: 14.46, currentPB: null, currentROE: 16.07,
     isBank:true,
