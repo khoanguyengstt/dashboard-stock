@@ -120,8 +120,8 @@ function drawCandlestickChart(canvas, data){
   function yPrice(p){ return padTop + (1 - (p - minP) / priceRange) * priceH; }
   function yVolTop(v){ return volTop + volH - (v / maxV) * volH; }
 
-  ctx.strokeStyle = "rgba(255,255,255,0.07)";
-  ctx.fillStyle = "#8b93a7";
+  ctx.strokeStyle = "rgba(15,23,42,0.08)";
+  ctx.fillStyle = "#6b7280";
   ctx.font = "10px -apple-system,Segoe UI,Roboto,sans-serif";
   const gridLines = 4;
   for(let i = 0; i <= gridLines; i++){
@@ -137,7 +137,7 @@ function drawCandlestickChart(canvas, data){
   data.forEach(function(d, i){
     const x = padLeft + i * slot + slot / 2;
     const up = d.close >= d.open;
-    const color = up ? "#1fbf75" : "#f0455a";
+    const color = up ? "#16a34a" : "#dc2626";
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
     ctx.lineWidth = 1;
@@ -150,12 +150,12 @@ function drawCandlestickChart(canvas, data){
     const bodyH = Math.max(1, Math.abs(yC - yO));
     ctx.fillRect(x - candleW / 2, bodyTop, candleW, bodyH);
 
-    ctx.fillStyle = up ? "rgba(31,191,117,0.55)" : "rgba(240,69,90,0.55)";
+    ctx.fillStyle = up ? "rgba(22,163,74,0.55)" : "rgba(220,38,38,0.55)";
     const vy = yVolTop(d.volume);
     ctx.fillRect(x - candleW / 2, vy, candleW, (volTop + volH) - vy);
   });
 
-  ctx.fillStyle = "#8b93a7";
+  ctx.fillStyle = "#6b7280";
   [0, Math.floor(n / 2), n - 1].forEach(function(i){
     if(!data[i]) return;
     const x = padLeft + i * slot + slot / 2;

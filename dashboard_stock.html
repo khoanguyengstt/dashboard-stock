@@ -6,9 +6,9 @@
 <title>Dashboard Cổ Phiếu VN100 - CANSLIM</title>
 <style>
   :root{
-    --bg:#0f1117; --panel:#171a23; --panel2:#1e222d; --border:#2a2f3d;
-    --text:#e6e8ef; --muted:#8b93a7; --green:#1fbf75; --red:#f0455a; --yellow:#f0b429;
-    --accent:#4f8cff;
+    --bg:#eef1f5; --panel:#ffffff; --panel2:#f2f4f8; --border:#e0e4ec;
+    --text:#1f2937; --muted:#6b7280; --green:#16a34a; --red:#dc2626; --yellow:#b45309;
+    --accent:#2563eb;
   }
   *{box-sizing:border-box;}
   body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);}
@@ -31,7 +31,7 @@
   .card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px;}
   .card h2 .tag{font-size:11px;color:var(--muted);font-weight:400;}
   #chartContainer{width:100%;}
-  .tech-box{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:12px;}
+  .tech-box{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:12px;}
   .tech-verdict-badge{display:block;text-align:center;font-weight:700;font-size:15px;padding:9px 10px;border-radius:8px;margin-bottom:10px;letter-spacing:.3px;}
   .tech-buy{background:rgba(31,191,117,.15);color:var(--green);border:1px solid rgba(31,191,117,.4);}
   .tech-sell{background:rgba(240,69,90,.15);color:var(--red);border:1px solid rgba(240,69,90,.4);}
@@ -43,12 +43,12 @@
   .tech-note{margin-top:8px;font-size:11px;color:var(--muted);font-style:italic;line-height:1.5;}
   .side-card{display:flex;flex-direction:column;}
   .side-subhead{font-size:13px;margin:14px 0 8px;color:var(--muted);font-weight:600;}
-  .rs-box{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;line-height:1.7;}
+  .rs-box{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;line-height:1.7;}
   .rs-box .rs-strong{color:var(--green);font-weight:700;}
   .rs-box .rs-weak{color:var(--red);font-weight:700;}
   .rs-row{display:flex;justify-content:space-between;margin-bottom:4px;}
   .rs-row span:first-child{color:var(--muted);}
-  .pattern-ref{margin-top:14px;border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,0.02);}
+  .pattern-ref{margin-top:14px;border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--panel2);}
   .pattern-ref summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);}
   .pattern-list{margin:10px 0 0;padding-left:18px;font-size:12.5px;line-height:1.6;color:var(--text);}
   .pattern-list li{margin-bottom:8px;}
@@ -117,8 +117,8 @@
   .fund-table{width:100%;border-collapse:collapse;font-size:12.5px;white-space:nowrap;}
   .fund-table th{text-align:right;color:var(--muted);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--border);}
   .fund-table th:first-child, .fund-table td:first-child{text-align:left;}
-  .fund-table td{text-align:right;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.04);}
-  .fund-table tr:hover td{background:rgba(255,255,255,.02);}
+  .fund-table td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--border);}
+  .fund-table tr:hover td{background:var(--panel2);}
   .fund-up{color:var(--green);}
   .fund-down{color:var(--red);}
   .fund-trend{font-size:11px;padding:2px 7px;border-radius:10px;font-weight:600;}
