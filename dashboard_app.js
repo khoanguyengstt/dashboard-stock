@@ -516,8 +516,8 @@ const VERDICT_CLASS = {buy:"badge-buy", watch:"badge-watch", avoid:"badge-avoid"
 function ratingToClass(rating){
   const r = (rating || "").toLowerCase();
   if(r.indexOf("bán") >= 0) return "avoid";
-  if(r.indexOf("trung lập") >= 0 || r.indexOf("nắm giữ") >= 0 || r.indexOf("theo dõi") >= 0) return "watch";
-  if(r.indexOf("mua") >= 0 || r.indexOf("khả quan") >= 0 || r.indexOf("tích cực") >= 0) return "buy";
+  if(r.indexOf("trung lập") >= 0 || r.indexOf("nắm giữ") >= 0 || r.indexOf("theo dõi") >= 0 || r.indexOf("phù hợp thị trường") >= 0 || r === "khác") return "watch";
+  if(r.indexOf("mua") >= 0 || r.indexOf("khả quan") >= 0 || r.indexOf("tích cực") >= 0 || r.indexOf("tăng tỷ trọng") >= 0 || r.indexOf("outperform") >= 0) return "buy";
   return "none";
 }
 
@@ -535,11 +535,14 @@ function renderValuations(ticker){
 
   const rows = data.valuations.map(function(v){
     const cls = ratingToClass(v.rating);
+    const dlBtn = v.url ? '<a href="' + v.url + '" target="_blank" rel="noopener" class="valuation-dl-btn" title="Xem/tải báo cáo gốc">Tải ↗</a>' : '—';
     return '<tr>' +
+      '<td>' + (v.date || "—") + '</td>' +
       '<td>' + v.ctck + '</td>' +
       '<td><span class="valuation-rating ' + cls + '">' + v.rating + '</span></td>' +
       '<td class="valuation-target">' + v.target + (v.target !== "—" && /[0-9]/.test(v.target) ? ' nghìn đ' : '') + '</td>' +
       '<td class="valuation-upside">' + v.upside + '</td>' +
+      '<td>' + dlBtn + '</td>' +
     '</tr>';
   }).join("");
 
@@ -554,8 +557,9 @@ function renderValuations(ticker){
 
   document.getElementById("valuationBody").innerHTML =
     '<table class="valuation-table"><thead><tr>' +
-      '<th>CTCK</th><th>Khuyến nghị</th><th>Giá mục tiêu</th><th>Upside</th>' +
-    '</tr></thead><tbody>' + rows + '</tbody></table>' + avgHtml;
+      '<th>Ngày</th><th>CTCK</th><th>Khuyến nghị</th><th>Giá mục tiêu</th><th>Upside</th><th>Báo cáo</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table>' + avgHtml +
+    '<div class="valuation-note">Tối đa 6 báo cáo gần nhất trong 1 năm qua, không quá 2 báo cáo/CTCK, nguồn: Simplize.vn (tổng hợp từ nhiều CTCK).</div>';
 }
 
 function fmtFundNum(v){

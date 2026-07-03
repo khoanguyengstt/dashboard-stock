@@ -60,9 +60,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"SSI", rating:"Mua", target:"36.000", upside:"+27,7%"},
-    {ctck:"Vietcap (VCSC)", rating:"Mua", target:"35.300", upside:"—"},
-    {ctck:"Agriseco", rating:"Mua", target:"32.000", upside:"+21%"}
+    {ctck:"SHS", rating:"Mua", target:"36.200", upside:"+37,4%", date:"20/05/2026", url:"https://simplize.vn/co-phieu/HPG/bao-cao"},
+    {ctck:"BSC", rating:"Mua", target:"40.800", upside:"+54,8%", date:"14/05/2026", url:"https://simplize.vn/co-phieu/HPG/bao-cao"},
+    {ctck:"NHSV", rating:"Mua", target:"34.200", upside:"+29,8%", date:"14/05/2026", url:"https://simplize.vn/co-phieu/HPG/bao-cao"},
+    {ctck:"Mirae Asset (MAS)", rating:"Mua", target:"34.500", upside:"+30,9%", date:"08/05/2026", url:"https://simplize.vn/co-phieu/HPG/bao-cao"},
+    {ctck:"Yuanta", rating:"Mua", target:"37.900", upside:"+43,8%", date:"29/04/2026", url:"https://simplize.vn/co-phieu/HPG/bao-cao"},
+    {ctck:"VDSC", rating:"Mua", target:"32.700", upside:"+24,1%", date:"24/04/2026", url:"https://simplize.vn/co-phieu/HPG/bao-cao"}
   ]
 },
 "VNM": {
@@ -83,8 +86,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"ACBS", rating:"Mua", target:"72.000", upside:"+25,5%"},
-    {ctck:"SSI", rating:"Trung lập", target:"67.500", upside:"—"}
+    {ctck:"Shinhan", rating:"Mua", target:"71.800", upside:"+30,8%", date:"26/06/2026", url:"https://simplize.vn/co-phieu/VNM/bao-cao"},
+    {ctck:"ACBS", rating:"Mua", target:"70.100", upside:"+27,7%", date:"11/05/2026", url:"https://simplize.vn/co-phieu/VNM/bao-cao"},
+    {ctck:"Mirae Asset (MAS)", rating:"Mua", target:"74.900", upside:"+36,4%", date:"05/05/2026", url:"https://simplize.vn/co-phieu/VNM/bao-cao"},
+    {ctck:"KBSV", rating:"Trung lập", target:"61.100", upside:"+11,3%", date:"23/03/2026", url:"https://simplize.vn/co-phieu/VNM/bao-cao"},
+    {ctck:"Yuanta", rating:"Mua", target:"71.600", upside:"+30,4%", date:"19/03/2026", url:"https://simplize.vn/co-phieu/VNM/bao-cao"},
+    {ctck:"Eldian", rating:"Mua", target:"69.800", upside:"+27,1%", date:"13/03/2026", url:"https://simplize.vn/co-phieu/VNM/bao-cao"}
   ]
 },
 "MWG": {
@@ -104,8 +111,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"SSI", rating:"Mua", target:"97.700", upside:"+22%"},
-    {ctck:"VNDirect", rating:"Giữ nguyên GMT", target:"108.100", upside:"—"}
+    {ctck:"VDSC", rating:"Mua", target:"103.100", upside:"+30,7%", date:"17/06/2026", url:"https://simplize.vn/co-phieu/MWG/bao-cao"},
+    {ctck:"BSC", rating:"Mua", target:"106.800", upside:"+35,4%", date:"10/06/2026", url:"https://simplize.vn/co-phieu/MWG/bao-cao"},
+    {ctck:"ACBS", rating:"Mua", target:"109.500", upside:"+38,8%", date:"10/06/2026", url:"https://simplize.vn/co-phieu/MWG/bao-cao"},
+    {ctck:"DSC", rating:"Mua", target:"117.000", upside:"+48,3%", date:"09/06/2026", url:"https://simplize.vn/co-phieu/MWG/bao-cao"},
+    {ctck:"FPTS", rating:"Mua", target:"110.600", upside:"+40,2%", date:"01/06/2026", url:"https://simplize.vn/co-phieu/MWG/bao-cao"},
+    {ctck:"Agriseco", rating:"Mua", target:"95.000", upside:"+20,4%", date:"29/05/2026", url:"https://simplize.vn/co-phieu/MWG/bao-cao"}
   ]
 },
 "VCB": {
@@ -125,9 +136,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"SSI", rating:"Mua", target:"84.900", upside:"—"},
-    {ctck:"Vietcap (VCSC)", rating:"Mua", target:"73.500", upside:"—"},
-    {ctck:"BVSC", rating:"Mua", target:"87.000", upside:"—"}
+    {ctck:"Mirae Asset (MAS)", rating:"Tăng tỷ trọng", target:"68.200", upside:"+8,6%", date:"09/04/2026", url:"https://simplize.vn/co-phieu/VCB/bao-cao"},
+    {ctck:"Shinhan", rating:"Mua", target:"79.800", upside:"+27,1%", date:"27/03/2026", url:"https://simplize.vn/co-phieu/VCB/bao-cao"},
+    {ctck:"KBSV", rating:"Mua", target:"75.500", upside:"+20,2%", date:"05/03/2026", url:"https://simplize.vn/co-phieu/VCB/bao-cao"},
+    {ctck:"SHS", rating:"Khả quan", target:"75.000", upside:"+19,4%", date:"03/03/2026", url:"https://simplize.vn/co-phieu/VCB/bao-cao"},
+    {ctck:"SSI", rating:"Mua", target:"84.900", upside:"+35,2%", date:"26/02/2026", url:"https://simplize.vn/co-phieu/VCB/bao-cao"},
+    {ctck:"KAFI", rating:"Mua", target:"74.100", upside:"+18,0%", date:"19/12/2025", url:"https://simplize.vn/co-phieu/VCB/bao-cao"}
   ]
 },
 "VPB": {
@@ -148,10 +162,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"VPBankS", rating:"Mua", target:"42.800", upside:"—"},
-    {ctck:"KBSV", rating:"Mua", target:"38.000", upside:"—"},
-    {ctck:"HSC", rating:"Mua", target:"36.800", upside:"+39%"},
-    {ctck:"BSC", rating:"Mua", target:"36.500", upside:"—"}
+    {ctck:"ACBS", rating:"Khả quan", target:"30.000", upside:"+17,4%", date:"31/03/2026", url:"https://simplize.vn/co-phieu/VPB/bao-cao"},
+    {ctck:"BSC", rating:"Mua", target:"36.500", upside:"+42,9%", date:"02/03/2026", url:"https://simplize.vn/co-phieu/VPB/bao-cao"},
+    {ctck:"KBSV", rating:"Mua", target:"38.000", upside:"+48,7%", date:"26/02/2026", url:"https://simplize.vn/co-phieu/VPB/bao-cao"},
+    {ctck:"Shinhan", rating:"Mua", target:"38.000", upside:"+48,7%", date:"25/02/2026", url:"https://simplize.vn/co-phieu/VPB/bao-cao"},
+    {ctck:"KBSV", rating:"Mua", target:"37.800", upside:"+47,9%", date:"07/11/2025", url:"https://simplize.vn/co-phieu/VPB/bao-cao"},
+    {ctck:"BSC", rating:"Mua", target:"35.600", upside:"+39,3%", date:"27/10/2025", url:"https://simplize.vn/co-phieu/VPB/bao-cao"}
   ]
 },
 "HDB": {
@@ -171,11 +187,11 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"SSI", rating:"Mua", target:"35.000", upside:"+37,3%"},
-    {ctck:"HSC", rating:"Khả quan", target:"33.000", upside:"—"},
-    {ctck:"Mirae Asset", rating:"Mua", target:"32.000", upside:"+21%"},
-    {ctck:"FPTS", rating:"Mua", target:"32.550", upside:"—"},
-    {ctck:"ACBS / SHS", rating:"Khả quan", target:"30.000", upside:"—"}
+    {ctck:"FPTS", rating:"Mua", target:"32.500", upside:"+20,6%", date:"25/06/2026", url:"https://simplize.vn/co-phieu/HDB/bao-cao"},
+    {ctck:"Shinhan", rating:"Mua", target:"34.000", upside:"+26,2%", date:"17/06/2026", url:"https://simplize.vn/co-phieu/HDB/bao-cao"},
+    {ctck:"SSI", rating:"Mua", target:"35.000", upside:"+29,9%", date:"28/05/2026", url:"https://simplize.vn/co-phieu/HDB/bao-cao"},
+    {ctck:"VPBankS", rating:"Mua", target:"33.400", upside:"+23,9%", date:"05/05/2026", url:"https://simplize.vn/co-phieu/HDB/bao-cao"},
+    {ctck:"VDSC", rating:"Mua", target:"31.200", upside:"+15,8%", date:"24/04/2026", url:"https://simplize.vn/co-phieu/HDB/bao-cao"}
   ]
 },
 "EIB": {
@@ -195,7 +211,7 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"Mirae Asset (MASVN)", rating:"Tăng tỷ trọng", target:"26.000", upside:"—"}
+    {ctck:"Mirae Asset (MAS)", rating:"Tăng tỷ trọng", target:"26.000", upside:"+25,9%", date:"03/04/2026", url:"https://simplize.vn/co-phieu/EIB/bao-cao"}
   ]
 },
 "STB": {
@@ -215,9 +231,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"VPBankS", rating:"Khác/Tham chiếu", target:"63.200", upside:"—"},
-    {ctck:"Vietcap (VCSC)", rating:"Nắm giữ (hạ từ Khả quan)", target:"58.300", upside:"—"},
-    {ctck:"MBS", rating:"Trung lập", target:"58.800", upside:"—"}
+    {ctck:"VPBankS", rating:"Khác", target:"63.200", upside:"-7,1%", date:"12/05/2026", url:"https://simplize.vn/co-phieu/STB/bao-cao"},
+    {ctck:"Mirae Asset (MAS)", rating:"Nắm giữ", target:"72.200", upside:"+6,2%", date:"21/04/2026", url:"https://simplize.vn/co-phieu/STB/bao-cao"},
+    {ctck:"MBS", rating:"Trung lập", target:"58.800", upside:"-13,5%", date:"15/04/2026", url:"https://simplize.vn/co-phieu/STB/bao-cao"},
+    {ctck:"SHS", rating:"Theo dõi", target:"70.000", upside:"+2,9%", date:"12/03/2026", url:"https://simplize.vn/co-phieu/STB/bao-cao"},
+    {ctck:"SSI", rating:"Trung lập", target:"58.200", upside:"-14,4%", date:"08/12/2025", url:"https://simplize.vn/co-phieu/STB/bao-cao"},
+    {ctck:"ACBS", rating:"Khả quan", target:"57.000", upside:"-16,2%", date:"21/11/2025", url:"https://simplize.vn/co-phieu/STB/bao-cao"}
   ]
 },
 "CTR": {
@@ -237,12 +256,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"Vietcap (VCSC)", rating:"Mua", target:"137.700", upside:"—"},
-    {ctck:"MBS", rating:"Khả quan (Mua)", target:"119.900", upside:"—"},
-    {ctck:"HSC", rating:"Tăng tỷ trọng", target:"99.000", upside:"+17%"},
-    {ctck:"Agriseco", rating:"Nắm giữ", target:"98.000", upside:"—"},
-    {ctck:"SSI", rating:"Trung lập", target:"96.000", upside:"+10%"},
-    {ctck:"BSC", rating:"Theo dõi (Trung lập)", target:"93.800", upside:"+11%"}
+    {ctck:"Agriseco", rating:"Trung lập", target:"98.000", upside:"+14,2%", date:"29/05/2026", url:"https://simplize.vn/co-phieu/CTR/bao-cao"},
+    {ctck:"Mirae Asset (MAS)", rating:"Tăng tỷ trọng", target:"98.800", upside:"+15,2%", date:"19/05/2026", url:"https://simplize.vn/co-phieu/CTR/bao-cao"},
+    {ctck:"VPBankS", rating:"Trung lập", target:"93.500", upside:"+9,0%", date:"14/05/2026", url:"https://simplize.vn/co-phieu/CTR/bao-cao"},
+    {ctck:"MBS", rating:"Khả quan", target:"113.600", upside:"+32,4%", date:"04/05/2026", url:"https://simplize.vn/co-phieu/CTR/bao-cao"},
+    {ctck:"BSC", rating:"Trung lập", target:"93.800", upside:"+9,3%", date:"28/04/2026", url:"https://simplize.vn/co-phieu/CTR/bao-cao"},
+    {ctck:"SSI", rating:"Trung lập", target:"96.000", upside:"+11,9%", date:"28/04/2026", url:"https://simplize.vn/co-phieu/CTR/bao-cao"}
   ]
 },
 "GVR": {
@@ -263,10 +282,10 @@ const TOP_ANALYSIS = {
   ],
   sources:[["CafeF - CTCK chỉ ra 10 doanh nghiệp tiềm năng nửa cuối 2026","https://cafef.vn/ctck-chi-ra-10-doanh-nghiep-co-nen-tang-co-ban-va-tiem-nang-tang-truong-tot-phu-hop-xuong-tien-nua-cuoi-2026-188260627223528475.chn"]],
   valuations:[
-    {ctck:"KBSV", rating:"Trung lập", target:"37.500", upside:"—"},
-    {ctck:"SSI", rating:"Trung lập (hạ từ Mua)", target:"36.200", upside:"—"},
-    {ctck:"MBS", rating:"Trung lập", target:"36.100", upside:"—"},
-    {ctck:"Vietcap (VCSC)", rating:"Phù hợp thị trường", target:"31.200", upside:"—"}
+    {ctck:"KBSV", rating:"Trung lập", target:"37.500", upside:"+5,0%", date:"13/03/2026", url:"https://simplize.vn/co-phieu/GVR/bao-cao"},
+    {ctck:"KBSV", rating:"Mua", target:"33.400", upside:"-6,4%", date:"15/12/2025", url:"https://simplize.vn/co-phieu/GVR/bao-cao"},
+    {ctck:"SSI", rating:"Khả quan", target:"35.700", upside:"+0,0%", date:"20/11/2025", url:"https://simplize.vn/co-phieu/GVR/bao-cao"},
+    {ctck:"Vietcap (VCSC)", rating:"Khác", target:"30.800", upside:"-13,7%", date:"10/07/2025", url:"https://simplize.vn/co-phieu/GVR/bao-cao"}
   ]
 },
 "FPT": {
@@ -287,10 +306,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["Tin nhanh Chứng khoán - MBS khuyến nghị khả quan FPT","https://m.tinnhanhchungkhoan.vn/bcpt/mbs-khuyen-nghi-kha-quan-danh-cho-co-phieu-fpt-4604.html"],["Bnews - Khuyến nghị cổ phiếu FPT, GMD","https://bnews.vn/khuyen-nghi-co-phieu-fpt-gmd-va-trien-vong-nhom-ban-le-2026/426737.html"]],
   valuations:[
-    {ctck:"SSI", rating:"Khả quan", target:"153.100", upside:"+12,3%"},
-    {ctck:"BVSC", rating:"Mua", target:"94.500", upside:"—"},
-    {ctck:"MBS", rating:"Khả quan (Mua)", target:"Chưa nêu cụ thể", upside:"—"},
-    {ctck:"CTCK khác (chưa xác định rõ)", rating:"Nâng lên Khả quan", target:"142.800", upside:"—"}
+    {ctck:"FPTS", rating:"Mua", target:"94.700", upside:"+31,0%", date:"19/06/2026", url:"https://simplize.vn/co-phieu/FPT/bao-cao"},
+    {ctck:"Vietcap (VCSC)", rating:"Mua", target:"89.700", upside:"+24,1%", date:"12/06/2026", url:"https://simplize.vn/co-phieu/FPT/bao-cao"},
+    {ctck:"KBSV", rating:"Mua", target:"103.100", upside:"+42,6%", date:"08/06/2026", url:"https://simplize.vn/co-phieu/FPT/bao-cao"},
+    {ctck:"BSC", rating:"Mua", target:"89.000", upside:"+23,1%", date:"18/05/2026", url:"https://simplize.vn/co-phieu/FPT/bao-cao"},
+    {ctck:"SSI", rating:"Mua", target:"99.900", upside:"+38,2%", date:"22/04/2026", url:"https://simplize.vn/co-phieu/FPT/bao-cao"},
+    {ctck:"Mirae Asset (MAS)", rating:"Mua", target:"90.400", upside:"+25,0%", date:"22/04/2026", url:"https://simplize.vn/co-phieu/FPT/bao-cao"}
   ]
 },
 "MBB": {
@@ -311,8 +332,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["Đầu tư Cổ phiếu - HSC nâng khuyến nghị MBB lên Mua","https://dautucophieu.net/cap-nhat-co-phieu-mbb-nang-khuyen-nghi-len-mua-vao-tren-co-so-dinh-gia-hap-dan/"]],
   valuations:[
-    {ctck:"HSC", rating:"Mua", target:"30.400", upside:"—"},
-    {ctck:"Yuanta", rating:"Mua", target:"29.500", upside:"—"}
+    {ctck:"VPBankS", rating:"Mua", target:"34.200", upside:"+38,5%", date:"19/06/2026", url:"https://simplize.vn/co-phieu/MBB/bao-cao"},
+    {ctck:"KBSV", rating:"Mua", target:"31.400", upside:"+27,1%", date:"15/06/2026", url:"https://simplize.vn/co-phieu/MBB/bao-cao"},
+    {ctck:"Mirae Asset (MAS)", rating:"Mua", target:"33.300", upside:"+34,8%", date:"04/06/2026", url:"https://simplize.vn/co-phieu/MBB/bao-cao"},
+    {ctck:"VPBankS", rating:"Mua", target:"34.200", upside:"+38,5%", date:"06/05/2026", url:"https://simplize.vn/co-phieu/MBB/bao-cao"},
+    {ctck:"Yuanta", rating:"Mua", target:"29.500", upside:"+19,4%", date:"21/04/2026", url:"https://simplize.vn/co-phieu/MBB/bao-cao"},
+    {ctck:"SHS", rating:"Khác", target:"31.000", upside:"+25,5%", date:"19/04/2026", url:"https://simplize.vn/co-phieu/MBB/bao-cao"}
   ]
 },
 "VHM": {
@@ -333,11 +358,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["Vietstock - Dòng tiền cá mập 26/06: Khối ngoại mua ròng mạnh cổ phiếu họ Vingroup","https://vietstock.vn/2026/06/theo-dau-dong-tien-ca-map-2606-khoi-ngoai-mua-rong-manh-co-phieu-ho-vingroup-830-1459394.htm"],["Đầu tư Cổ phiếu - Cập nhật VHM, HSC nâng giá mục tiêu","https://dautucophieu.net/cap-nhat-co-phieu-vhm-hoat-dong-ban-buon-khoi-sac-nang-du-bao-loi-nhuan-va-gia-muc-tieu/"]],
   valuations:[
-    {ctck:"HSC", rating:"Nắm giữ", target:"163.400", upside:"+33% (điều chỉnh GMT)"},
-    {ctck:"Vietcap (VCSC)", rating:"Phù hợp thị trường (hạ từ Mua)", target:"153.700", upside:"+25% (điều chỉnh GMT)"},
-    {ctck:"MBS", rating:"Khả quan", target:"123.200", upside:"—"},
-    {ctck:"SSI", rating:"Khả quan", target:"69.400", upside:"—"},
-    {ctck:"VNDirect", rating:"Trung lập", target:"65.000", upside:"+10,4%"}
+    {ctck:"Vietcap (VCSC)", rating:"Trung lập", target:"147.700", upside:"-2,6%", date:"02/06/2026", url:"https://simplize.vn/co-phieu/VHM/bao-cao"},
+    {ctck:"Shinhan", rating:"Mua", target:"133.500", upside:"-11,9%", date:"08/04/2026", url:"https://simplize.vn/co-phieu/VHM/bao-cao"},
+    {ctck:"DSC", rating:"Trung lập", target:"99.200", upside:"-34,6%", date:"19/03/2026", url:"https://simplize.vn/co-phieu/VHM/bao-cao"},
+    {ctck:"ACBS", rating:"Trung lập", target:"102.500", upside:"-32,4%", date:"18/03/2026", url:"https://simplize.vn/co-phieu/VHM/bao-cao"},
+    {ctck:"MBS", rating:"Khả quan", target:"117.200", upside:"-22,7%", date:"10/03/2026", url:"https://simplize.vn/co-phieu/VHM/bao-cao"},
+    {ctck:"ACBS", rating:"Khả quan", target:"111.700", upside:"-26,3%", date:"03/12/2025", url:"https://simplize.vn/co-phieu/VHM/bao-cao"}
   ]
 },
 "VIC": {
@@ -357,8 +383,7 @@ const TOP_ANALYSIS = {
   ],
   sources:[["Thương hiệu Công luận - Khối ngoại thu hẹp bán ròng, gom mạnh VIC","https://thuonghieucongluan.com.vn/khoi-ngoai-thu-hep-ban-rong-bat-ngo-gom-manh-co-phieu-vic-a324288.html"],["Tin nhanh Chứng khoán - GD khối ngoại tuần 22-26/6","https://www.tinnhanhchungkhoan.vn/giao-dich-chung-khoan-khoi-ngoai-tuan-22-266-mua-rong-hon-1100-ty-dong-mot-co-phieu-lon-post393031.html"]],
   valuations:[
-    {ctck:"SSI", rating:"Trung lập", target:"65.000", upside:"+10,4%"},
-    {ctck:"Vietcap (VCSC)", rating:"Bán", target:"Đã hạ 3% (chưa rõ số tuyệt đối)", upside:"—"}
+    {ctck:"Vietcap (VCSC)", rating:"Trung lập", target:"63.900", upside:"-71,0%", date:"05/09/2025", url:"https://simplize.vn/co-phieu/VIC/bao-cao"}
   ]
 },
 "ANV": {
@@ -379,8 +404,12 @@ const TOP_ANALYSIS = {
   ],
   sources:[["Elibook - ANV: LNST quý 2 đạt 408 tỷ đồng, tăng 23% svck","https://elibook.vn/2026/07/01/anv-loi-nhuan-sau-thue-quy-2-dat-408-ty-dong-tang-23-so-voi-cung-ky-nho-san-luong-tieu-thu-ca-tra-va-ca-ro-phi-tich-cuc.html/"]],
   valuations:[
-    {ctck:"VDSC", rating:"Mua", target:"26.000", upside:"+26%"},
-    {ctck:"HSC", rating:"Mua", target:"31.100", upside:"+39%"}
+    {ctck:"Mirae Asset (MAS)", rating:"Mua", target:"34.000", upside:"+39,9%", date:"18/03/2026", url:"https://simplize.vn/co-phieu/ANV/bao-cao"},
+    {ctck:"BVSC", rating:"Khả quan", target:"31.500", upside:"+29,6%", date:"15/01/2026", url:"https://simplize.vn/co-phieu/ANV/bao-cao"},
+    {ctck:"FPTS", rating:"Theo dõi", target:"25.600", upside:"+5,3%", date:"11/11/2025", url:"https://simplize.vn/co-phieu/ANV/bao-cao"},
+    {ctck:"Shinhan", rating:"Mua", target:"35.700", upside:"+46,9%", date:"05/11/2025", url:"https://simplize.vn/co-phieu/ANV/bao-cao"},
+    {ctck:"MBS", rating:"Mua", target:"32.500", upside:"+33,7%", date:"25/08/2025", url:"https://simplize.vn/co-phieu/ANV/bao-cao"},
+    {ctck:"FPTS", rating:"Khác", target:"20.400", upside:"-16,0%", date:"09/07/2025", url:"https://simplize.vn/co-phieu/ANV/bao-cao"}
   ]
 }
 };
