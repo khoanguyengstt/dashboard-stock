@@ -477,7 +477,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:3857.62,profit:45.24,yoyRevenue:30.11,yoyProfit:-66.42,pe:11.42,pb:0.59,roe:5.23},
       {quarter:"Q2/2025",revenue:2310.91,profit:131.69,yoyRevenue:-16.99,yoyProfit:-3.09,pe:11.24,pb:0.60,roe:5.23},
       {quarter:"Q3/2025",revenue:2371.76,profit:117.55,yoyRevenue:-25.76,yoyProfit:439.25,pe:8.07,pb:0.57,roe:6.94},
-      {quarter:"Q4/2025",revenue:2193.50,profit:78.43,yoyRevenue:-42.94,yoyProfit:2.94,pe:7.57,pb:0.53,roe:6.90}
+      {quarter:"Q4/2025",revenue:2193.50,profit:78.43,yoyRevenue:-42.94,yoyProfit:2.94,pe:7.57,pb:0.53,roe:6.90},
+      {quarter:"Q1/2026",revenue:2224.69,profit:162.60,yoyRevenue:-42.32,yoyProfit:192.94}
     ]
   },
   ACB: {
@@ -490,7 +491,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:6358.87,profit:3678.27,yoyRevenue:-5.40,yoyProfit:-5.82},
       {quarter:"Q2/2025",revenue:6683.85,profit:4881.16,yoyRevenue:-6.01,yoyProfit:9.23},
       {quarter:"Q3/2025",revenue:6769.71,profit:4280.59,yoyRevenue:-1.62,yoyProfit:10.60},
-      {quarter:"Q4/2025",revenue:7093.27,profit:2784.69,yoyRevenue:0.18,yoyProfit:-38.74}
+      {quarter:"Q4/2025",revenue:7093.27,profit:2784.69,yoyRevenue:0.18,yoyProfit:-38.74},
+      {quarter:"Q1/2026",revenue:6989.16,profit:4320.39,yoyRevenue:9.91,yoyProfit:17.46}
     ]
   },
   AGG: {
@@ -502,7 +504,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:191.77,profit:10.27,yoyRevenue:-85.39,yoyProfit:-94.87,pe:28.51,pb:1.01,roe:3.50},
       {quarter:"Q2/2025",revenue:193.91,profit:80.60,yoyRevenue:14.71,yoyProfit:216.59,pe:15.76,pb:0.80,roe:5.21},
       {quarter:"Q3/2025",revenue:170.37,profit:109.00,yoyRevenue:-36.52,yoyProfit:348.67,pe:9.68,pb:0.72,roe:7.75},
-      {quarter:"Q4/2025",revenue:273.04,profit:179.33,yoyRevenue:67.31,yoyProfit:277.87,pe:5.40,pb:0.58,roe:11.47}
+      {quarter:"Q4/2025",revenue:273.04,profit:179.33,yoyRevenue:67.31,yoyProfit:277.87,pe:5.40,pb:0.58,roe:11.47},
+      {quarter:"Q1/2026",revenue:67.26,profit:5.01,yoyRevenue:-64.93,yoyProfit:-37.92}
     ]
   },
   ASM: {
@@ -514,7 +517,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2719.88,profit:15.87,yoyRevenue:6.57,yoyProfit:-72.86,pe:21.90,pb:0.56,roe:2.55},
       {quarter:"Q2/2025",revenue:3359.89,profit:17.73,yoyRevenue:-0.57,yoyProfit:-79.95,pe:42.50,pb:0.53,roe:1.24},
       {quarter:"Q3/2025",revenue:2632.87,profit:11.41,yoyRevenue:-18.32,yoyProfit:-76.88,pe:86.94,pb:0.47,roe:0.54},
-      {quarter:"Q4/2025",revenue:2627.67,profit:-7.30,yoyRevenue:-8.35,yoyProfit:52.62,pe:60.79,pb:0.42,roe:0.69}
+      {quarter:"Q4/2025",revenue:2627.67,profit:-7.30,yoyRevenue:-8.35,yoyProfit:52.62,pe:60.79,pb:0.42,roe:0.69},
+      {quarter:"Q1/2026",revenue:2486.43,profit:120.13,yoyRevenue:-8.58,yoyProfit:216.96}
     ]
   },
   BCG: {
@@ -576,7 +580,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:337.18,profit:81.12,yoyRevenue:-4.14,yoyProfit:-40.86,pe:31.06,pb:2.16,roe:7.11},
       {quarter:"Q2/2025",revenue:506.43,profit:101.90,yoyRevenue:19.40,yoyProfit:-11.22,pe:30.76,pb:2.03,roe:6.75},
       {quarter:"Q3/2025",revenue:687.92,profit:215.59,yoyRevenue:115.57,yoyProfit:207.95,pe:20.04,pb:1.81,roe:9.40},
-      {quarter:"Q4/2025",revenue:565.65,profit:95.06,yoyRevenue:77.60,yoyProfit:4.29,pe:18.22,pb:1.63,roe:9.32}
+      {quarter:"Q4/2025",revenue:565.65,profit:95.06,yoyRevenue:77.60,yoyProfit:4.29,pe:18.22,pb:1.63,roe:9.32},
+      {quarter:"Q1/2026",revenue:697.14,profit:88.82,yoyRevenue:106.76,yoyProfit:9.49}
     ]
   },
   BVH: {
@@ -588,7 +593,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:10675.75,profit:671.88,yoyRevenue:3.42,yoyProfit:14.70,pe:16.55,pb:1.57,roe:9.72},
       {quarter:"Q2/2025",revenue:11364.91,profit:664.55,yoyRevenue:6.13,yoyProfit:55.33,pe:15.44,pb:1.58,roe:10.53},
       {quarter:"Q3/2025",revenue:10448.27,profit:759.33,yoyRevenue:-0.24,yoyProfit:41.78,pe:19.51,pb:2.11,roe:11.28},
-      {quarter:"Q4/2025",revenue:11239.42,profit:728.83,yoyRevenue:0.66,yoyProfit:29.85,pe:18.45,pb:2.14,roe:12.06}
+      {quarter:"Q4/2025",revenue:11239.42,profit:728.83,yoyRevenue:0.66,yoyProfit:29.85,pe:18.45,pb:2.14,roe:12.06},
+      {quarter:"Q1/2026",revenue:9594.34,profit:815.62,yoyRevenue:-1.95,yoyProfit:18.77}
     ]
   },
   BWE: {
@@ -600,7 +606,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:923.93,profit:147.57,yoyRevenue:16.70,yoyProfit:-17.64,pe:17.15,pb:2.04,roe:11.77},
       {quarter:"Q2/2025",revenue:1325.15,profit:302.58,yoyRevenue:28.12,yoyProfit:122.95,pe:13.66,pb:1.96,roe:14.73},
       {quarter:"Q3/2025",revenue:903.42,profit:264.37,yoyRevenue:-4.14,yoyProfit:45.19,pe:11.63,pb:1.75,roe:15.91},
-      {quarter:"Q4/2025",revenue:1390.37,profit:276.52,yoyRevenue:16.79,yoyProfit:94.81,pe:9.65,pb:1.60,roe:17.52}
+      {quarter:"Q4/2025",revenue:1390.37,profit:276.52,yoyRevenue:16.79,yoyProfit:94.81,pe:9.65,pb:1.60,roe:17.52},
+      {quarter:"Q1/2026",revenue:1034.75,profit:211.88,yoyRevenue:11.99,yoyProfit:30.15}
     ]
   },
   CII: {
@@ -612,7 +619,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:721.29,profit:18.07,yoyRevenue:-20.18,yoyProfit:-93.28,pe:393.59,pb:1.16,roe:0.24},
       {quarter:"Q2/2025",revenue:756.87,profit:28.74,yoyRevenue:1.14,yoyProfit:1673.53,pe:317.13,pb:1.90,roe:0.54},
       {quarter:"Q3/2025",revenue:740.10,profit:11.06,yoyRevenue:1.08,yoyProfit:85.87,pe:230.73,pb:1.30,roe:0.55},
-      {quarter:"Q4/2025",revenue:844.96,profit:66.19,yoyRevenue:5.84,yoyProfit:665.75,pe:95.87,pb:1.45,roe:1.66}
+      {quarter:"Q4/2025",revenue:844.96,profit:66.19,yoyRevenue:5.84,yoyProfit:665.75,pe:95.87,pb:1.45,roe:1.66},
+      {quarter:"Q1/2026",revenue:859.08,profit:40.77,yoyRevenue:19.10,yoyProfit:-57.35}
     ]
   },
   CMG: {
@@ -624,7 +632,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1917.77,profit:79.97,yoyRevenue:14.97,yoyProfit:45.42,pe:23.91,pb:2.85,roe:12.43},
       {quarter:"Q2/2025",revenue:2210.10,profit:94.15,yoyRevenue:23.22,yoyProfit:13.13,pe:24.29,pb:2.89,roe:12.48},
       {quarter:"Q3/2025",revenue:2420.13,profit:89.99,yoyRevenue:10.61,yoyProfit:52.86,pe:22.09,pb:2.82,roe:13.18},
-      {quarter:"Q4/2025",revenue:2563.14,profit:134.50,yoyRevenue:11.16,yoyProfit:6.27,pe:16.36,pb:2.03}
+      {quarter:"Q4/2025",revenue:2563.14,profit:134.50,yoyRevenue:11.16,yoyProfit:6.27,pe:16.36,pb:2.03},
+      {quarter:"Q1/2026",revenue:2367.41,profit:118.27,yoyRevenue:23.44,yoyProfit:14.59}
     ]
   },
   CRE: {
@@ -636,7 +645,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:154.34,profit:3.01,yoyRevenue:-68.74,yoyProfit:-61.23,pe:115.07,pb:0.72,roe:0.63},
       {quarter:"Q2/2025",revenue:349.78,profit:39.46,yoyRevenue:4.98,yoyProfit:412.86,pe:64.64,pb:0.77,roe:1.19},
       {quarter:"Q3/2025",revenue:334.24,profit:23.10,yoyRevenue:1.90,yoyProfit:62.11,pe:45.20,pb:0.60,roe:1.34},
-      {quarter:"Q4/2025",revenue:485.13,profit:7.73,yoyRevenue:26.61,yoyProfit:-25.26,pe:47.25,pb:0.62,roe:1.33}
+      {quarter:"Q4/2025",revenue:485.13,profit:7.73,yoyRevenue:26.61,yoyProfit:-25.26,pe:47.25,pb:0.62,roe:1.33},
+      {quarter:"Q1/2026",revenue:451.84,profit:16.33,yoyRevenue:192.76,yoyProfit:442.52}
     ]
   },
   CTD: {
@@ -648,7 +658,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:5002.82,profit:57.13,yoyRevenue:7.22,yoyProfit:-45.53,pe:25.05,pb:0.94,roe:3.73},
       {quarter:"Q2/2025",revenue:8237.24,profit:201.53,yoyRevenue:24.89,yoyProfit:192.23,pe:21.91,pb:1.13,roe:5.20},
       {quarter:"Q3/2025",revenue:7451.78,profit:294.81,yoyRevenue:56.59,yoyProfit:217.27,pe:12.30,pb:0.88,roe:7.38},
-      {quarter:"Q4/2025",revenue:10007.27,profit:227.84,yoyRevenue:45.33,yoyProfit:117.83,pe:12.40,pb:1.04}
+      {quarter:"Q4/2025",revenue:10007.27,profit:227.84,yoyRevenue:45.33,yoyProfit:117.83,pe:12.40,pb:1.04},
+      {quarter:"Q1/2026",revenue:6409.81,profit:118.93,yoyRevenue:28.12,yoyProfit:108.14}
     ]
   },
   CTG: {
@@ -661,7 +672,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:15475.22,profit:5418.88,yoyRevenue:1.98,yoyProfit:9.28},
       {quarter:"Q2/2025",revenue:15842.62,profit:9669.89,yoyRevenue:3.28,yoyProfit:80.23},
       {quarter:"Q3/2025",revenue:17175.72,profit:8448.78,yoyRevenue:10.26,yoyProfit:61.67},
-      {quarter:"Q4/2025",revenue:17959.70,profit:11066.94,yoyRevenue:10.10,yoyProfit:12.95}
+      {quarter:"Q4/2025",revenue:17959.70,profit:11066.94,yoyRevenue:10.10,yoyProfit:12.95},
+      {quarter:"Q1/2026",revenue:19385.15,profit:8960.04,yoyRevenue:25.27,yoyProfit:62.93}
     ]
   },
   DBC: {
@@ -673,7 +685,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:3749.98,profit:508.26,yoyRevenue:12.16,yoyProfit:600.01,pe:9.15,pb:1.66,roe:18.97},
       {quarter:"Q2/2025",revenue:3848.33,profit:506.97,yoyRevenue:20.54,yoyProfit:248.59,pe:6.49,pb:1.36,roe:22.29},
       {quarter:"Q3/2025",revenue:5021.58,profit:342.96,yoyRevenue:36.50,yoyProfit:9.86,pe:6.81,pb:1.37,roe:21.66},
-      {quarter:"Q4/2025",revenue:2350.51,profit:148.58,yoyRevenue:-30.59,yoyProfit:-37.80,pe:5.77,pb:1.08,roe:20.32}
+      {quarter:"Q4/2025",revenue:2350.51,profit:148.58,yoyRevenue:-30.59,yoyProfit:-37.80,pe:5.77,pb:1.08,roe:20.32},
+      {quarter:"Q1/2026",revenue:4307.72,profit:374.04,yoyRevenue:14.87,yoyProfit:-26.41}
     ]
   },
   DCM: {
@@ -685,7 +698,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:3572.12,profit:411.42,yoyRevenue:23.81,yoyProfit:18.91,pe:14.08,pb:1.99,roe:14.74},
       {quarter:"Q2/2025",revenue:6252.27,profit:786.12,yoyRevenue:56.09,yoyProfit:34.50,pe:10.92,pb:1.80,roe:16.55},
       {quarter:"Q3/2025",revenue:3096.35,profit:327.69,yoyRevenue:16.21,yoyProfit:172.24,pe:10.34,pb:1.86,roe:18.29},
-      {quarter:"Q4/2025",revenue:4302.32,profit:434.58,yoyRevenue:-1.94,yoyProfit:17.83,pe:11.25,pb:2.05,roe:18.65}
+      {quarter:"Q4/2025",revenue:4302.32,profit:434.58,yoyRevenue:-1.94,yoyProfit:17.83,pe:11.25,pb:2.05,roe:18.65},
+      {quarter:"Q1/2026",revenue:5430.8,profit:788.63,yoyRevenue:52.03,yoyProfit:91.68}
     ]
   },
   DGC: {
@@ -698,7 +712,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2811.40,profit:809.33,yoyRevenue:17.84,yoyProfit:20.33,pe:12.41,pb:2.77,roe:23.08},
       {quarter:"Q2/2025",revenue:2895.50,profit:842.25,yoyRevenue:15.54,yoyProfit:-2.15,pe:11.13,pb:2.33,roe:22.21},
       {quarter:"Q3/2025",revenue:2818.11,profit:751.64,yoyRevenue:10.11,yoyProfit:6.47,pe:8.27,pb:1.67,roe:21.82},
-      {quarter:"Q4/2025",revenue:2742.03,profit:587.17,yoyRevenue:13.34,yoyProfit:-21.43,pe:6.57,pb:1.32,roe:21.29}
+      {quarter:"Q4/2025",revenue:2742.03,profit:587.17,yoyRevenue:13.34,yoyProfit:-21.43,pe:6.57,pb:1.32,roe:21.29},
+      {quarter:"Q1/2026",revenue:2125.5,profit:430.05,yoyRevenue:-24.4,yoyProfit:-46.86}
     ]
   },
   DGW: {
@@ -711,7 +726,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:5574.85,profit:105.92,yoyRevenue:11.45,yoyProfit:14.55,pe:20.49,pb:3.06,roe:15.71},
       {quarter:"Q2/2025",revenue:5871.96,profit:115.75,yoyRevenue:15.96,yoyProfit:29.97,pe:17.63,pb:2.80,roe:16.19},
       {quarter:"Q3/2025",revenue:7503.66,profit:166.44,yoyRevenue:17.62,yoyProfit:36.71,pe:18.27,pb:2.99,roe:17.06},
-      {quarter:"Q4/2025",revenue:8292.36,profit:159.22,yoyRevenue:35.08,yoyProfit:13.44,pe:17.86,pb:2.87,roe:17.09}
+      {quarter:"Q4/2025",revenue:8292.36,profit:159.22,yoyRevenue:35.08,yoyProfit:13.44,pe:17.86,pb:2.87,roe:17.09},
+      {quarter:"Q1/2026",revenue:8613.23,profit:201.88,yoyRevenue:54.5,yoyProfit:90.6}
     ]
   },
   DHC: {
@@ -723,7 +739,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:826.09,profit:75.70,yoyRevenue:1.89,yoyProfit:36.14,pe:11.13,pb:1.41,roe:13.27},
       {quarter:"Q2/2025",revenue:880.98,profit:82.97,yoyRevenue:-13.30,yoyProfit:37.37,pe:11.87,pb:1.63,roe:14.06},
       {quarter:"Q3/2025",revenue:932.29,profit:99.61,yoyRevenue:4.00,yoyProfit:29.32,pe:10.76,pb:1.52,roe:14.77},
-      {quarter:"Q4/2025",revenue:993.70,profit:134.79,yoyRevenue:13.69,yoyProfit:174.85,pe:8.80,pb:1.56,roe:18.66}
+      {quarter:"Q4/2025",revenue:993.70,profit:134.79,yoyRevenue:13.69,yoyProfit:174.85,pe:8.80,pb:1.56,roe:18.66},
+      {quarter:"Q1/2026",revenue:967.13,profit:137.33,yoyRevenue:17.07,yoyProfit:81.41}
     ]
   },
   DIG: {
@@ -735,7 +752,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:176.53,profit:-35.35,yoyRevenue:-5.31,yoyProfit:69.83,pe:71.59,pb:1.81,roe:2.54},
       {quarter:"Q2/2025",revenue:284.67,profit:66.72,yoyRevenue:-55.97,yoyProfit:-47.03,pe:100.33,pb:2.14,roe:1.76},
       {quarter:"Q3/2025",revenue:1564.21,profit:211.45,yoyRevenue:2403.30,yoyProfit:2888.48,pe:31.27,pb:1.59,roe:4.35},
-      {quarter:"Q4/2025",revenue:2761.62,profit:421.81,yoyRevenue:514.40,yoyProfit:329.30,pe:14.89,pb:1.17,roe:7.28}
+      {quarter:"Q4/2025",revenue:2761.62,profit:421.81,yoyRevenue:514.40,yoyProfit:329.30,pe:14.89,pb:1.17,roe:7.28},
+      {quarter:"Q1/2026",revenue:164.26,profit:-9.91,yoyRevenue:-6.95,yoyProfit:71.97}
     ]
   },
   DPM: {
@@ -747,7 +765,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:4188.86,profit:204.94,yoyRevenue:24.45,yoyProfit:-22.43,pe:32.39,pb:1.38,roe:4.25},
       {quarter:"Q2/2025",revenue:5446.88,profit:402.90,yoyRevenue:35.76,yoyProfit:74.73,pe:24.65,pb:1.39,roe:5.81},
       {quarter:"Q3/2025",revenue:3746.56,profit:236.39,yoyRevenue:20.37,yoyProfit:275.27,pe:19.72,pb:1.46,roe:7.35},
-      {quarter:"Q4/2025",revenue:3437.82,profit:229.01,yoyRevenue:8.57,yoyProfit:1245.38,pe:16.79,pb:1.59,roe:9.60}
+      {quarter:"Q4/2025",revenue:3437.82,profit:229.01,yoyRevenue:8.57,yoyProfit:1245.38,pe:16.79,pb:1.59,roe:9.60},
+      {quarter:"Q1/2026",revenue:5696.72,profit:410.84,yoyRevenue:36.0,yoyProfit:100.47}
     ]
   },
   DXG: {
@@ -759,7 +778,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:924.93,profit:48.36,yoyRevenue:-13.13,yoyProfit:54.58,pe:62.34,pb:1.60,roe:2.48},
       {quarter:"Q2/2025",revenue:769.74,profit:81.37,yoyRevenue:-31.64,yoyProfit:147.18,pe:60.63,pb:1.74,roe:2.80},
       {quarter:"Q3/2025",revenue:1068.29,profit:92.84,yoyRevenue:5.25,yoyProfit:202.26,pe:38.97,pb:1.37,roe:3.22},
-      {quarter:"Q4/2025",revenue:1727.07,profit:8.32,yoyRevenue:8.63,yoyProfit:-94.83,pe:66.55,pb:1.20,roe:1.87}
+      {quarter:"Q4/2025",revenue:1727.07,profit:8.32,yoyRevenue:8.63,yoyProfit:-94.83,pe:66.55,pb:1.20,roe:1.87},
+      {quarter:"Q1/2026",revenue:1467.43,profit:214.44,yoyRevenue:58.65,yoyProfit:343.42}
     ]
   },
   DXS: {
@@ -771,7 +791,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:512.46,profit:40.06,yoyRevenue:-4.07,yoyProfit:28.34,pe:42.41,pb:1.05,roe:2.49},
       {quarter:"Q2/2025",revenue:965.09,profit:216.13,yoyRevenue:37.39,yoyProfit:468.18,pe:19.62,pb:1.03,roe:5.39},
       {quarter:"Q3/2025",revenue:864.11,profit:77.63,yoyRevenue:48.55,yoyProfit:122.12,pe:11.15,pb:0.65,roe:6.01},
-      {quarter:"Q4/2025",revenue:1597.58,profit:2.64,yoyRevenue:101.87,yoyProfit:-92.75,pe:12.13,pb:0.67,roe:5.69}
+      {quarter:"Q4/2025",revenue:1597.58,profit:2.64,yoyRevenue:101.87,yoyProfit:-92.75,pe:12.13,pb:0.67,roe:5.69},
+      {quarter:"Q1/2026",revenue:1415.72,profit:290.57,yoyRevenue:176.26,yoyProfit:625.34}
     ]
   },
   FRT: {
@@ -783,7 +804,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:11699.60,profit:167.96,yoyRevenue:29.02,yoyProfit:333.30,pe:58.29,pb:12.52,roe:23.95},
       {quarter:"Q2/2025",revenue:11425.72,profit:118.66,yoyRevenue:23.23,yoyProfit:343.69,pe:45.85,pb:8.61,roe:24.87},
       {quarter:"Q3/2025",revenue:13147.24,profit:218.73,yoyRevenue:26.30,yoyProfit:55.23,pe:45.58,pb:9.11,roe:24.80},
-      {quarter:"Q4/2025",revenue:14959.49,profit:289.51,yoyRevenue:30.17,yoyProfit:160.59,pe:31.60,pb:6.02,roe:26.13}
+      {quarter:"Q4/2025",revenue:14959.49,profit:289.51,yoyRevenue:30.17,yoyProfit:160.59,pe:31.60,pb:6.02,roe:26.13},
+      {quarter:"Q1/2026",revenue:15161.53,profit:374.6,yoyRevenue:29.59,yoyProfit:123.03}
     ]
   },
   FTS: {
@@ -795,7 +817,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:312.06,profit:152.97,yoyRevenue:4.29,yoyProfit:-8.20,pe:24.98,pb:3.34,roe:13.65},
       {quarter:"Q2/2025",revenue:239.14,profit:60.62,yoyRevenue:-21.65,yoyProfit:-62.23,pe:25.49,pb:2.81,roe:10.94},
       {quarter:"Q3/2025",revenue:284.41,profit:55.11,yoyRevenue:26.61,yoyProfit:-31.69,pe:26.34,pb:2.68,roe:10.12},
-      {quarter:"Q4/2025",revenue:370.19,profit:128.06,yoyRevenue:16.17,yoyProfit:-19.72,pe:23.73,pb:2.16,roe:9.29}
+      {quarter:"Q4/2025",revenue:370.19,profit:128.06,yoyRevenue:16.17,yoyProfit:-19.72,pe:23.73,pb:2.16,roe:9.29},
+      {quarter:"Q1/2026",revenue:378.4,profit:159.92,yoyRevenue:21.26,yoyProfit:4.54}
     ]
   },
   GAS: {
@@ -807,7 +830,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:25675.43,profit:2756.53,yoyRevenue:10.12,yoyProfit:9.75,pe:14.95,pb:2.52,roe:16.96},
       {quarter:"Q2/2025",revenue:30103.97,profit:4747.61,yoyRevenue:41.39,yoyProfit:42.96,pe:11.93,pb:2.14,roe:19.40},
       {quarter:"Q3/2025",revenue:35711.04,profit:2549.12,yoyRevenue:41.39,yoyProfit:1.08,pe:23.34,pb:4.35,roe:18.93},
-      {quarter:"Q4/2025",revenue:43706.10,profit:1361.08,yoyRevenue:75.10,yoyProfit:-33.41,pe:16.55,pb:2.85,roe:18.04}
+      {quarter:"Q4/2025",revenue:43706.10,profit:1361.08,yoyRevenue:75.10,yoyProfit:-33.41,pe:16.55,pb:2.85,roe:18.04},
+      {quarter:"Q1/2026",revenue:38034.49,profit:2994.12,yoyRevenue:48.14,yoyProfit:8.62}
     ]
   },
   GEG: {
@@ -819,7 +843,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1112.76,profit:378.24,yoyRevenue:50.53,yoyProfit:321.85,pe:18.38,pb:1.51,roe:8.92},
       {quarter:"Q2/2025",revenue:624.34,profit:165.82,yoyRevenue:28.03,yoyProfit:672.70,pe:11.92,pb:1.29,roe:11.79},
       {quarter:"Q3/2025",revenue:671.33,profit:74.65,yoyRevenue:23.60,yoyProfit:373.05,pe:9.46,pb:1.19,roe:13.55},
-      {quarter:"Q4/2025",revenue:590.44,profit:89.81,yoyRevenue:6.32,yoyProfit:189.36,pe:8.52,pb:1.16,roe:15.09}
+      {quarter:"Q4/2025",revenue:590.44,profit:89.81,yoyRevenue:6.32,yoyProfit:189.36,pe:8.52,pb:1.16,roe:15.09},
+      {quarter:"Q1/2026",revenue:767.38,profit:263.65,yoyRevenue:-31.04,yoyProfit:-30.3}
     ]
   },
   GEX: {
@@ -831,7 +856,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:7983.32,profit:233.74,yoyRevenue:19.06,yoyProfit:115.33,pe:27.39,pb:3.36,roe:7.92},
       {quarter:"Q2/2025",revenue:10189.02,profit:656.87,yoyRevenue:22.50,yoyProfit:-22.67,pe:27.66,pb:2.97,roe:8.89},
       {quarter:"Q3/2025",revenue:9970.05,profit:621.93,yoyRevenue:12.57,yoyProfit:529.08,pe:15.78,pb:2.04,roe:8.27},
-      {quarter:"Q4/2025",revenue:11765.77,profit:-34.65,yoyRevenue:15.57,yoyProfit:-106.03,pe:23.87,pb:1.98,roe:7.31}
+      {quarter:"Q4/2025",revenue:11765.77,profit:-34.65,yoyRevenue:15.57,yoyProfit:-106.03,pe:23.87,pb:1.98,roe:7.31},
+      {quarter:"Q1/2026",revenue:10822.86,profit:578.77,yoyRevenue:35.57,yoyProfit:147.61}
     ]
   },
   GMD: {
@@ -843,7 +869,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1276.95,profit:402.98,yoyRevenue:26.99,yoyProfit:-27.96,pe:15.01,pb:1.89,roe:10.71},
       {quarter:"Q2/2025",revenue:1493.73,profit:445.26,yoyRevenue:29.79,yoyProfit:34.78,pe:18.45,pb:2.46,roe:12.20},
       {quarter:"Q3/2025",revenue:1560.50,profit:315.21,yoyRevenue:23.45,yoyProfit:-5.92,pe:19.62,pb:2.33,roe:11.20},
-      {quarter:"Q4/2025",revenue:1624.85,profit:592.18,yoyRevenue:15.12,yoyProfit:156.73,pe:18.05,pb:2.44,roe:13.76}
+      {quarter:"Q4/2025",revenue:1624.85,profit:592.18,yoyRevenue:15.12,yoyProfit:156.73,pe:18.05,pb:2.44,roe:13.76},
+      {quarter:"Q1/2026",revenue:1452.41,profit:650.23,yoyRevenue:13.74,yoyProfit:61.36}
     ]
   },
   HCM: {
@@ -855,7 +882,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:999.58,profit:226.72,yoyRevenue:15.82,yoyProfit:-18.11,pe:18.53,pb:2.61,roe:9.54},
       {quarter:"Q2/2025",revenue:1073.46,profit:192.37,yoyRevenue:-1.87,yoyProfit:-38.61,pe:21.04,pb:2.62,roe:8.47},
       {quarter:"Q3/2025",revenue:1664.89,profit:440.54,yoyRevenue:46.34,yoyProfit:98.09,pe:19.48,pb:2.59,roe:10.46},
-      {quarter:"Q4/2025",revenue:1398.22,profit:318.99,yoyRevenue:18.34,yoyProfit:40.49,pe:19.23,pb:2.08,roe:9.43}
+      {quarter:"Q4/2025",revenue:1398.22,profit:318.99,yoyRevenue:18.34,yoyProfit:40.49,pe:19.23,pb:2.08,roe:9.43},
+      {quarter:"Q1/2026",revenue:1466.4,profit:290.72,yoyRevenue:46.7,yoyProfit:28.23}
     ]
   },
   HDC: {
@@ -867,7 +895,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:98.97,profit:13.58,yoyRevenue:15.99,yoyProfit:928.66,pe:78.53,pb:2.74,roe:3.43},
       {quarter:"Q2/2025",revenue:80.23,profit:57.87,yoyRevenue:-53.22,yoyProfit:15.06,pe:85.55,pb:3.16,roe:3.78},
       {quarter:"Q3/2025",revenue:102.01,profit:537.89,yoyRevenue:-24.21,yoyProfit:4012.91,pe:6.98,pb:1.49,roe:25.19},
-      {quarter:"Q4/2025",revenue:175.29,profit:29.75,yoyRevenue:6.34,yoyProfit:2080.45,pe:5.84,pb:1.29,roe:24.87}
+      {quarter:"Q4/2025",revenue:175.29,profit:29.75,yoyRevenue:6.34,yoyProfit:2080.45,pe:5.84,pb:1.29,roe:24.87},
+      {quarter:"Q1/2026",revenue:257.21,profit:58.37,yoyRevenue:159.89,yoyProfit:329.82}
     ]
   },
   HDG: {
@@ -879,7 +908,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:623.18,profit:155.07,yoyRevenue:-26.49,yoyProfit:-29.94,pe:35.22,pb:1.59,roe:4.59},
       {quarter:"Q2/2025",revenue:589.77,profit:-18.37,yoyRevenue:7.24,yoyProfit:-128.75,pe:57.42,pb:1.84,roe:3.23},
       {quarter:"Q3/2025",revenue:714.64,profit:284.99,yoyRevenue:26.06,yoyProfit:107.10,pe:29.26,pb:1.56,roe:5.53},
-      {quarter:"Q4/2025",revenue:887.99,profit:348.71,yoyRevenue:9.62,yoyProfit:567.74,pe:12.44,pb:1.40,roe:11.89}
+      {quarter:"Q4/2025",revenue:887.99,profit:348.71,yoyRevenue:9.62,yoyProfit:567.74,pe:12.44,pb:1.40,roe:11.89},
+      {quarter:"Q1/2026",revenue:689.47,profit:103.97,yoyRevenue:10.64,yoyProfit:-32.95}
     ]
   },
   HHV: {
@@ -891,7 +921,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:735.02,profit:146.24,yoyRevenue:6.54,yoyProfit:52.32,pe:12.16,pb:1.11,roe:5.24},
       {quarter:"Q2/2025",revenue:947.06,profit:130.70,yoyRevenue:16.39,yoyProfit:19.42,pe:13.88,pb:1.21,roe:5.22},
       {quarter:"Q3/2025",revenue:913.52,profit:128.87,yoyRevenue:14.95,yoyProfit:23.90,pe:11.15,pb:1.07,roe:5.23},
-      {quarter:"Q4/2025",revenue:1205.77,profit:175.02,yoyRevenue:19.39,yoyProfit:49.66,pe:10.55,pb:1.06,roe:5.78}
+      {quarter:"Q4/2025",revenue:1205.77,profit:175.02,yoyRevenue:19.39,yoyProfit:49.66,pe:10.55,pb:1.06,roe:5.78},
+      {quarter:"Q1/2026",revenue:906.97,profit:217.34,yoyRevenue:23.39,yoyProfit:48.62}
     ]
   },
   HSG: {
@@ -903,7 +934,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:8661.49,profit:207.51,yoyRevenue:-8.09,yoyProfit:-34.99,pe:23.93,pb:0.99,roe:4.17},
       {quarter:"Q2/2025",revenue:9755.44,profit:273.78,yoyRevenue:-11.20,yoyProfit:0.14,pe:22.16,pb:0.92,roe:4.18},
       {quarter:"Q3/2025",revenue:8496.51,profit:88.20,yoyRevenue:-16.89,yoyProfit:148.64,pe:13.60,pb:0.88,roe:6.54},
-      {quarter:"Q4/2025",revenue:8610.14,profit:62.40,yoyRevenue:-17.27,yoyProfit:-62.30,pe:15.76,pb:0.87}
+      {quarter:"Q4/2025",revenue:8610.14,profit:62.40,yoyRevenue:-17.27,yoyProfit:-62.30,pe:15.76,pb:0.87},
+      {quarter:"Q1/2026",revenue:9230.09,profit:123.47,yoyRevenue:6.56,yoyProfit:-40.5}
     ]
   },
   HT1: {
@@ -915,7 +947,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1703.07,profit:-9.18,yoyRevenue:7.40,yoyProfit:62.83,pe:65.57,pb:1.02,roe:1.56},
       {quarter:"Q2/2025",revenue:2098.27,profit:112.33,yoyRevenue:2.48,yoyProfit:145.05,pe:47.38,pb:1.36,roe:2.91},
       {quarter:"Q3/2025",revenue:2037.18,profit:85.66,yoyRevenue:15.32,yoyProfit:279.89,pe:31.23,pb:1.28,roe:4.18},
-      {quarter:"Q4/2025",revenue:2125.03,profit:84.92,yoyRevenue:8.40,yoyProfit:416.33,pe:20.98,pb:1.13,roe:5.51}
+      {quarter:"Q4/2025",revenue:2125.03,profit:84.92,yoyRevenue:8.40,yoyProfit:416.33,pe:20.98,pb:1.13,roe:5.51},
+      {quarter:"Q1/2026",revenue:2010.73,profit:77.84,yoyRevenue:18.07,yoyProfit:947.93}
     ]
   },
   IMP: {
@@ -927,7 +960,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:671.47,profit:74.46,yoyRevenue:23.27,yoyProfit:20.25,pe:24.02,pb:3.56,roe:15.40},
       {quarter:"Q2/2025",revenue:770.08,profit:90.30,yoyRevenue:32.14,yoyProfit:36.97,pe:21.42,pb:3.61,roe:16.44},
       {quarter:"Q3/2025",revenue:676.89,profit:76.89,yoyRevenue:9.53,yoyProfit:6.19,pe:22.79,pb:3.75,roe:16.56},
-      {quarter:"Q4/2025",revenue:795.86,profit:107.49,yoyRevenue:3.72,yoyProfit:-10.88,pe:24.70,pb:3.74,roe:15.55}
+      {quarter:"Q4/2025",revenue:795.86,profit:107.49,yoyRevenue:3.72,yoyProfit:-10.88,pe:24.70,pb:3.74,roe:15.55},
+      {quarter:"Q1/2026",revenue:629.19,profit:82.02,yoyRevenue:-6.3,yoyProfit:10.15}
     ]
   },
   KBC: {
@@ -939,7 +973,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:3049.19,profit:782.71,yoyRevenue:1901.65,yoyProfit:1013.34,pe:18.20,pb:1.41,roe:6.69},
       {quarter:"Q2/2025",revenue:574.56,profit:405.24,yoyRevenue:-35.57,yoyProfit:68.11,pe:19.35,pb:1.40,roe:7.04},
       {quarter:"Q3/2025",revenue:1347.29,profit:307.28,yoyRevenue:41.76,yoyProfit:56.62,pe:18.64,pb:1.36,roe:7.09},
-      {quarter:"Q4/2025",revenue:1648.41,profit:608.40,yoyRevenue:110.97,yoyProfit:1903.90,pe:13.88,pb:1.29,roe:9.70}
+      {quarter:"Q4/2025",revenue:1648.41,profit:608.40,yoyRevenue:110.97,yoyProfit:1903.90,pe:13.88,pb:1.29,roe:9.70},
+      {quarter:"Q1/2026",revenue:1335.91,profit:234.26,yoyRevenue:-56.19,yoyProfit:-70.07}
     ]
   },
   KDC: {
@@ -951,7 +986,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2199.78,profit:-75.49,yoyRevenue:15.92,yoyProfit:-892.21,pe:-367.83,pb:2.39,roe:-0.64},
       {quarter:"Q2/2025",revenue:2067.34,profit:103.16,yoyRevenue:16.77,yoyProfit:1245.91,pe:279.63,pb:2.27,roe:0.81},
       {quarter:"Q3/2025",revenue:2487.93,profit:51.94,yoyRevenue:8.02,yoyProfit:112.90,pe:178.39,pb:2.17,roe:1.23},
-      {quarter:"Q4/2025",revenue:2536.48,profit:440.27,yoyRevenue:-2.86,yoyProfit:27005.41,pe:24.30,pb:1.79,roe:7.61}
+      {quarter:"Q4/2025",revenue:2536.48,profit:440.27,yoyRevenue:-2.86,yoyProfit:27005.41,pe:24.30,pb:1.79,roe:7.61},
+      {quarter:"Q1/2026",revenue:2532.13,profit:32.05,yoyRevenue:15.11,yoyProfit:142.46}
     ]
   },
   KDH: {
@@ -963,7 +999,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:716.28,profit:121.95,yoyRevenue:114.48,yoyProfit:92.46,pe:34.01,pb:1.77,roe:5.31},
       {quarter:"Q2/2025",revenue:1054.37,profit:199.03,yoyRevenue:63.43,yoyProfit:-28.54,pe:46.81,pb:2.13,roe:4.55},
       {quarter:"Q3/2025",revenue:1098.46,profit:235.76,yoyRevenue:334.51,yoyProfit:235.10,pe:32.07,pb:1.71,roe:5.60},
-      {quarter:"Q4/2025",revenue:1819.99,profit:488.73,yoyRevenue:-11.79,yoyProfit:22.74,pe:27.13,pb:1.54,roe:5.82}
+      {quarter:"Q4/2025",revenue:1819.99,profit:488.73,yoyRevenue:-11.79,yoyProfit:22.74,pe:27.13,pb:1.54,roe:5.82},
+      {quarter:"Q1/2026",revenue:281.36,profit:327.05,yoyRevenue:-60.72,yoyProfit:168.18}
     ]
   },
   KOS: {
@@ -975,7 +1012,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:226.68,profit:2.61,yoyRevenue:-4.47,yoyProfit:-9.21,pe:397.27,pb:3.63,roe:0.91},
       {quarter:"Q2/2025",revenue:436.11,profit:4.33,yoyRevenue:-5.47,yoyProfit:-57.52,pe:548.47,pb:3.62,roe:0.66},
       {quarter:"Q3/2025",revenue:351.76,profit:11.01,yoyRevenue:15.43,yoyProfit:-1.89,pe:561.20,pb:3.64,roe:0.65},
-      {quarter:"Q4/2025",revenue:540.73,profit:1.00,yoyRevenue:24.15,yoyProfit:135.12,pe:435.33,pb:3.54,roe:0.82}
+      {quarter:"Q4/2025",revenue:540.73,profit:1.00,yoyRevenue:24.15,yoyProfit:135.12,pe:435.33,pb:3.54,roe:0.82},
+      {quarter:"Q1/2026",revenue:256.96,profit:2.74,yoyRevenue:13.36,yoyProfit:4.98}
     ]
   },
   LPB: {
@@ -988,7 +1026,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:3281.91,profit:2533.91,yoyRevenue:-5.27,yoyProfit:10.23},
       {quarter:"Q2/2025",revenue:3735.85,profit:2395.87,yoyRevenue:2.50,yoyProfit:-1.06},
       {quarter:"Q3/2025",revenue:4235.05,profit:2762.01,yoyRevenue:12.10,yoyProfit:18.50},
-      {quarter:"Q4/2025",revenue:4781.43,profit:3730.59,yoyRevenue:6.10,yoyProfit:39.73}
+      {quarter:"Q4/2025",revenue:4781.43,profit:3730.59,yoyRevenue:6.10,yoyProfit:39.73},
+      {quarter:"Q1/2026",revenue:3878.25,profit:2279.19,yoyRevenue:18.17,yoyProfit:-10.05}
     ]
   },
   MSB: {
@@ -1001,7 +1040,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2503.79,profit:1265.60,yoyRevenue:5.84,yoyProfit:6.00},
       {quarter:"Q2/2025",revenue:2584.84,profit:1237.49,yoyRevenue:10.37,yoyProfit:-28.47},
       {quarter:"Q3/2025",revenue:2815.32,profit:1274.18,yoyRevenue:17.48,yoyProfit:30.22},
-      {quarter:"Q4/2025",revenue:3043.55,profit:1851.25,yoyRevenue:-3.04,yoyProfit:14.49}
+      {quarter:"Q4/2025",revenue:3043.55,profit:1851.25,yoyRevenue:-3.04,yoyProfit:14.49},
+      {quarter:"Q1/2026",revenue:3197.51,profit:1514.22,yoyRevenue:27.71,yoyProfit:19.64}
     ]
   },
   MSN: {
@@ -1013,7 +1053,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:18946.40,profit:393.50,yoyRevenue:0.02,yoyProfit:277.07,pe:49.92,pb:3.55,roe:5.56},
       {quarter:"Q2/2025",revenue:18425.06,profit:1032.19,yoyRevenue:-8.80,yoyProfit:105.38,pe:42.63,pb:3.53,roe:9.17},
       {quarter:"Q3/2025",revenue:21255.66,profit:1208.66,yoyRevenue:-1.48,yoyProfit:72.40,pe:34.93,pb:3.29,roe:10.46},
-      {quarter:"Q4/2025",revenue:23300.56,profit:1473.96,yoyRevenue:2.48,yoyProfit:113.29,pe:28.49,pb:3.16,roe:12.53}
+      {quarter:"Q4/2025",revenue:23300.56,profit:1473.96,yoyRevenue:2.48,yoyProfit:113.29,pe:28.49,pb:3.16,roe:12.53},
+      {quarter:"Q1/2026",revenue:24075.24,profit:1973.58,yoyRevenue:27.07,yoyProfit:401.55}
     ]
   },
   NKG: {
@@ -1025,7 +1066,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:4108.30,profit:65.40,yoyRevenue:-22.72,yoyProfit:-56.43,pe:14.39,pb:0.96,roe:5.89},
       {quarter:"Q2/2025",revenue:3827.08,profit:91.59,yoyRevenue:-32.66,yoyProfit:-58.30,pe:23.97,pb:0.94,roe:3.58},
       {quarter:"Q3/2025",revenue:3789.40,profit:49.53,yoyRevenue:-27.25,yoyProfit:-23.62,pe:26.64,pb:0.89,roe:2.26},
-      {quarter:"Q4/2025",revenue:3174.46,profit:-9.41,yoyRevenue:-29.44,yoyProfit:-151.09,pe:31.11,pb:0.84,roe:2.93}
+      {quarter:"Q4/2025",revenue:3174.46,profit:-9.41,yoyRevenue:-29.44,yoyProfit:-151.09,pe:31.11,pb:0.84,roe:2.93},
+      {quarter:"Q1/2026",revenue:3277.76,profit:21.46,yoyRevenue:-20.22,yoyProfit:-67.19}
     ]
   },
   NLG: {
@@ -1037,7 +1079,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1291.16,profit:108.36,yoyRevenue:530.93,yoyProfit:241.00,pe:22.80,pb:1.64,roe:7.43},
       {quarter:"Q2/2025",revenue:772.56,profit:99.33,yoyRevenue:206.22,yoyProfit:-31.36,pe:22.71,pb:1.93,roe:6.87},
       {quarter:"Q3/2025",revenue:1877.22,profit:145.96,yoyRevenue:406.57,yoyProfit:378.69,pe:13.19,pb:1.41,roe:8.79},
-      {quarter:"Q4/2025",revenue:1704.15,profit:347.72,yoyRevenue:-73.24,yoyProfit:-30.79,pe:15.26,pb:1.06,roe:6.28}
+      {quarter:"Q4/2025",revenue:1704.15,profit:347.72,yoyRevenue:-73.24,yoyProfit:-30.79,pe:15.26,pb:1.06,roe:6.28},
+      {quarter:"Q1/2026",revenue:1279.4,profit:109.52,yoyRevenue:-0.91,yoyProfit:1.07}
     ]
   },
   NT2: {
@@ -1049,7 +1092,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1426.71,profit:36.96,yoyRevenue:444.74,yoyProfit:123.37,pe:20.81,pb:1.45,roe:6.79},
       {quarter:"Q2/2025",revenue:2081.26,profit:326.25,yoyRevenue:-4.79,yoyProfit:167.01,pe:12.99,pb:1.46,roe:11.62},
       {quarter:"Q3/2025",revenue:1928.24,profit:214.23,yoyRevenue:12.65,yoyProfit:383.54,pe:11.46,pb:1.66,roe:15.35},
-      {quarter:"Q4/2025",revenue:2522.02,profit:552.84,yoyRevenue:41.37,yoyProfit:641.44,pe:6.70,pb:1.56,roe:24.98}
+      {quarter:"Q4/2025",revenue:2522.02,profit:552.84,yoyRevenue:41.37,yoyProfit:641.44,pe:6.70,pb:1.56,roe:24.98},
+      {quarter:"Q1/2026",revenue:2171.66,profit:179.98,yoyRevenue:52.21,yoyProfit:386.96}
     ]
   },
   NVL: {
@@ -1062,7 +1106,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1778.25,profit:-443.35,yoyRevenue:154.82,yoyProfit:21.81,pe:-5.39,pb:0.90,roe:-18.04},
       {quarter:"Q2/2025",revenue:1936.65,profit:-160.57,yoyRevenue:21.92,yoyProfit:97.59,pe:162.94,pb:0.72,roe:0.45},
       {quarter:"Q3/2025",revenue:1683.60,profit:-878.22,yoyRevenue:-16.33,yoyProfit:-128.15,pe:-6.77,pb:0.76,roe:-10.02},
-      {quarter:"Q4/2025",revenue:1567.85,profit:3225.88,yoyRevenue:-67.21,yoyProfit:237.25,pe:23.20,pb:1.01,roe:4.19}
+      {quarter:"Q4/2025",revenue:1567.85,profit:3225.88,yoyRevenue:-67.21,yoyProfit:237.25,pe:23.20,pb:1.01,roe:4.19},
+      {quarter:"Q1/2026",revenue:3586.66,profit:859.56,yoyRevenue:101.7,yoyProfit:293.88}
     ]
   },
   OCB: {
@@ -1075,7 +1120,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2163.56,profit:712.46,yoyRevenue:13.83,yoyProfit:-25.29},
       {quarter:"Q2/2025",revenue:2179.12,profit:792.93,yoyRevenue:9.69,yoyProfit:10.60},
       {quarter:"Q3/2025",revenue:2424.22,profit:1227.94,yoyRevenue:17.41,yoyProfit:253.67},
-      {quarter:"Q4/2025",revenue:2481.94,profit:1276.76,yoyRevenue:-6.51,yoyProfit:10.48}
+      {quarter:"Q4/2025",revenue:2481.94,profit:1276.76,yoyRevenue:-6.51,yoyProfit:10.48},
+      {quarter:"Q1/2026",revenue:2382.73,profit:975.19,yoyRevenue:10.13,yoyProfit:36.87}
     ]
   },
   PAN: {
@@ -1087,7 +1133,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:4193.57,profit:107.67,yoyRevenue:16.81,yoyProfit:28.81,pe:11.20,pb:1.38,roe:12.68},
       {quarter:"Q2/2025",revenue:4192.69,profit:139.03,yoyRevenue:17.57,yoyProfit:49.61,pe:9.46,pb:1.23,roe:13.32},
       {quarter:"Q3/2025",revenue:5212.10,profit:156.19,yoyRevenue:0.36,yoyProfit:-16.37,pe:9.37,pb:1.20,roe:12.64},
-      {quarter:"Q4/2025",revenue:4411.81,profit:269.77,yoyRevenue:0.09,yoyProfit:9.84,pe:9.81,pb:1.24,roe:12.92}
+      {quarter:"Q4/2025",revenue:4411.81,profit:269.77,yoyRevenue:0.09,yoyProfit:9.84,pe:9.81,pb:1.24,roe:12.92},
+      {quarter:"Q1/2026",revenue:3852.18,profit:670.04,yoyRevenue:-8.14,yoyProfit:522.31}
     ]
   },
   PC1: {
@@ -1099,7 +1146,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1860.37,profit:55.28,yoyRevenue:-14.06,yoyProfit:-31.37,pe:19.73,pb:1.56,roe:8.09},
       {quarter:"Q2/2025",revenue:2934.93,profit:141.89,yoyRevenue:-6.56,yoyProfit:-10.74,pe:19.51,pb:1.46,roe:7.65},
       {quarter:"Q3/2025",revenue:3278.08,profit:300.87,yoyRevenue:46.86,yoyProfit:88.53,pe:17.57,pb:1.67,roe:9.96},
-      {quarter:"Q4/2025",revenue:5011.42,profit:543.34,yoyRevenue:96.46,yoyProfit:693.42,pe:8.14,pb:1.30,roe:17.30}
+      {quarter:"Q4/2025",revenue:5011.42,profit:543.34,yoyRevenue:96.46,yoyProfit:693.42,pe:8.14,pb:1.30,roe:17.30},
+      {quarter:"Q1/2026",revenue:2167.8,profit:269.83,yoyRevenue:16.53,yoyProfit:388.12}
     ]
   },
   PDR: {
@@ -1111,7 +1159,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:437.94,profit:50.61,yoyRevenue:170.01,yoyProfit:-3.76,pe:115.98,pb:1.70,roe:1.39},
       {quarter:"Q2/2025",revenue:19.93,profit:64.92,yoyRevenue:141.38,yoyProfit:30.52,pe:124.84,pb:1.83,roe:1.50},
       {quarter:"Q3/2025",revenue:506.53,profit:85.80,yoyRevenue:19175.54,yoyProfit:67.45,pe:84.06,pb:1.49,roe:1.77},
-      {quarter:"Q4/2025",revenue:360.58,profit:313.74,yoyRevenue:-44.41,yoyProfit:20461.76,pe:30.99,pb:1.33,roe:4.41}
+      {quarter:"Q4/2025",revenue:360.58,profit:313.74,yoyRevenue:-44.41,yoyProfit:20461.76,pe:30.99,pb:1.33,roe:4.41},
+      {quarter:"Q1/2026",revenue:104.33,profit:137.54,yoyRevenue:-76.18,yoyProfit:171.76}
     ]
   },
   PHR: {
@@ -1123,7 +1172,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:311.49,profit:95.57,yoyRevenue:-3.67,yoyProfit:30.78,pe:17.41,pb:2.17,roe:12.59},
       {quarter:"Q2/2025",revenue:367.97,profit:90.97,yoyRevenue:35.31,yoyProfit:40.76,pe:15.04,pb:2.01,roe:13.27},
       {quarter:"Q3/2025",revenue:616.79,profit:259.44,yoyRevenue:49.81,yoyProfit:163.99,pe:13.00,pb:2.16,roe:17.33},
-      {quarter:"Q4/2025",revenue:498.98,profit:32.26,yoyRevenue:-20.53,yoyProfit:-85.60,pe:17.34,pb:2.06,roe:12.31}
+      {quarter:"Q4/2025",revenue:498.98,profit:32.26,yoyRevenue:-20.53,yoyProfit:-85.60,pe:17.34,pb:2.06,roe:12.31},
+      {quarter:"Q1/2026",revenue:468.86,profit:285.08,yoyRevenue:50.52,yoyProfit:198.29}
     ]
   },
   PLX: {
@@ -1135,7 +1185,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:67890.17,profit:133.41,yoyRevenue:-9.64,yoyProfit:-87.57,pe:23.65,pb:1.76,roe:7.57},
       {quarter:"Q2/2025",revenue:76568.08,profit:1366.41,yoyRevenue:4.05,yoyProfit:827.07,pe:20.80,pb:1.75,roe:8.22},
       {quarter:"Q3/2025",revenue:83655.31,profit:610.70,yoyRevenue:30.00,yoyProfit:13.33,pe:28.18,pb:2.92,roe:10.33},
-      {quarter:"Q4/2025",revenue:81871.62,profit:564.74,yoyRevenue:15.22,yoyProfit:3.57,pe:17.64,pb:1.80,roe:10.24}
+      {quarter:"Q4/2025",revenue:81871.62,profit:564.74,yoyRevenue:15.22,yoyProfit:3.57,pe:17.64,pb:1.80,roe:10.24},
+      {quarter:"Q1/2026",revenue:98724.24,profit:-662.48,yoyRevenue:45.42,yoyProfit:-596.57}
     ]
   },
   PNJ: {
@@ -1147,7 +1198,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:9759.65,profit:677.73,yoyRevenue:-23.17,yoyProfit:-8.14,pe:14.09,pb:2.48,roe:18.57},
       {quarter:"Q2/2025",revenue:7664.65,profit:437.00,yoyRevenue:-20.20,yoyProfit:2.01,pe:15.53,pb:2.70,roe:18.13},
       {quarter:"Q3/2025",revenue:8235.61,profit:495.70,yoyRevenue:13.98,yoyProfit:129.67,pe:18.39,pb:3.61,roe:19.95},
-      {quarter:"Q4/2025",revenue:9750.68,profit:1218.07,yoyRevenue:12.10,yoyProfit:66.66,pe:12.12,pb:2.59,roe:23.06}
+      {quarter:"Q4/2025",revenue:9750.68,profit:1218.07,yoyRevenue:12.10,yoyProfit:66.66,pe:12.12,pb:2.59,roe:23.06},
+      {quarter:"Q1/2026",revenue:17366.66,profit:1467.41,yoyRevenue:77.94,yoyProfit:116.52}
     ]
   },
   POW: {
@@ -1159,7 +1211,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:8150.31,profit:445.09,yoyRevenue:30.55,yoyProfit:60.32,pe:26.55,pb:1.05,roe:4.00},
       {quarter:"Q2/2025",revenue:9398.77,profit:602.42,yoyRevenue:0.18,yoyProfit:53.77,pe:22.32,pb:1.01,roe:4.61},
       {quarter:"Q3/2025",revenue:7855.19,profit:809.30,yoyRevenue:29.60,yoyProfit:104.19,pe:20.43,pb:1.25,roe:5.06},
-      {quarter:"Q4/2025",revenue:8901.87,profit:569.85,yoyRevenue:3.28,yoyProfit:1143.15,pe:14.90,pb:1.13,roe:7.33}
+      {quarter:"Q4/2025",revenue:8901.87,profit:569.85,yoyRevenue:3.28,yoyProfit:1143.15,pe:14.90,pb:1.13,roe:7.33},
+      {quarter:"Q1/2026",revenue:12327.02,profit:1300.09,yoyRevenue:51.25,yoyProfit:192.1}
     ]
   },
   PPC: {
@@ -1172,7 +1225,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1536.11,profit:52.33,yoyRevenue:-23.04,yoyProfit:-66.75,pe:11.55,pb:0.81,roe:7.03},
       {quarter:"Q2/2025",revenue:1940.20,profit:6.09,yoyRevenue:-21.43,yoyProfit:-93.51,pe:14.30,pb:0.74,roe:5.14},
       {quarter:"Q3/2025",revenue:1496.74,profit:-14.29,yoyRevenue:2.13,yoyProfit:-169.10,pe:14.73,pb:0.74,roe:4.97},
-      {quarter:"Q4/2025",revenue:1592.77,profit:121.05,yoyRevenue:-9.00,yoyProfit:-33.18,pe:19.70,pb:0.73,roe:3.67}
+      {quarter:"Q4/2025",revenue:1592.77,profit:121.05,yoyRevenue:-9.00,yoyProfit:-33.18,pe:19.70,pb:0.73,roe:3.67},
+      {quarter:"Q1/2026",revenue:1798.18,profit:95.73,yoyRevenue:17.06,yoyProfit:82.94}
     ]
   },
   PTB: {
@@ -1184,7 +1238,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1620.23,profit:113.01,yoyRevenue:12.74,yoyProfit:26.72,pe:9.48,pb:1.26,roe:13.67},
       {quarter:"Q2/2025",revenue:1904.63,profit:124.57,yoyRevenue:18.44,yoyProfit:12.80,pe:8.61,pb:1.18,roe:13.99},
       {quarter:"Q3/2025",revenue:1683.94,profit:135.86,yoyRevenue:13.40,yoyProfit:70.69,pe:7.87,pb:1.38,roe:15.56},
-      {quarter:"Q4/2025",revenue:2091.29,profit:123.24,yoyRevenue:7.98,yoyProfit:37.78,pe:6.98,pb:1.25,roe:16.28}
+      {quarter:"Q4/2025",revenue:2091.29,profit:123.24,yoyRevenue:7.98,yoyProfit:37.78,pe:6.98,pb:1.25,roe:16.28},
+      {quarter:"Q1/2026",revenue:2094.74,profit:153.97,yoyRevenue:29.29,yoyProfit:36.24}
     ]
   },
   PVD: {
@@ -1196,7 +1251,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1502.99,profit:152.86,yoyRevenue:-14.39,yoyProfit:-3.20,pe:16.98,pb:0.73,roe:4.43},
       {quarter:"Q2/2025",revenue:2447.44,profit:239.69,yoyRevenue:7.19,yoyProfit:73.39,pe:14.32,pb:0.69,roe:5.00},
       {quarter:"Q3/2025",revenue:2570.71,profit:278.25,yoyRevenue:5.43,yoyProfit:53.08,pe:19.35,pb:1.02,roe:5.46},
-      {quarter:"Q4/2025",revenue:4369.48,profit:364.82,yoyRevenue:55.59,yoyProfit:66.13,pe:16.59,pb:1.02,roe:6.36}
+      {quarter:"Q4/2025",revenue:4369.48,profit:364.82,yoyRevenue:55.59,yoyProfit:66.13,pe:16.59,pb:1.02,roe:6.36},
+      {quarter:"Q1/2026",revenue:3401.07,profit:300.05,yoyRevenue:126.29,yoyProfit:96.29}
     ]
   },
   PVT: {
@@ -1208,7 +1264,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2789.55,profit:215.06,yoyRevenue:9.99,yoyProfit:-6.87,pe:7.89,pb:1.07,roe:14.22},
       {quarter:"Q2/2025",revenue:4312.63,profit:294.78,yoyRevenue:44.33,yoyProfit:2.26,pe:7.65,pb:1.02,roe:13.84},
       {quarter:"Q3/2025",revenue:4419.45,profit:263.38,yoyRevenue:50.62,yoyProfit:-27.84,pe:9.81,pb:1.16,roe:12.22},
-      {quarter:"Q4/2025",revenue:4444.13,profit:265.90,yoyRevenue:36.00,yoyProfit:27.19,pe:9.96,pb:1.19,roe:12.66}
+      {quarter:"Q4/2025",revenue:4444.13,profit:265.90,yoyRevenue:36.00,yoyProfit:27.19,pe:9.96,pb:1.19,roe:12.66},
+      {quarter:"Q1/2026",revenue:4177.08,profit:387.44,yoyRevenue:49.74,yoyProfit:80.15}
     ]
   },
   REE: {
@@ -1220,7 +1277,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2073.50,profit:611.40,yoyRevenue:12.56,yoyProfit:27.25,pe:17.03,pb:1.85,roe:11.42},
       {quarter:"Q2/2025",revenue:2516.32,profit:622.93,yoyRevenue:15.27,yoyProfit:76.04,pe:14.74,pb:1.79,roe:12.55},
       {quarter:"Q3/2025",revenue:2555.16,profit:674.23,yoyRevenue:25.79,yoyProfit:40.51,pe:13.00,pb:1.65,roe:13.20},
-      {quarter:"Q4/2025",revenue:2880.57,profit:619.99,yoyRevenue:23.20,yoyProfit:-8.60,pe:12.85,pb:1.55,roe:12.69}
+      {quarter:"Q4/2025",revenue:2880.57,profit:619.99,yoyRevenue:23.20,yoyProfit:-8.60,pe:12.85,pb:1.55,roe:12.69},
+      {quarter:"Q1/2026",revenue:2477.13,profit:938.74,yoyRevenue:19.47,yoyProfit:53.54}
     ]
   },
   SAB: {
@@ -1232,7 +1290,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:5899.50,profit:793.11,yoyRevenue:-18.55,yoyProfit:-20.47,pe:15.26,pb:2.62,roe:17.17},
       {quarter:"Q2/2025",revenue:6867.33,profit:1207.50,yoyRevenue:-15.58,yoyProfit:-3.27,pe:14.27,pb:2.73,roe:16.07},
       {quarter:"Q3/2025",revenue:6509.18,profit:1360.54,yoyRevenue:-15.87,yoyProfit:21.57,pe:14.91,pb:2.84,roe:16.36},
-      {quarter:"Q4/2025",revenue:6972.99,profit:1062.39,yoyRevenue:-22.94,yoyProfit:10.04,pe:13.98,pb:2.92,roe:17.46}
+      {quarter:"Q4/2025",revenue:6972.99,profit:1062.39,yoyRevenue:-22.94,yoyProfit:10.04,pe:13.98,pb:2.92,roe:17.46},
+      {quarter:"Q1/2026",revenue:6538.76,profit:1245.44,yoyRevenue:10.84,yoyProfit:55.75}
     ]
   },
   SAM: {
@@ -1245,7 +1304,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1163.69,profit:3.52,yoyRevenue:86.68,yoyProfit:-83.23,pe:46.13,pb:0.77,roe:1.67},
       {quarter:"Q2/2025",revenue:1403.79,profit:31.11,yoyRevenue:-14.14,yoyProfit:-26.43,pe:49.18,pb:0.68,roe:1.38},
       {quarter:"Q3/2025",revenue:1540.11,profit:12.26,yoyRevenue:67.62,yoyProfit:377.71,pe:41.95,pb:0.68,roe:1.62},
-      {quarter:"Q4/2025",revenue:2018.60,profit:49.51,yoyRevenue:131.51,yoyProfit:167.54,pe:26.45,pb:0.62,roe:2.37}
+      {quarter:"Q4/2025",revenue:2018.60,profit:49.51,yoyRevenue:131.51,yoyProfit:167.54,pe:26.45,pb:0.62,roe:2.37},
+      {quarter:"Q1/2026",revenue:1775.55,profit:15.25,yoyRevenue:52.58,yoyProfit:333.24}
     ]
   },
   SBT: {
@@ -1257,7 +1317,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:7303.76,profit:216.67,yoyRevenue:18.35,yoyProfit:6.03,pe:24.50,pb:1.96,roe:8.20},
       {quarter:"Q2/2025",revenue:6857.93,profit:160.66,yoyRevenue:-27.73,yoyProfit:-17.49,pe:26.18,pb:2.07,roe:7.78},
       {quarter:"Q3/2025",revenue:5386.65,profit:201.08,yoyRevenue:-21.16,yoyProfit:-7.42,pe:25.44,pb:1.92,roe:7.51},
-      {quarter:"Q4/2025",revenue:6749.70,profit:160.87,yoyRevenue:-10.61,yoyProfit:-26.19,pe:24.83,pb:1.66}
+      {quarter:"Q4/2025",revenue:6749.70,profit:160.87,yoyRevenue:-10.61,yoyProfit:-26.19,pe:24.83,pb:1.66},
+      {quarter:"Q1/2026",revenue:8253.47,profit:244.95,yoyRevenue:13.0,yoyProfit:13.05}
     ]
   },
   SCR: {
@@ -1270,7 +1331,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:109.90,profit:1.51,yoyRevenue:58.12,yoyProfit:-69.24,pe:-7652.78,pb:0.71,roe:-0.01},
       {quarter:"Q2/2025",revenue:409.08,profit:29.44,yoyRevenue:441.22,yoyProfit:896.14,pe:108.43,pb:0.70,roe:0.64},
       {quarter:"Q3/2025",revenue:431.64,profit:1.24,yoyRevenue:133.88,yoyProfit:102.58,pe:91.58,pb:0.59,roe:0.64},
-      {quarter:"Q4/2025",revenue:276.88,profit:44.13,yoyRevenue:-41.15,yoyProfit:3858.80,pe:34.13,pb:0.49,roe:1.45}
+      {quarter:"Q4/2025",revenue:276.88,profit:44.13,yoyRevenue:-41.15,yoyProfit:3858.80,pe:34.13,pb:0.49,roe:1.45},
+      {quarter:"Q1/2026",revenue:150.48,profit:11.66,yoyRevenue:36.92,yoyProfit:672.19}
     ]
   },
   SCS: {
@@ -1282,7 +1344,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:266.34,profit:169.92,yoyRevenue:25.15,yoyProfit:15.37,pe:9.56,pb:4.23,roe:51.15},
       {quarter:"Q2/2025",revenue:291.74,profit:189.06,yoyRevenue:10.47,yoyProfit:-0.25,pe:7.89,pb:3.88,roe:48.09},
       {quarter:"Q3/2025",revenue:311.57,profit:203.97,yoyRevenue:17.17,yoyProfit:9.79,pe:7.55,pb:3.30,roe:48.58},
-      {quarter:"Q4/2025",revenue:327.00,profit:188.11,yoyRevenue:11.20,yoyProfit:10.50,pe:7.35,pb:3.45,roe:50.62}
+      {quarter:"Q4/2025",revenue:327.00,profit:188.11,yoyRevenue:11.20,yoyProfit:10.50,pe:7.35,pb:3.45,roe:50.62},
+      {quarter:"Q1/2026",revenue:271.97,profit:173.29,yoyRevenue:2.11,yoyProfit:1.98}
     ]
   },
   SHB: {
@@ -1295,7 +1358,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:5543.67,profit:3496.35,yoyRevenue:7.23,yoyProfit:8.94},
       {quarter:"Q2/2025",revenue:9160.06,profit:3646.90,yoyRevenue:107.62,yoyProfit:59.59},
       {quarter:"Q3/2025",revenue:5323.82,profit:2606.72,yoyRevenue:63.22,yoyProfit:49.82},
-      {quarter:"Q4/2025",revenue:187.36,profit:2210.32,yoyRevenue:-97.77,yoyProfit:5.88}
+      {quarter:"Q4/2025",revenue:187.36,profit:2210.32,yoyRevenue:-97.77,yoyProfit:5.88},
+      {quarter:"Q1/2026",revenue:5497.24,profit:3725.96,yoyRevenue:-0.84,yoyProfit:6.57}
     ]
   },
   SJS: {
@@ -1308,7 +1372,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:143.35,profit:67.24,yoyRevenue:21.19,yoyProfit:52.55,pe:67.62,pb:6.50,roe:9.99},
       {quarter:"Q2/2025",revenue:200.65,profit:103.88,yoyRevenue:68.88,yoyProfit:98.76,pe:55.51,pb:6.04,roe:11.41},
       {quarter:"Q3/2025",revenue:26.72,profit:2.88,yoyRevenue:-79.06,yoyProfit:-93.88,pe:51.59,pb:4.77,roe:9.63},
-      {quarter:"Q4/2025",revenue:380.01,profit:187.32,yoyRevenue:35.08,yoyProfit:49.74,pe:48.25,pb:5.09,roe:11.12}
+      {quarter:"Q4/2025",revenue:380.01,profit:187.32,yoyRevenue:35.08,yoyProfit:49.74,pe:48.25,pb:5.09,roe:11.12},
+      {quarter:"Q1/2026",revenue:316.75,profit:175.7,yoyRevenue:120.96,yoyProfit:161.3}
     ]
   },
   SSB: {
@@ -1321,7 +1386,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2450.48,profit:3492.49,yoyRevenue:22.42,yoyProfit:190.72},
       {quarter:"Q2/2025",revenue:2464.39,profit:1133.28,yoyRevenue:-10.11,yoyProfit:-17.98},
       {quarter:"Q3/2025",revenue:2337.10,profit:779.49,yoyRevenue:-16.45,yoyProfit:-22.97},
-      {quarter:"Q4/2025",revenue:2451.87,profit:104.29,yoyRevenue:1.07,yoyProfit:-91.46}
+      {quarter:"Q4/2025",revenue:2451.87,profit:104.29,yoyRevenue:1.07,yoyProfit:-91.46},
+      {quarter:"Q1/2026",revenue:2413.46,profit:1110.63,yoyRevenue:-1.51,yoyProfit:-68.19}
     ]
   },
   SZC: {
@@ -1333,7 +1399,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:414.23,profit:126.35,yoyRevenue:93.81,yoyProfit:94.15,pe:18.34,pb:2.08,roe:11.78},
       {quarter:"Q2/2025",revenue:217.84,profit:94.93,yoyRevenue:-16.99,yoyProfit:-7.14,pe:16.43,pb:1.87,roe:11.41},
       {quarter:"Q3/2025",revenue:86.48,profit:20.82,yoyRevenue:-47.51,yoyProfit:-65.06,pe:17.70,pb:1.79,roe:10.07},
-      {quarter:"Q4/2025",revenue:379.42,profit:102.70,yoyRevenue:63.79,yoyProfit:43.23,pe:15.14,pb:1.63,roe:10.93}
+      {quarter:"Q4/2025",revenue:379.42,profit:102.70,yoyRevenue:63.79,yoyProfit:43.23,pe:15.14,pb:1.63,roe:10.93},
+      {quarter:"Q1/2026",revenue:101.94,profit:17.15,yoyRevenue:-75.39,yoyProfit:-86.43}
     ]
   },
   TCB: {
@@ -1346,7 +1413,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:8305.39,profit:5947.96,yoyRevenue:-2.28,yoyProfit:-4.39},
       {quarter:"Q2/2025",revenue:9137.08,profit:6247.36,yoyRevenue:-3.60,yoyProfit:0.87},
       {quarter:"Q3/2025",revenue:9924.64,profit:6419.34,yoyRevenue:11.15,yoyProfit:11.88},
-      {quarter:"Q4/2025",revenue:10787.98,profit:6675.56,yoyRevenue:25.42,yoyProfit:98.03}
+      {quarter:"Q4/2025",revenue:10787.98,profit:6675.56,yoyRevenue:25.42,yoyProfit:98.03},
+      {quarter:"Q1/2026",revenue:9522.05,profit:6950.28,yoyRevenue:14.65,yoyProfit:15.58}
     ]
   },
   TCH: {
@@ -1359,7 +1427,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:858.84,profit:187.68,yoyRevenue:-46.96,yoyProfit:-39.91,pe:19.23,pb:1.69,roe:9.09},
       {quarter:"Q2/2025",revenue:390.36,profit:37.87,yoyRevenue:-52.88,yoyProfit:-73.14,pe:20.30,pb:2.09,roe:7.95},
       {quarter:"Q3/2025",revenue:345.93,profit:40.21,yoyRevenue:-75.62,yoyProfit:-81.70,pe:19.30,pb:1.24,roe:5.73},
-      {quarter:"Q4/2025",revenue:317.03,profit:52.43,yoyRevenue:-79.69,yoyProfit:-82.90,pe:43.06,pb:1.43,roe:3.04}
+      {quarter:"Q4/2025",revenue:317.03,profit:52.43,yoyRevenue:-79.69,yoyProfit:-82.90,pe:43.06,pb:1.43,roe:3.04},
+      {quarter:"Q1/2026",revenue:394.08,profit:95.23,yoyRevenue:-54.11,yoyProfit:-49.26}
     ]
   },
   TMS: {
@@ -1371,7 +1440,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:711.45,profit:91.40,yoyRevenue:2.10,yoyProfit:142.70,pe:27.75,pb:1.73,roe:6.42},
       {quarter:"Q2/2025",revenue:875.51,profit:76.74,yoyRevenue:5.50,yoyProfit:101.47,pe:23.59,pb:1.68,roe:7.27},
       {quarter:"Q3/2025",revenue:934.58,profit:92.45,yoyRevenue:2.49,yoyProfit:25.09,pe:22.86,pb:1.69,roe:7.59},
-      {quarter:"Q4/2025",revenue:983.09,profit:101.48,yoyRevenue:7.15,yoyProfit:91.77,pe:19.20,pb:1.67,roe:8.84}
+      {quarter:"Q4/2025",revenue:983.09,profit:101.48,yoyRevenue:7.15,yoyProfit:91.77,pe:19.20,pb:1.67,roe:8.84},
+      {quarter:"Q1/2026",revenue:789.68,profit:97.8,yoyRevenue:11.0,yoyProfit:7.0}
     ]
   },
   TPB: {
@@ -1384,7 +1454,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:3383.62,profit:1686.69,yoyRevenue:-1.28,yoyProfit:15.31},
       {quarter:"Q2/2025",revenue:3151.33,profit:1629.60,yoyRevenue:-2.64,yoyProfit:7.03},
       {quarter:"Q3/2025",revenue:3237.62,profit:1520.64,yoyRevenue:2.01,yoyProfit:9.95},
-      {quarter:"Q4/2025",revenue:3598.60,profit:2565.06,yoyRevenue:17.27,yoyProfit:50.60}
+      {quarter:"Q4/2025",revenue:3598.60,profit:2565.06,yoyRevenue:17.27,yoyProfit:50.60},
+      {quarter:"Q1/2026",revenue:3459.59,profit:1682.23,yoyRevenue:2.25,yoyProfit:-0.26}
     ]
   },
   VCG: {
@@ -1397,7 +1468,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2596.05,profit:127.96,yoyRevenue:-2.25,yoyProfit:-72.37,pe:27.77,pb:2.00,roe:7.36},
       {quarter:"Q2/2025",revenue:4387.36,profit:278.93,yoyRevenue:56.25,yoyProfit:185.91,pe:22.04,pb:2.13,roe:9.53},
       {quarter:"Q3/2025",revenue:4429.33,profit:3282.11,yoyRevenue:65.56,yoyProfit:3989.29,pe:3.11,pb:1.10,roe:44.30},
-      {quarter:"Q4/2025",revenue:4651.73,profit:243.83,yoyRevenue:-1.68,yoyProfit:-14.62,pe:3.91,pb:1.27,roe:37.60}
+      {quarter:"Q4/2025",revenue:4651.73,profit:243.83,yoyRevenue:-1.68,yoyProfit:-14.62,pe:3.91,pb:1.27,roe:37.60},
+      {quarter:"Q1/2026",revenue:3424.42,profit:368.52,yoyRevenue:31.91,yoyProfit:188.0}
     ]
   },
   VCI: {
@@ -1409,7 +1481,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:850.93,profit:294.87,yoyRevenue:5.53,yoyProfit:49.11,pe:26.03,pb:2.40,roe:9.37},
       {quarter:"Q2/2025",revenue:1159.67,profit:183.90,yoyRevenue:26.62,yoyProfit:-34.13,pe:31.25,pb:2.48,roe:7.83},
       {quarter:"Q3/2025",revenue:1443.29,profit:420.26,yoyRevenue:48.13,yoyProfit:95.15,pe:22.28,pb:2.33,roe:8.83},
-      {quarter:"Q4/2025",revenue:1526.31,profit:442.92,yoyRevenue:52.78,yoyProfit:102.83,pe:20.90,pb:1.75,roe:8.67}
+      {quarter:"Q4/2025",revenue:1526.31,profit:442.92,yoyRevenue:52.78,yoyProfit:102.83,pe:20.90,pb:1.75,roe:8.67},
+      {quarter:"Q1/2026",revenue:1406.48,profit:340.73,yoyRevenue:65.29,yoyProfit:15.55}
     ]
   },
   VHC: {
@@ -1421,7 +1494,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2656.68,profit:193.06,yoyRevenue:-7.12,yoyProfit:13.79,pe:10.00,pb:1.41,roe:14.43},
       {quarter:"Q2/2025",revenue:3207.15,profit:514.76,yoyRevenue:-0.19,yoyProfit:61.86,pe:8.72,pb:1.35,roe:16.25},
       {quarter:"Q3/2025",revenue:3478.48,profit:433.00,yoyRevenue:5.63,yoyProfit:35.05,pe:9.82,pb:1.56,roe:17.00},
-      {quarter:"Q4/2025",revenue:2726.34,profit:277.45,yoyRevenue:-14.83,yoyProfit:-33.61,pe:9.81,pb:1.45,roe:15.51}
+      {quarter:"Q4/2025",revenue:2726.34,profit:277.45,yoyRevenue:-14.83,yoyProfit:-33.61,pe:9.81,pb:1.45,roe:15.51},
+      {quarter:"Q1/2026",revenue:2962.74,profit:285.96,yoyRevenue:11.52,yoyProfit:48.12}
     ]
   },
   VIB: {
@@ -1434,7 +1508,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:3737.11,profit:1936.46,yoyRevenue:-14.24,yoyProfit:-3.23},
       {quarter:"Q2/2025",revenue:3968.69,profit:2076.47,yoyRevenue:-8.07,yoyProfit:23.38},
       {quarter:"Q3/2025",revenue:4172.73,profit:1624.51,yoyRevenue:0.32,yoyProfit:1.58},
-      {quarter:"Q4/2025",revenue:4213.63,profit:1647.98,yoyRevenue:7.59,yoyProfit:-14.22}
+      {quarter:"Q4/2025",revenue:4213.63,profit:1647.98,yoyRevenue:7.59,yoyProfit:-14.22},
+      {quarter:"Q1/2026",revenue:4038.57,profit:2241.19,yoyRevenue:8.07,yoyProfit:15.74}
     ]
   },
   VIX: {
@@ -1447,7 +1522,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:979.68,profit:372.28,yoyRevenue:171.69,yoyProfit:129.88,pe:26.50,pb:1.65,roe:6.08},
       {quarter:"Q2/2025",revenue:1976.15,profit:1301.61,yoyRevenue:421.64,yoyProfit:951.49,pe:28.11,pb:3.38,roe:12.41},
       {quarter:"Q3/2025",revenue:3221.83,profit:2449.42,yoyRevenue:481.81,yoyProfit:822.97,pe:8.93,pb:1.88,roe:24.08},
-      {quarter:"Q4/2025",revenue:2101.49,profit:1286.71,yoyRevenue:285.86,yoyProfit:1046.80,pe:5.30,pb:2.00,roe:28.85}
+      {quarter:"Q4/2025",revenue:2101.49,profit:1286.71,yoyRevenue:285.86,yoyProfit:1046.80,pe:5.30,pb:2.00,roe:28.85},
+      {quarter:"Q1/2026",revenue:1653.4,profit:138.37,yoyRevenue:68.77,yoyProfit:-62.83}
     ]
   },
   VJC: {
@@ -1460,7 +1536,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:17952.15,profit:640.46,yoyRevenue:0.90,yoyProfit:19.45,pe:43.18,pb:3.94,roe:8.86},
       {quarter:"Q2/2025",revenue:17885.30,profit:652.38,yoyRevenue:10.15,yoyProfit:121.42,pe:56.93,pb:4.87,roe:9.91},
       {quarter:"Q3/2025",revenue:16931.45,profit:319.28,yoyRevenue:-6.79,yoyProfit:-44.14,pe:56.62,pb:3.98,roe:7.78},
-      {quarter:"Q4/2025",revenue:29324.05,profit:510.42,yoyRevenue:47.72,yoyProfit:67799.95,pe:48.29,pb:4.30,roe:10.14}
+      {quarter:"Q4/2025",revenue:29324.05,profit:510.42,yoyRevenue:47.72,yoyProfit:67799.95,pe:48.29,pb:4.30,roe:10.14},
+      {quarter:"Q1/2026",revenue:21021.32,profit:1023.4,yoyRevenue:17.1,yoyProfit:59.79}
     ]
   },
   VND: {
@@ -1472,7 +1549,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1257.98,profit:382.53,yoyRevenue:-9.16,yoyProfit:-38.01,pe:18.18,pb:1.41,roe:7.75},
       {quarter:"Q2/2025",revenue:1740.49,profit:368.51,yoyRevenue:19.36,yoyProfit:6.85,pe:22.06,pb:1.70,roe:7.64},
       {quarter:"Q3/2025",revenue:2214.25,profit:929.05,yoyRevenue:74.41,yoyProfit:83.92,pe:15.45,pb:1.45,roe:9.66},
-      {quarter:"Q4/2025",revenue:1427.51,profit:342.00,yoyRevenue:17.75,yoyProfit:36.08,pe:12.57,pb:1.22,roe:9.96}
+      {quarter:"Q4/2025",revenue:1427.51,profit:342.00,yoyRevenue:17.75,yoyProfit:36.08,pe:12.57,pb:1.22,roe:9.96},
+      {quarter:"Q1/2026",revenue:1807.01,profit:545.34,yoyRevenue:43.64,yoyProfit:42.56}
     ]
   },
   VPI: {
@@ -1485,7 +1563,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:248.73,profit:140.79,yoyRevenue:96.55,yoyProfit:52.98,pe:43.00,pb:3.43,roe:8.54},
       {quarter:"Q2/2025",revenue:179.40,profit:3.90,yoyRevenue:-53.71,yoyProfit:-84.10,pe:49.30,pb:3.63,roe:7.58},
       {quarter:"Q3/2025",revenue:395.57,profit:118.16,yoyRevenue:7.42,yoyProfit:7.45,pe:46.92,pb:3.37,roe:7.30},
-      {quarter:"Q4/2025",revenue:1152.66,profit:127.79,yoyRevenue:53.86,yoyProfit:25.39,pe:50.30,pb:3.74,roe:7.73}
+      {quarter:"Q4/2025",revenue:1152.66,profit:127.79,yoyRevenue:53.86,yoyProfit:25.39,pe:50.30,pb:3.74,roe:7.73},
+      {quarter:"Q1/2026",revenue:287.35,profit:26.51,yoyRevenue:15.53,yoyProfit:-81.17}
     ]
   },
   VRE: {
@@ -1497,7 +1576,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2131.42,profit:1177.40,yoyRevenue:-5.47,yoyProfit:8.76,pe:15.18,pb:1.48,roe:6.95},
       {quarter:"Q2/2025",revenue:2142.63,profit:1233.26,yoyRevenue:-13.55,yoyProfit:20.73,pe:18.99,pb:1.89,roe:6.96},
       {quarter:"Q3/2025",revenue:2251.00,profit:1376.43,yoyRevenue:8.34,yoyProfit:51.86,pe:14.46,pb:1.54,roe:6.91},
-      {quarter:"Q4/2025",revenue:2312.33,profit:2658.84,yoyRevenue:8.65,yoyProfit:144.98,pe:10.15,pb:1.35,roe:14.28}
+      {quarter:"Q4/2025",revenue:2312.33,profit:2658.84,yoyRevenue:8.65,yoyProfit:144.98,pe:10.15,pb:1.35,roe:14.28},
+      {quarter:"Q1/2026",revenue:2293.62,profit:1606.26,yoyRevenue:7.61,yoyProfit:36.42}
     ]
   },
   VSH: {
@@ -1510,7 +1590,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:624.62,profit:268.69,yoyRevenue:78.71,yoyProfit:15077.78,pe:16.14,pb:2.39,roe:15.13},
       {quarter:"Q2/2025",revenue:501.57,profit:166.26,yoyRevenue:21.58,yoyProfit:147.57,pe:12.73,pb:2.08,roe:16.93},
       {quarter:"Q3/2025",revenue:556.00,profit:211.28,yoyRevenue:40.29,yoyProfit:171.54,pe:11.09,pb:2.12,roe:19.47},
-      {quarter:"Q4/2025",revenue:621.89,profit:216.38,yoyRevenue:-6.73,yoyProfit:-28.34,pe:11.87,pb:2.07,roe:17.91}
+      {quarter:"Q4/2025",revenue:621.89,profit:216.38,yoyRevenue:-6.73,yoyProfit:-28.34,pe:11.87,pb:2.07,roe:17.91},
+      {quarter:"Q1/2026",revenue:618.28,profit:268.69,yoyRevenue:-1.02,yoyProfit:0.0}
     ]
   },
   VCB: {
@@ -1527,7 +1608,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:13687.15,profit:8696.23,yoyRevenue:-2.78,yoyProfit:1.35},
       {quarter:"Q2/2025",revenue:14160.19,profit:8831.89,yoyRevenue:1.82,yoyProfit:8.77},
       {quarter:"Q3/2025",revenue:14657.24,profit:9020.50,yoyRevenue:7.95,yoyProfit:5.30},
-      {quarter:"Q4/2025",revenue:16266.83,profit:8629.05,yoyRevenue:17.52,yoyProfit:0.74}
+      {quarter:"Q4/2025",revenue:16266.83,profit:8629.05,yoyRevenue:17.52,yoyProfit:0.74},
+      {quarter:"Q1/2026",revenue:17651.08,profit:9462.10,yoyRevenue:28.96,yoyProfit:8.74}
     ]
   },
   VPB: {
@@ -1544,7 +1626,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:13355.76,profit:3894.91,yoyRevenue:17.95,yoyProfit:9.20},
       {quarter:"Q2/2025",revenue:13478.57,profit:4862.40,yoyRevenue:8.63,yoyProfit:36.32},
       {quarter:"Q3/2025",revenue:15061.21,profit:7275.48,yoyRevenue:23.90,yoyProfit:80.63},
-      {quarter:"Q4/2025",revenue:16767.18,profit:7957.14,yoyRevenue:18.79,yoyProfit:72.33}
+      {quarter:"Q4/2025",revenue:16767.18,profit:7957.14,yoyRevenue:18.79,yoyProfit:72.33},
+      {quarter:"Q1/2026",revenue:16960.63,profit:6329.47,yoyRevenue:26.99,yoyProfit:60.86}
     ]
   },
   HDB: {
@@ -1591,7 +1674,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:6863.17,profit:2896.69,yoyRevenue:15.33,yoyProfit:37.19},
       {quarter:"Q2/2025",revenue:6585.08,profit:2893.60,yoyRevenue:7.66,yoyProfit:32.93},
       {quarter:"Q3/2025",revenue:7874.37,profit:2901.28,yoyRevenue:23.71,yoyProfit:31.81},
-      {quarter:"Q4/2025",revenue:5358.00,profit:-2752.46,yoyRevenue:-12.15,yoyProfit:-176.50}
+      {quarter:"Q4/2025",revenue:5358.00,profit:-2752.46,yoyRevenue:-12.15,yoyProfit:-176.50},
+      {quarter:"Q1/2026",revenue:6042.04,profit:1584.40,yoyRevenue:-11.96,yoyProfit:-45.30}
     ]
   },
   CTR: {
@@ -1607,7 +1691,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:2738.46,profit:121.71,yoyRevenue:4.40,yoyProfit:4.80,pe:20.76,pb:5.63},
       {quarter:"Q2/2025",revenue:3236.36,profit:145.22,yoyRevenue:7.56,yoyProfit:16.08,pe:18.46,pb:5.22},
       {quarter:"Q3/2025",revenue:3965.18,profit:168.94,yoyRevenue:14.09,yoyProfit:15.50,pe:18.72,pb:5.09},
-      {quarter:"Q4/2025",revenue:3999.53,profit:163.85,yoyRevenue:14.21,yoyProfit:8.71,pe:16.38,pb:4.75}
+      {quarter:"Q4/2025",revenue:3999.53,profit:163.85,yoyRevenue:14.21,yoyProfit:8.71,pe:16.38,pb:4.75},
+      {quarter:"Q1/2026",revenue:3804.83,profit:149.89,yoyRevenue:38.94,yoyProfit:23.15}
     ]
   },
   GVR: {
@@ -1623,7 +1708,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:5681.99,profit:1184.65,yoyRevenue:23.78,yoyProfit:149.10,pe:25.12,pb:2.17},
       {quarter:"Q2/2025",revenue:5891.20,profit:1446.81,yoyRevenue:26.59,yoyProfit:76.26,pe:20.70,pb:1.96},
       {quarter:"Q3/2025",revenue:9296.20,profit:1897.26,yoyRevenue:20.46,yoyProfit:101.03,pe:26.03,pb:2.82},
-      {quarter:"Q4/2025",revenue:8658.03,profit:694.40,yoyRevenue:-6.96,yoyProfit:-60.29,pe:24.82,pb:2.34}
+      {quarter:"Q4/2025",revenue:8658.03,profit:694.40,yoyRevenue:-6.96,yoyProfit:-60.29,pe:24.82,pb:2.34},
+      {quarter:"Q1/2026",revenue:8850.11,profit:2513.38,yoyRevenue:55.76,yoyProfit:112.16}
     ]
   },
   FPT: {
@@ -1639,7 +1725,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:16064.98,profit:2174.30,yoyRevenue:13.99,yoyProfit:20.93,pe:23.01,pb:5.95},
       {quarter:"Q2/2025",revenue:16658.34,profit:2257.46,yoyRevenue:9.26,yoyProfit:20.39,pe:18.66,pb:4.86},
       {quarter:"Q3/2025",revenue:17225.51,profit:2434.84,yoyRevenue:7.85,yoyProfit:16.56,pe:18.65,pb:4.69},
-      {quarter:"Q4/2025",revenue:20258.87,profit:2509.52,yoyRevenue:14.77,yoyProfit:19.80,pe:13.31,pb:3.43}
+      {quarter:"Q4/2025",revenue:20258.87,profit:2509.52,yoyRevenue:14.77,yoyProfit:19.80,pe:13.31,pb:3.43},
+      {quarter:"Q1/2026",revenue:12485.84,profit:2476.79,yoyRevenue:-22.28,yoyProfit:13.91}
     ]
   },
   MBB: {
@@ -1656,7 +1743,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:11692.18,profit:6567.74,yoyRevenue:29.02,yoyProfit:44.90,pe:6.62,pb:1.38},
       {quarter:"Q2/2025",revenue:12372.12,profit:5877.61,yoyRevenue:17.48,yoyProfit:-2.47,pe:8.88,pb:1.78},
       {quarter:"Q3/2025",revenue:12990.52,profit:5571.02,yoyRevenue:24.71,yoyProfit:-3.78,pe:9.00,pb:1.72},
-      {quarter:"Q4/2025",revenue:14555.29,profit:8762.57,yoyRevenue:30.63,yoyProfit:39.44,pe:8.03,pb:1.58}
+      {quarter:"Q4/2025",revenue:14555.29,profit:8762.57,yoyRevenue:30.63,yoyProfit:39.44,pe:8.03,pb:1.58},
+      {quarter:"Q1/2026",revenue:14913.12,profit:7702.72,yoyRevenue:27.55,yoyProfit:15.40}
     ]
   },
   VHM: {
@@ -1672,7 +1760,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:15697.92,profit:2688.95,yoyRevenue:91.18,yoyProfit:203.94,pe:11.78,pb:1.83},
       {quarter:"Q2/2025",revenue:18974.96,profit:7508.04,yoyRevenue:-33.13,yoyProfit:-31.06,pe:14.89,pb:2.00},
       {quarter:"Q3/2025",revenue:16419.97,profit:4183.93,yoyRevenue:-50.73,yoyProfit:-46.81,pe:17.45,pb:2.02},
-      {quarter:"Q4/2025",revenue:102178.07,profit:27514.33,yoyRevenue:215.23,yoyProfit:126.28,pe:14.80,pb:2.61}
+      {quarter:"Q4/2025",revenue:102178.07,profit:27514.33,yoyRevenue:215.23,yoyProfit:126.28,pe:14.80,pb:2.61},
+      {quarter:"Q1/2026",revenue:65114.24,profit:25625.36,yoyRevenue:314.8,yoyProfit:852.99}
     ]
   },
   VIC: {
@@ -1688,7 +1777,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:83821.34,profit:6978.76,yoyRevenue:285.57,yoyProfit:-12.04,pe:38.80,pb:2.91},
       {quarter:"Q2/2025",revenue:46435.49,profit:-940.91,yoyRevenue:9.69,yoyProfit:73.34,pe:58.53,pb:5.47},
       {quarter:"Q3/2025",revenue:39143.02,profit:640.18,yoyRevenue:-37.73,yoyProfit:-87.91,pe:122.46,pb:7.44},
-      {quarter:"Q4/2025",revenue:162238.60,profit:4671.90,yoyRevenue:161.02,yoyProfit:113.09,pe:153.62,pb:11.80}
+      {quarter:"Q4/2025",revenue:162238.60,profit:4671.90,yoyRevenue:161.02,yoyProfit:113.09,pe:153.62,pb:11.80},
+      {quarter:"Q1/2026",revenue:104371.18,profit:5610.78,yoyRevenue:24.52,yoyProfit:-19.6}
     ]
   },
   ANV: {
@@ -1704,7 +1794,8 @@ const FUNDAMENTALS = {
       {quarter:"Q1/2025",revenue:1111.47,profit:132.02,yoyRevenue:9.37,yoyProfit:681.03,pe:38.07,pb:2.12},
       {quarter:"Q2/2025",revenue:1744.79,profit:332.81,yoyRevenue:44.29,yoyProfit:14651.17,pe:16.36,pb:2.50},
       {quarter:"Q3/2025",revenue:2007.87,profit:283.08,yoyRevenue:49.28,yoyProfit:915.48,pe:9.47,pb:2.01},
-      {quarter:"Q4/2025",revenue:2128.36,profit:251.57,yoyRevenue:55.50,yoyProfit:4610.83,pe:6.43,pb:1.82}
+      {quarter:"Q4/2025",revenue:2128.36,profit:251.57,yoyRevenue:55.50,yoyProfit:4610.83,pe:6.43,pb:1.82},
+      {quarter:"Q1/2026",revenue:1844.95,profit:195.36,yoyRevenue:65.99,yoyProfit:47.97}
     ]
   }
 };
