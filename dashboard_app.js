@@ -46,8 +46,8 @@ inits.market = async function(){
   const el = $('#view-market');
   el.innerHTML = `<div class="card"><h2>VN-Index &nbsp;<span id="vniNow" class="mini"></span></h2><div id="mBanner" style="margin-bottom:10px"></div><div id="chartVni" style="height:380px"></div></div>
   <div class="grid g2">
-    <div class="card"><h2>🏆 Top CANSLIM hôm nay</h2><div id="topCs"></div></div>
-    <div class="card"><h2>🚀 Top sức mạnh giá (RS)</h2><div id="topRs"></div></div>
+    <div class="card"><h2>Top CANSLIM hôm nay</h2><div id="topCs"></div></div>
+    <div class="card"><h2>Top sức mạnh giá (RS)</h2><div id="topRs"></div></div>
   </div>`;
   const mini = (rows, cols) => `<table><tr><th>Mã</th>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr>` +
     rows.map(r=>`<tr class="row" onclick="openDetail('${r.t}')"><td><b>${r.t}</b> <span class="mini">${(r.n||'').slice(0,22)}</span></td>${cols.map(c=>`<td class="${c[2]?c[2](r):''}">${c[1](r)}</td>`).join('')}</tr>`).join('') + '</table>';
@@ -84,11 +84,11 @@ const COLS = [
   ['npatYoY','LNST YoY%'],['revYoY','DT YoY%'],['cagr3','LN 3n%/n'],['cap','Vốn hóa (tỷ)'],['val20','GTGD (tỷ/ph)'],['rsi','RSI'],['vx','Vol x TB']
 ];
 const PRESETS = {
-  canslim: {label:'⭐ CANSLIM ≥ 4', f: r => r.csTong>=4},
-  growth: {label:'🚀 Tăng trưởng cao', f: r => (r.npatYoY||0)>=30 && (r.revYoY||0)>=15},
-  value: {label:'💎 Định giá rẻ', f: r => r.pe!=null && r.pe>0 && r.pe<10 && r.pb!=null && r.pb<1.5 && (r.roe||0)>=12},
-  divi: {label:'💰 Cổ tức cao', f: r => (r.dy||0)>=5},
-  breakout: {label:'📈 Gần đỉnh + vol lớn', f: r => (r.dHi||-99)>=-5 && (r.vx||0)>=1.5}
+  canslim: {label:'CANSLIM ≥ 4', f: r => r.csTong>=4},
+  growth: {label:'Tăng trưởng cao', f: r => (r.npatYoY||0)>=30 && (r.revYoY||0)>=15},
+  value: {label:'Định giá rẻ', f: r => r.pe!=null && r.pe>0 && r.pe<10 && r.pb!=null && r.pb<1.5 && (r.roe||0)>=12},
+  divi: {label:'Cổ tức cao', f: r => (r.dy||0)>=5},
+  breakout: {label:'Gần đỉnh + vol lớn', f: r => (r.dHi||-99)>=-5 && (r.vx||0)>=1.5}
 };
 inits.screener = function(){
   if (scInit) return; scInit = true;

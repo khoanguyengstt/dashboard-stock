@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dashboard Cổ Phiếu VN — HOSE + HNX (702 mã)</title>
+<title>Khoa KAFI — CANSLIM Dashboard</title>
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
@@ -12,7 +12,9 @@
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px}
 .wrap{max-width:1400px;margin:0 auto;padding:12px}
 header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 0}
-header h1{font-size:20px;color:var(--green-dark)}
+header h1{font-size:20px;color:var(--green-dark);display:flex;align-items:center;gap:10px}
+.logo-mark{display:inline-flex;width:34px;height:34px;border-radius:8px;background:var(--green);color:#fff;font-weight:800;font-size:17px;align-items:center;justify-content:center}
+header h1 .sub{font-weight:400;color:var(--muted);font-size:14px}
 .badge{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 12px;font-size:12px;color:var(--muted)}
 .btn{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 14px;cursor:pointer;font-size:13px}
 .btn:hover{border-color:var(--green)}
@@ -60,17 +62,17 @@ footer{color:var(--muted);font-size:12px;padding:16px 0;text-align:center}
 <body>
 <div class="wrap">
   <header>
-    <h1>📊 Dashboard Cổ Phiếu VN</h1>
+    <h1><span class="logo-mark">K</span>Khoa KAFI <span class="sub">CANSLIM Dashboard</span></h1>
     <span class="badge" id="bgeData">Dữ liệu: …</span>
     <span class="badge">702 mã HOSE + HNX</span>
-    <button class="btn" id="btnRefresh" title="Tải lại toàn bộ dữ liệu screener từ API (khoảng 1-2 phút)">⟳ Cập nhật dữ liệu</button>
+    <button class="btn" id="btnRefresh" title="Tải lại toàn bộ dữ liệu screener từ API (khoảng 1-2 phút)">Cập nhật dữ liệu</button>
     <span id="refreshStatus" class="mini"></span>
   </header>
   <nav>
-    <button class="btn active" data-view="market">🌐 Thị trường</button>
-    <button class="btn" data-view="screener">🔎 Bộ lọc cổ phiếu</button>
-    <button class="btn" data-view="detail">📈 Chi tiết mã</button>
-    <button class="btn" data-view="compare">⚖️ So sánh</button>
+    <button class="btn active" data-view="market">Thị trường</button>
+    <button class="btn" data-view="screener">Bộ lọc cổ phiếu</button>
+    <button class="btn" data-view="detail">Chi tiết mã</button>
+    <button class="btn" data-view="compare">So sánh</button>
   </nav>
   <div id="view-market"></div>
   <div id="view-screener" style="display:none"></div>
@@ -80,6 +82,6 @@ footer{color:var(--muted);font-size:12px;padding:16px 0;text-align:center}
 </div>
 <div id="toast"></div>
 <script src="dashboard_data.js?v=20260704c"></script>
-<script src="dashboard_app.js?v=20260704c"></script>
+<script src="dashboard_app.js?v=20260704d"></script>
 </body>
 </html>
