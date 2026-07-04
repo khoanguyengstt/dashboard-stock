@@ -137,6 +137,16 @@
   }
   .fund-table-h th{text-align:right;min-width:78px;}
   .fund-table-h td{text-align:right;}
+  .fund-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .fund-head h2{margin:0;}
+  .fund-tabs{display:flex;gap:4px;}
+  .fund-tab{background:var(--panel2);border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;}
+  .fund-tab:hover{border-color:var(--accent);color:var(--accent);}
+  .fund-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .fund-chart-block{margin-bottom:16px;}
+  .fund-chart-block:last-child{margin-bottom:0;}
+  .fund-chart-title{font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:6px;}
+  .fund-chart-canvas{width:100%;height:150px;display:block;}
 </style>
 </head>
 <body>
@@ -164,6 +174,17 @@
         <h2>Biểu đồ giá <span class="tag" id="chartSymbolLabel"></span></h2>
         <div id="chartContainer" style="height:460px;"></div>
       </div>
+      <div class="card">
+        <div class="fund-head">
+          <h2>Dữ liệu cơ bản <span class="tag">Doanh thu • LNST • P/E • P/B — 12 quý gần nhất</span></h2>
+          <div class="fund-tabs">
+            <button class="fund-tab active" data-tab="table" id="fundTabTable">Bảng số liệu</button>
+            <button class="fund-tab" data-tab="chart" id="fundTabChart">P/E &amp; P/B</button>
+          </div>
+        </div>
+        <div id="fundamentalsBody"><div class="empty-state">Chưa có dữ liệu.</div></div>
+        <div id="fundamentalsChartBody" style="display:none;"></div>
+      </div>
     </div>
     <div>
       <div class="card side-card">
@@ -174,11 +195,6 @@
         <div id="valuationBody" class="valuation-scroll"></div>
       </div>
     </div>
-  </div>
-
-  <div class="card">
-    <h2>Dữ liệu cơ bản <span class="tag">Doanh thu • LNST • P/E • P/B — 12 quý gần nhất</span></h2>
-    <div id="fundamentalsBody"><div class="empty-state">Chưa có dữ liệu.</div></div>
   </div>
 
   <div class="grid">

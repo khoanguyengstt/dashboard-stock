@@ -530,10 +530,6 @@ function renderValuations(ticker){
     return;
   }
 
-  const numericTargets = data.valuations
-    .map(function(v){ return parseFloat(String(v.target).replace(/\./g, "").replace(",", ".")); })
-    .filter(function(n){ return !isNaN(n); });
-
   const rows = data.valuations.map(function(v){
     const cls = ratingToClass(v.rating);
     const dlBtn = v.url ? '<a href="' + v.url + '" target="_blank" rel="noopener" class="valuation-dl-btn" title="Xem/tải báo cáo gốc">Tải ↗</a>' : '—';
@@ -547,19 +543,10 @@ function renderValuations(ticker){
     '</tr>';
   }).join("");
 
-  let avgHtml = "";
-  if(numericTargets.length > 1){
-    const avg = numericTargets.reduce(function(a, b){ return a + b; }, 0) / numericTargets.length;
-    const min = Math.min.apply(null, numericTargets);
-    const max = Math.max.apply(null, numericTargets);
-    avgHtml = '<div class="valuation-avg">Giá mục tiêu trung bình (' + numericTargets.length + ' CTCK): <b>' +
-      avg.toFixed(1) + '</b> nghìn đ &nbsp;•&nbsp; Khoảng: ' + min.toFixed(1) + ' – ' + max.toFixed(1) + ' nghìn đ</div>';
-  }
-
   document.getElementById("valuationBody").innerHTML =
     '<table class="valuation-table"><thead><tr>' +
       '<th>Ngày</th><th>CTCK</th><th>Khuyến nghị</th><th>Giá mục tiêu</th><th>Upside</th><th>Báo cáo</th>' +
-    '</tr></thead><tbody>' + rows + '</tbody></table>' + avgHtml;
+    '</tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
 function fmtFundNum(v){
@@ -576,8 +563,16 @@ function fmtFundRatio(v){
   if(v === null || v === undefined || isNaN(v)) return "--";
   return Number(v).toLocaleString("vi-VN", {maximumFractionDigits:2});
 }
+function fmtFundPctPlain(v){
+  if(v === null || v === undefined || isNaN(v)) return "--";
+  const sign = v > 0 ? "+" : "";
+  return sign + v.toFixed(1) + "%";
+}
+
+let currentFundTicker = null;
 
 function renderFundamentals(ticker){
+  currentFundTicker = ticker;
   const body = document.getElementById("fundamentalsBody");
   if(!body) return;
   const fd = FUNDAMENTALS[ticker];
@@ -607,7 +602,7 @@ function renderFundamentals(ticker){
   const yoyProfitCells = fd.quarters.map(function(q){ return '<td>' + fmtFundPct(q.yoyProfit) + '</td>'; }).join("");
   const trendCells = trends.map(function(t){ return '<td>' + t + '</td>'; }).join("");
   const hasROE = fd.quarters.some(function(q){ return q.roe !== undefined && q.roe !== null; });
-  const roeCells = fd.quarters.map(function(q){ return '<td>' + fmtFundPct(q.roe) + '</td>'; }).join("");
+  const roeCells = fd.quarters.map(function(q){ return '<td>' + fmtFundPctPlain(q.roe) + '</td>'; }).join("");
   const roeRow = hasROE ? ('<tr><td>ROE (%)</td>' + roeCells + '</tr>') : "";
 
   // P/E, P/B theo từng quý (chỉ có với các mã không phải NH, và riêng MBB trong nhóm NH)
@@ -647,6 +642,150 @@ function renderFundamentals(ticker){
       (hasROE ? '' : 'Mã này chưa có dữ liệu ROE theo quý. ') +
       '"Tăng tốc/Giảm tốc" so sánh %YoY LNST quý này với quý liền trước.' +
     '</div>';
+
+  // Nếu đang mở tab biểu đồ P/E & P/B, vẽ lại luôn theo mã mới chọn
+  const chartBody = document.getElementById("fundamentalsChartBody");
+  if(chartBody && chartBody.style.display !== "none"){
+    renderFundamentalsCharts(ticker);
+  }
+}
+
+// ---------------------------------------------------------------
+// BIỂU ĐỒ P/E & P/B THEO QUÝ (tab thứ 2 của "Dữ liệu cơ bản")
+// ---------------------------------------------------------------
+function drawFundLineChart(canvas, labels, values, color){
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  if(rect.width < 5 || rect.height < 5) return;
+  canvas.width = Math.max(1, rect.width * dpr);
+  canvas.height = Math.max(1, rect.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const W = rect.width, H = rect.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const padLeft = 6, padRight = 42, padTop = 10, padBottom = 18;
+  const plotW = W - padLeft - padRight;
+  const plotH = H - padTop - padBottom;
+
+  const valid = values.map(function(v){ return (v === null || v === undefined || isNaN(v)) ? null : Number(v); });
+  const validNums = valid.filter(function(v){ return v !== null; });
+  if(!validNums.length){
+    ctx.fillStyle = "#9ca3af";
+    ctx.font = "12px -apple-system,Segoe UI,Roboto,sans-serif";
+    ctx.fillText("Không có dữ liệu", padLeft, H / 2);
+    return;
+  }
+  const maxV = Math.max.apply(null, validNums);
+  const minV = Math.min.apply(null, validNums);
+  const range = (maxV - minV) || 1;
+  const pad = range * 0.15;
+  const top = maxV + pad, bottom = Math.max(0, minV - pad);
+  const span = (top - bottom) || 1;
+
+  const n = labels.length;
+  const stepX = n > 1 ? plotW / (n - 1) : 0;
+  function xAt(i){ return padLeft + i * stepX; }
+  function yAt(v){ return padTop + (1 - (v - bottom) / span) * plotH; }
+
+  // gridlines + nhãn trục y
+  ctx.strokeStyle = "rgba(15,23,42,0.08)";
+  ctx.fillStyle = "#9ca3af";
+  ctx.font = "10px -apple-system,Segoe UI,Roboto,sans-serif";
+  const gridLines = 3;
+  for(let i = 0; i <= gridLines; i++){
+    const v = bottom + (span * i / gridLines);
+    const y = yAt(v);
+    ctx.beginPath();
+    ctx.moveTo(padLeft, y);
+    ctx.lineTo(W - padRight, y);
+    ctx.stroke();
+    ctx.fillText(v.toFixed(1), W - padRight + 4, y + 3);
+  }
+
+  // đường nối các điểm có dữ liệu (bỏ qua khoảng trống null)
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  let started = false;
+  valid.forEach(function(v, i){
+    if(v === null){ started = false; return; }
+    const x = xAt(i), y = yAt(v);
+    if(!started){ ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
+  });
+  ctx.stroke();
+
+  // chấm tròn tại từng điểm
+  ctx.fillStyle = color;
+  valid.forEach(function(v, i){
+    if(v === null) return;
+    const x = xAt(i), y = yAt(v);
+    ctx.beginPath();
+    ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // nhãn trục x: đầu, giữa, cuối
+  ctx.fillStyle = "#9ca3af";
+  [0, Math.floor((n - 1) / 2), n - 1].forEach(function(i){
+    if(i < 0 || i >= n) return;
+    const x = xAt(i);
+    ctx.fillText(labels[i], Math.max(padLeft, Math.min(x - 12, W - padRight - 24)), H - 3);
+  });
+}
+
+function renderFundamentalsCharts(ticker){
+  const container = document.getElementById("fundamentalsChartBody");
+  if(!container) return;
+  const fd = FUNDAMENTALS[ticker];
+  const hasQuarterlyPB = fd && fd.quarters && fd.quarters.some(function(q){ return q.pe !== undefined && q.pe !== null; });
+
+  if(!fd || !fd.quarters || !fd.quarters.length || !hasQuarterlyPB){
+    container.innerHTML = '<div class="empty-state">Mã này chưa có dữ liệu P/E, P/B theo quý để vẽ biểu đồ.</div>';
+    return;
+  }
+
+  container.innerHTML =
+    '<div class="fund-chart-block">' +
+      '<div class="fund-chart-title">P/E theo quý</div>' +
+      '<canvas class="fund-chart-canvas" id="fundPeCanvas"></canvas>' +
+    '</div>' +
+    '<div class="fund-chart-block">' +
+      '<div class="fund-chart-title">P/B theo quý</div>' +
+      '<canvas class="fund-chart-canvas" id="fundPbCanvas"></canvas>' +
+    '</div>';
+
+  const labels = fd.quarters.map(function(q){ return q.quarter; });
+  const peValues = fd.quarters.map(function(q){ return q.pe; });
+  const pbValues = fd.quarters.map(function(q){ return q.pb; });
+
+  requestAnimationFrame(function(){
+    const peCanvas = document.getElementById("fundPeCanvas");
+    const pbCanvas = document.getElementById("fundPbCanvas");
+    if(peCanvas) drawFundLineChart(peCanvas, labels, peValues, "#2563eb");
+    if(pbCanvas) drawFundLineChart(pbCanvas, labels, pbValues, "#b45309");
+  });
+}
+
+function setFundTab(tab){
+  const tableBtn = document.getElementById("fundTabTable");
+  const chartBtn = document.getElementById("fundTabChart");
+  const tableBody = document.getElementById("fundamentalsBody");
+  const chartBody = document.getElementById("fundamentalsChartBody");
+  if(!tableBtn || !chartBtn || !tableBody || !chartBody) return;
+
+  if(tab === "chart"){
+    tableBtn.classList.remove("active");
+    chartBtn.classList.add("active");
+    tableBody.style.display = "none";
+    chartBody.style.display = "block";
+    renderFundamentalsCharts(currentFundTicker);
+  } else {
+    chartBtn.classList.remove("active");
+    tableBtn.classList.add("active");
+    chartBody.style.display = "none";
+    tableBody.style.display = "block";
+  }
 }
 
 function renderAnalysis(ticker){
@@ -722,6 +861,18 @@ function selectTicker(ticker){
 }
 
 select.addEventListener("change", () => selectTicker(select.value));
+
+const fundTabTableBtn = document.getElementById("fundTabTable");
+const fundTabChartBtn = document.getElementById("fundTabChart");
+if(fundTabTableBtn) fundTabTableBtn.onclick = () => setFundTab("table");
+if(fundTabChartBtn) fundTabChartBtn.onclick = () => setFundTab("chart");
+
+window.addEventListener("resize", function(){
+  const chartBody = document.getElementById("fundamentalsChartBody");
+  if(chartBody && chartBody.style.display !== "none" && currentFundTicker){
+    renderFundamentalsCharts(currentFundTicker);
+  }
+});
 
 // Mặc định mở HPG khi tải trang
 selectTicker("HPG");
