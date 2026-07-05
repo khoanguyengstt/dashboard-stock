@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Khoa KAFI — CANSLIM Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#F7F9FB;--panel:#FFFFFF;--panel2:#F3F5F7;--border:#E8EAEF;--text:#1F2937;--muted:#7A828E;
+--green:#18A34B;--green-dark:#128A3E;--green-soft:#E7F6EC;--red:#E5484D;--red-soft:#FDECEC;
+--blue:#2563EB;--amber:#B45309;--amber-soft:#FEF6E7}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:14px}
+body{background:var(--bg);color:var(--text);font-family:'Inter','Segoe UI',system-ui,sans-serif;font-feature-settings:'tnum' 1;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1400px;margin:0 auto;padding:16px 20px}
+/* ===== NAVBAR ===== */
+.topbar{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border)}
+.topbar-in{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:22px;padding:0 20px;height:56px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:16.5px;color:var(--green-dark);white-space:nowrap}
+.logo-mark{display:inline-flex;width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#18A34B,#128A3E);color:#fff;font-weight:800;font-size:15px;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(24,163,75,.35)}
+.logo .sub{font-weight:500;color:var(--muted);font-size:12px;margin-left:2px}
+.searchbox{display:flex;align-items:center;gap:8px;border:1.5px solid var(--border);border-radius:22px;padding:7px 14px;min-width:210px;background:#fff;transition:.15s}
+.searchbox:focus-within{border-color:var(--green)}
+.searchbox svg{flex:none;color:var(--muted)}
+.searchbox input{border:none;outline:none;font:inherit;width:100%;background:none;color:var(--text)}
+nav{display:flex;gap:4px;flex:1}
+.nav-link{background:none;border:none;font:inherit;font-weight:600;font-size:14px;color:var(--text);padding:17px 13px 14px;cursor:pointer;border-bottom:2.5px solid transparent;transition:.15s}
+.nav-link:hover{color:var(--green-dark)}
+.nav-link.active{color:var(--green-dark);border-bottom-color:var(--green)}
+.btn{background:#fff;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 14px;cursor:pointer;font:inherit;font-size:13px;font-weight:600;transition:.15s}
+.btn:hover{border-color:var(--green)}
+.btn.primary,.btn.active{background:var(--green);border-color:var(--green);color:#fff}
+.btn-cta{background:var(--green-dark);color:#fff;border:none;border-radius:8px;padding:9px 16px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px rgba(18,138,62,.3)}
+.btn-cta:hover{background:#0d6e31}
+/* ===== CARDS ===== */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.card h2{font-size:15px;font-weight:700;margin-bottom:12px;color:var(--text);letter-spacing:-.01em}
+.card h2 .hint{font-weight:500;font-size:12px;color:var(--muted);margin-left:6px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}
+.hero{display:grid;grid-template-columns:1fr 400px;gap:16px}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:1000px){.g2,.hero,.stats4{grid-template-columns:1fr}.searchbox{min-width:120px}}
+/* ===== SEGMENTED ===== */
+.seg{display:inline-flex;background:var(--panel2);border-radius:9px;padding:3px;gap:2px}
+.seg button{border:none;background:none;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);padding:6px 16px;border-radius:7px;cursor:pointer}
+.seg button.on{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(16,24,40,.12)}
+/* ===== TABLES ===== */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{position:sticky;top:0;background:#fff;color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;text-align:right;padding:9px 8px;cursor:pointer;white-space:nowrap;user-select:none;border-bottom:1.5px solid var(--border)}
+th:first-child,td:first-child{text-align:left}
+th.on{color:var(--green-dark)}
+td{padding:9px 8px;border-top:1px solid #F1F3F6;text-align:right;white-space:nowrap;font-weight:500}
+tr.row:hover{background:var(--green-soft);cursor:pointer}
+.up{color:#0DA750;font-weight:600}.down{color:var(--red);font-weight:600}.mut{color:var(--muted);font-weight:400}
+/* signal table (hero right) */
+.sigtb td{padding:7px 6px;border-top:1px solid #F1F3F6}
+.sigtb .l1{font-weight:700;font-size:13.5px}
+.sigtb .l2{color:var(--muted);font-size:12px;font-weight:400}
+/* ===== CHIPS ===== */
+.chip{display:inline-block;border-radius:5px;padding:2px 7px;font-size:11.5px;font-weight:700}
+.chip.g{background:var(--green-soft);color:var(--green-dark)}
+.chip.r{background:var(--red-soft);color:var(--red)}
+.chip.a{background:var(--amber-soft);color:var(--amber)}
+.chip.n{background:var(--panel2);color:var(--muted)}
+.tag{display:inline-block;border-radius:7px;padding:4px 12px;font-size:12.5px;font-weight:700}
+/* ===== KPI ===== */
+input,select{background:#fff;border:1.5px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font:inherit;font-size:13px}
+input:focus,select:focus{outline:none;border-color:var(--green)}
+input[type=number]{width:80px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.filters label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.cs-letter{display:inline-flex;width:30px;height:30px;border-radius:8px;align-items:center;justify-content:center;font-weight:800;margin-right:6px;border:1px solid var(--border);font-size:13px}
+.cs-on{background:var(--green-soft);color:var(--green-dark);border-color:#B7E4C7}
+.cs-off{background:var(--panel2);color:var(--muted)}
+.kpis{display:flex;gap:10px;flex-wrap:wrap}
+.kpi{background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px;min-width:108px}
+.kpi .l{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.01em}
+.kpi .v{font-size:16.5px;font-weight:700;margin-top:3px;color:var(--text)}
+/* perf rows (Finbox style) */
+.perf-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid #F1F3F6}
+.perf-row:last-child{border-bottom:none}
+.perf-row .l{color:var(--muted);font-size:12.5px;font-weight:500}
+.perf-row .v{font-weight:700;font-size:15px}
+#chartMain{height:420px}#chartRsi,#chartMacd{height:110px}
+.mini{font-size:12px;color:var(--muted)}
+.search-wrap{position:relative}
+#sugg,#navSugg{position:absolute;top:40px;left:0;background:#fff;border:1px solid var(--border);border-radius:10px;z-index:200;max-height:300px;overflow:auto;min-width:290px;display:none;box-shadow:0 12px 32px rgba(16,24,40,.14)}
+#sugg div,#navSugg div{padding:8px 12px;cursor:pointer;font-size:13px}
+#sugg div:hover,#navSugg div:hover{background:var(--green-soft)}
+.pill{cursor:pointer;background:#fff;border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:12.5px;font-weight:600;color:var(--text)}
+.pill.on{background:var(--green);border-color:var(--green);color:#fff}
+#toast{position:fixed;bottom:18px;right:18px;background:var(--green-dark);color:#fff;padding:11px 18px;border-radius:10px;display:none;z-index:999;box-shadow:0 8px 24px rgba(16,24,40,.25);font-weight:600;font-size:13px}
+.cmp-chip{background:var(--green-soft);border:1px solid #B7E4C7;border-radius:20px;padding:4px 12px;margin-right:6px;display:inline-block;color:var(--green-dark);font-weight:700}
+.cmp-chip span{cursor:pointer;color:var(--red);margin-left:6px}
+footer{color:var(--muted);font-size:11.5px;padding:20px 0 28px;text-align:center;font-style:italic}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:sp .8s linear infinite;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-in">
+  <div class="logo"><span class="logo-mark">K</span>Khoa KAFI<span class="sub">CANSLIM</span></div>
+  <div class="searchbox search-wrap">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="navQ" placeholder="Tìm kiếm mã..." autocomplete="off">
+    <div id="navSugg"></div>
+  </div>
+  <nav>
+    <button class="nav-link active" data-view="market">Thị trường</button>
+    <button class="nav-link" data-view="screener">Bộ lọc cổ phiếu</button>
+    <button class="nav-link" data-view="detail">Chi tiết mã</button>
+    <button class="nav-link" data-view="compare">So sánh</button>
+  </nav>
+  <button class="btn-cta" id="btnRefresh" title="Tải lại dữ liệu screener từ API (~1-2 phút)">Cập nhật dữ liệu</button>
+</div></div>
+<div class="wrap">
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+    <span class="mini" id="bgeData">Dữ liệu: …</span><span class="mini">·</span>
+    <span class="mini">702 mã HOSE + HNX</span>
+    <span id="refreshStatus" class="mini"></span>
+  </div>
+  <div id="view-market"></div>
+  <div id="view-screener" style="display:none"></div>
+  <div id="view-detail" style="display:none"></div>
+  <div id="view-compare" style="display:none"></div>
+  <footer>Disclaimer: Số liệu hiệu suất tính từ mô phỏng lịch sử (backtest) của hệ Khoa KAFI Signal, đã gồm phí 0,3%/chiều; kết quả quá khứ không đảm bảo tương lai. Nguồn dữ liệu: VNDirect (giá), Vietcap IQ (BCTC). Thông tin chỉ mang tính tham khảo, không phải khuyến nghị đầu tư.</footer>
+</div>
+<div id="toast"></div>
+<script src="dashboard_data.js?v=20260705k"></script>
+<script src="dashboard_app.js?v=20260705l"></script>
+</body>
+</html>
