@@ -118,7 +118,7 @@ inits.market = async function(){
   </div>
   <div style="height:16px"></div>
   <div class="stats4">
-    <div class="card" style="margin:0"><h2>Lợi suất KAFI Signal</h2>
+    <div class="card" style="margin:0"><h2>Khoa KAFI Signal</h2>
       <div class="perf-row"><span class="l">1 năm</span><span class="v up">${st.y1>=0?'+':''}${st.y1}%</span></div>
       <div class="perf-row"><span class="l">3 năm</span><span class="v up">+${st.y3}%</span></div>
       <div class="perf-row"><span class="l">Từ 2019</span><span class="v up">+${st.all}%</span></div></div>
@@ -126,7 +126,7 @@ inits.market = async function(){
       <div class="perf-row"><span class="l">1 năm</span><span class="v">${st.vy1>=0?'+':''}${st.vy1}%</span></div>
       <div class="perf-row"><span class="l">3 năm</span><span class="v">+${st.vy3}%</span></div>
       <div class="perf-row"><span class="l">Từ 2019</span><span class="v">+${st.vall}%</span></div></div>
-    <div class="card" style="margin:0"><h2>Chất lượng hệ</h2>
+    <div class="card" style="margin:0"><h2>Chất lượng hệ thống</h2>
       <div class="perf-row"><span class="l">R:R</span><span class="v">${st.rr}</span></div>
       <div class="perf-row"><span class="l">Win rate</span><span class="v">${st.winrate}%</span></div>
       <div class="perf-row"><span class="l">Tổng số deal</span><span class="v">${st.ndeal}</span></div></div>
