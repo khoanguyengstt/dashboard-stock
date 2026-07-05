@@ -467,7 +467,7 @@ function computeTPN(oh, boardCode, qsAv){
       const chg = (c[i]/c[i-1]-1)*100;
       if (chg < ceilThr) continue;
       if (!v20[i] || v[i] < 2.0*v20[i]) continue;
-      if (c[i]*v20[i]/1e6 < 20) continue;
+      if (c[i]*v20[i]/1e6 < 15) continue;
       const b = baseInfo(i);
       if (b.hasCeil || b.rng > 12) continue;
       if (!gradeAt(t[i])) {
@@ -513,7 +513,7 @@ function renderTPN(s){
     desc = `Tín hiệu MUA ${s.buyDate} giá ${s.fill.toFixed(2)}. ` + (s.holdDays<3 ? `Đang chờ hàng về — hệ thống sẽ phán quyết giữ hay bán ngay khi hàng về.` : (s.belowMa20 ? `⚠️ Cấu trúc tăng giá đang suy yếu — chuẩn bị tín hiệu BÁN.` : `Đang trong xu hướng tăng — giữ vị thế tới khi hệ thống phát tín hiệu BÁN. Cắt lỗ tự động −7%.`));
   }
   else if (s.weakToday) { chip = ['TÍN HIỆU YẾU (WEAK) — ĐỨNG NGOÀI', '#fef6e7', '#b45309']; desc = `Có tín hiệu kỹ thuật trong phiên nhưng bộ xếp hạng AI đánh giá độ tin cậy thấp — hệ thống KHÔNG khuyến nghị vào lệnh, chỉ hiển thị để quan sát.`; }
-  else if (!s.hasCeil && s.rng <= 12 && s.gtgd >= 20) { chip = ['VÙNG THEO DÕI — CHỜ ĐIỂM MUA', '#fef9e7', '#b45309']; desc = `Cổ phiếu đã vào vùng theo dõi của thuật toán — cấu trúc tích lũy và dòng tiền đạt chuẩn. Chờ phiên bùng nổ kích hoạt tín hiệu MUA.`; }
+  else if (!s.hasCeil && s.rng <= 12 && s.gtgd >= 15) { chip = ['VÙNG THEO DÕI — CHỜ ĐIỂM MUA', '#fef9e7', '#b45309']; desc = `Cổ phiếu đã vào vùng theo dõi của thuật toán — cấu trúc tích lũy và dòng tiền đạt chuẩn. Chờ phiên bùng nổ kích hoạt tín hiệu MUA.`; }
   else { chip = ['CHƯA CÓ TÍN HIỆU', '#f3f5f7', '#6b7280']; desc = 'Cổ phiếu chưa vào vùng theo dõi của thuật toán. Hệ thống quét tự động mỗi phiên.'; }
   el.innerHTML = `<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
     <span class="tag" style="background:${chip[1]};color:${chip[2]};font-size:14px;padding:6px 14px">${chip[0]}</span>
@@ -797,7 +797,7 @@ $('#btnRefresh').onclick = async function(){
         const ret = n => c.length>n?+((last/c[c.length-1-n]-1)*100).toFixed(1):null;
         o.r3 = ret(63); o.r6 = ret(126); o.r12 = ret(250);
         // trạng thái vùng theo dõi của engine tín hiệu (chi tiết thuật toán không công bố)
-        if (c.length>32 && (o.val20||0)>=20000) {
+        if (c.length>32 && (o.val20||0)>=15000) {
           const thr = o.b==='HN'?8.8:6.3; const L2 = c.length-1;
           let hi=-1e9, lo=1e9, hc=false;
           for (let k=L2-29;k<=L2;k++){ if(c[k]>hi)hi=c[k]; if(c[k]<lo)lo=c[k]; if(k>0&&(c[k]/c[k-1]-1)*100>=thr)hc=true; }
