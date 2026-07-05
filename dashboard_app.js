@@ -187,7 +187,7 @@ function loadProChart(){
     if (clr) clr.onclick = () => { proChart.removeOverlay(); addProBadges(); };
   };
   if (window.klinecharts) init();
-  else { const s = document.createElement('script'); s.src = 'https://unpkg.com/klinecharts@9.8.10/dist/klinecharts.min.js'; s.onload = init; document.head.appendChild(s); }
+  else { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/klinecharts@9/dist/klinecharts.min.js'; s.onload = init; s.onerror = () => toast('Không tải được thư viện chart'); document.head.appendChild(s); }
 }
 window.openDetail = t => { showView('detail', true); $$('nav .btn').forEach(b=>b.classList.toggle('active', b.dataset.view==='detail')); inits.detail(t); };
 inits.detail = function(t){
