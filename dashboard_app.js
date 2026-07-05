@@ -150,22 +150,44 @@ function renderSc(){
 
 // ================= 3. CHI TIẾT MÃ =================
 let dtInit = false, dtCharts = [], kqChart = null, rtChart = null, curT = null, curOhlc = null;
-let tvLoadedFor = null, useLog = false;
-function loadTvWidget(){
-  if (!curT || tvLoadedFor === curT) return;
-  tvLoadedFor = curT;
-  const r = byT[curT] || {};
-  const sym = (r.b === 'HN' ? 'HNX:' : 'HOSE:') + curT;
-  const wrap = document.getElementById('chartProWrap');
-  wrap.innerHTML = '<div id="tvw" style="height:100%"></div>';
-  const init = () => new TradingView.widget({
-    container_id: 'tvw', symbol: sym, interval: 'D', timezone: 'Asia/Ho_Chi_Minh',
-    theme: 'light', style: 1, locale: 'vi_VN', autosize: true,
-    hide_side_toolbar: false, allow_symbol_change: false, withdateranges: true,
-    studies: ['MASimple@tv-basicstudies']
+let proLoadedFor = null, proChart = null, useLog = false;
+function addProBadges(){
+  if (!proChart || !curOhlc) return;
+  const tix = {}; curOhlc.t.forEach((tt,i)=>tix[tt]=i);
+  curMarkers.forEach(m => {
+    const i = tix[m.time]; if (i == null) return;
+    proChart.createOverlay({ name: 'simpleAnnotation', lock: true, extendData: m.text,
+      points: [{ timestamp: m.time*1000, value: m.position==='belowBar' ? curOhlc.l[i] : curOhlc.h[i] }],
+      styles: { text: { color: '#fff', backgroundColor: m.color, borderRadius: 4, paddingLeft: 5, paddingRight: 5, paddingTop: 3, paddingBottom: 3 } } });
   });
-  if (window.TradingView) init();
-  else { const s = document.createElement('script'); s.src = 'https://s3.tradingview.com/tv.js'; s.onload = init; document.head.appendChild(s); }
+}
+function loadProChart(){
+  if (!curT || !curOhlc || proLoadedFor === curT) return;
+  const init = () => {
+    proLoadedFor = curT;
+    const wrap = document.getElementById('chartProWrap');
+    wrap.innerHTML = '<div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;align-items:center" id="proTools">'
+      + '<span class="mini" style="margin-right:4px">Công cụ vẽ:</span>'
+      + [['segment','✏️ Xu hướng'],['horizontalStraightLine','― Ngang'],['rayLine','↗ Tia'],['fibonacciLine','𝑓 Fibonacci'],['priceChannelLine','∥ Kênh giá']]
+        .map(x=>`<button class="btn" style="padding:3px 10px;font-size:12px" data-ov="${x[0]}">${x[1]}</button>`).join('')
+      + '<button class="btn" style="padding:3px 10px;font-size:12px" id="proClear">🗑 Xóa nét vẽ</button>'
+      + '<span class="mini" style="margin-left:auto">Badge B/S = tín hiệu Trần Phá Nền v1.1</span></div>'
+      + '<div id="proK" style="height:620px"></div>';
+    try { klinecharts.dispose('proK'); } catch(e){}
+    proChart = klinecharts.init('proK');
+    proChart.setStyles({ candle: { bar: { upColor:'#18a34b', downColor:'#e5484d', upBorderColor:'#18a34b', downBorderColor:'#e5484d', upWickColor:'#18a34b', downWickColor:'#e5484d' } },
+      indicator: { lines: [{color:'#2563eb'},{color:'#d97706'},{color:'#8b5cf6'}] } });
+    proChart.applyNewData(curOhlc.t.map((tt,i)=>({ timestamp: tt*1000, open: curOhlc.o[i], high: curOhlc.h[i], low: curOhlc.l[i], close: curOhlc.c[i], volume: curOhlc.v[i] })));
+    proChart.createIndicator('MA', true, { id: 'candle_pane' });
+    proChart.createIndicator('VOL');
+    proChart.createIndicator('MACD');
+    addProBadges();
+    wrap.querySelectorAll('[data-ov]').forEach(b => b.onclick = () => proChart.createOverlay(b.dataset.ov));
+    const clr = wrap.querySelector('#proClear');
+    if (clr) clr.onclick = () => { proChart.removeOverlay(); addProBadges(); };
+  };
+  if (window.klinecharts) init();
+  else { const s = document.createElement('script'); s.src = 'https://unpkg.com/klinecharts@9.8.10/dist/klinecharts.min.js'; s.onload = init; document.head.appendChild(s); }
 }
 window.openDetail = t => { showView('detail', true); $$('nav .btn').forEach(b=>b.classList.toggle('active', b.dataset.view==='detail')); inits.detail(t); };
 inits.detail = function(t){
@@ -183,7 +205,7 @@ inits.detail = function(t){
       <div class="card"><h2 id="dChartTitle">Biểu đồ giá</h2>
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center" id="dRanges">
           <button class="btn active" id="btnChartSig">Chart Tín hiệu</button>
-          <button class="btn" id="btnChartPro">Chart Pro (TradingView)</button>
+          <button class="btn" id="btnChartPro">Chart Pro + Tín hiệu</button>
           <span style="width:14px"></span>
           ${[['3T',0.25],['6T',0.5],['1N',1],['3N',3],['5N',5],['Tất cả',14]].map((x,i)=>`<button class="btn rng ${i===2?'active':''}" data-y="${x[1]}">${x[0]}</button>`).join('')}
           <label class="mini" style="margin-left:10px"><input type="checkbox" id="ckBoll"> Bollinger</label>
@@ -221,7 +243,7 @@ inits.detail = function(t){
     $('#btnChartPro').onclick = () => {
       $('#chartSigWrap').style.display='none'; $('#chartProWrap').style.display='';
       $('#btnChartPro').classList.add('active'); $('#btnChartSig').classList.remove('active');
-      loadTvWidget();
+      loadProChart();
     };
     $('#ckBoll').onchange = () => { const b = $('#dRanges .btn.active'); drawPrice(b?+b.dataset.y:1); };
     $('#btnCmpAdd').onclick = () => { if (curT) addCmp(curT); };
@@ -242,7 +264,7 @@ async function loadDetail(t){
     const tpn = computeTPN(oh, r.b || 'HO');
     curMarkers = tpn.markers;
     renderTPN(tpn.state);
-    if (tvLoadedFor && tvLoadedFor !== t) { tvLoadedFor = null; if (document.getElementById('chartProWrap').style.display !== 'none') loadTvWidget(); }
+    if (proLoadedFor && proLoadedFor !== t) { proLoadedFor = null; if (document.getElementById('chartProWrap').style.display !== 'none') loadProChart(); }
     $('#dTitle').innerHTML = `${t} <span class="mini">— ${r.n||''} (${r.b==='HO'?'HOSE':'HNX'})</span>`;
     // KPI
     const c = oh.c||[], last = c[c.length-1], prev = c[c.length-2]||last;
