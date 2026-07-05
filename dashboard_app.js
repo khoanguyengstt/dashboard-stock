@@ -227,6 +227,12 @@ function loadProChart(){
     proChart.createIndicator('VOL');
     proChart.createIndicator('MACD');
     addProBadges();
+    // bang so lieu chay theo con tro tren Chart Pro
+    const tmap = {}; curOhlc.t.forEach((tt,i)=>{ tmap[tt*1000] = i; });
+    proChart.subscribeAction('onCrosshairChange', d => {
+      const ts = d && d.kLineData ? d.kLineData.timestamp : null;
+      updateKpis(ts != null && tmap[ts] != null ? tmap[ts] : null);
+    });
     wrap.querySelectorAll('[data-ov]').forEach(b => b.onclick = () => proChart.createOverlay(b.dataset.ov));
     const clr = wrap.querySelector('#proClear');
     if (clr) clr.onclick = () => { proChart.removeOverlay(); addProBadges(); };
