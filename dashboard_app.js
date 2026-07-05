@@ -367,12 +367,10 @@ inits.detail = function(t){
         </div>
         <div id="chartProWrap" style="display:none;height:640px"></div>
       </div>
-      <div class="card"><h2>Đánh giá CANSLIM tự động</h2><div id="dCs"></div></div>
-      <div class="grid g2">
-        <div class="card"><h2>KQKD theo quý — Doanh thu &amp; LNST (tỷ đồng)</h2><canvas id="cvKq" height="240"></canvas></div>
-        <div class="card"><h2>Định giá theo quý — P/E, P/B, ROE</h2><canvas id="cvRt" height="240"></canvas></div>
-      </div>
-      <div class="card"><h2>Bảng KQKD 12 quý gần nhất</h2><div style="overflow:auto"><table id="tbKq"></table></div></div>
+      <div class="card"><h2>Dữ liệu cơ bản <span class="hint">Doanh thu · LNST · P/E · P/B — 12 quý gần nhất</span></h2>
+        <div class="mini" id="dFundCur" style="margin-bottom:10px;font-size:13px"></div>
+        <div style="overflow:auto"><table id="tbFund"></table></div>
+        <div class="mini" style="margin-top:10px;font-style:italic">Ô "--" là quý nguồn chưa công bố. "Tăng tốc/Giảm tốc" so sánh %YoY LNST quý này với quý liền trước.</div></div>
       </div>`;
       // eslint-disable-next-line
   const dq = $('#dQ');
@@ -435,9 +433,7 @@ async function loadDetail(t){
     dtData = {oh, qsAv, rtsAv};
     updateKpis(null);
     drawPrice(14);
-    drawCanslim(r, qs);
-    drawKq(qs);
-    drawRt(rts);
+    drawFund(r, qs, rts);
   } catch(e){ toast('Lỗi tải dữ liệu '+t+': '+e.message); }
 }
 // ===== Khoa KAFI Signal engine v2 =====
@@ -562,6 +558,40 @@ function drawPrice(years){
   // đồng bộ trục thời gian
   const sync = (a,b) => a.timeScale().subscribeVisibleLogicalRangeChange(r => r && b.timeScale().setVisibleLogicalRange(r));
   sync(ch,chV); sync(chV,ch);
+}
+function drawFund(r, qs, rts){
+  const cur = [];
+  if (r.pe!=null) cur.push(`P/E hiện tại: <b>${fmt(r.pe,2)}</b>`);
+  if (r.pb!=null) cur.push(`P/B hiện tại: <b>${fmt(r.pb,2)}</b>`);
+  if (r.roe!=null) cur.push(`ROE hiện tại (TTM): <b>${fmt(r.roe,1)}%</b>`);
+  $('#dFundCur').innerHTML = cur.join(' &nbsp;·&nbsp; ');
+  const last12 = qs.slice(-12);
+  const rtByQ = {}; rts.forEach(x=>{ rtByQ[x.yearReport+'Q'+x.quarter] = x; });
+  const cols = last12.map(q => {
+    const key = q.yearReport+'Q'+q.lengthReport;
+    const pv = qs.find(x=>x.yearReport===q.yearReport-1 && x.lengthReport===q.lengthReport);
+    const rev = pick(q,REV), np = pick(q,NPAT);
+    const rev0 = pv?pick(pv,REV):null, np0 = pv?pick(pv,NPAT):null;
+    const rt = rtByQ[key] || {};
+    return { lb: 'Q'+q.lengthReport+'/'+q.yearReport,
+      rev: rev!=null?rev/1e9:null, np: np!=null?np/1e9:null,
+      ydt: (rev!=null&&rev0)?(rev/Math.abs(rev0)-1)*100:null,
+      yln: (np!=null&&np0)?(np/Math.abs(np0)-1)*100:null,
+      roe: rt.roe!=null?rt.roe*100:null, pe: rt.pe, pb: rt.pb };
+  });
+  const cell = (v,d,suf='',color=false) => v==null ? '<td class="mut">--</td>' : `<td class="${color?cls(v):''}">${(color&&v>0?'+':'')+fmt(v,d)+suf}</td>`;
+  const trend = cols.map((c,i)=>{ if (i===0 || c.yln==null || cols[i-1].yln==null) return '<td class="mut">--</td>';
+    return c.yln>=cols[i-1].yln ? '<td><span class="chip g">Tăng tốc ▲</span></td>' : '<td><span class="chip r">Giảm tốc ▼</span></td>'; });
+  $('#tbFund').innerHTML =
+    '<tr><th style="text-align:left">Quý</th>'+cols.map(c=>`<th>${c.lb}</th>`).join('')+'</tr>'
+    +'<tr><td style="text-align:left"><b>Doanh thu (tỷ)</b></td>'+cols.map(c=>cell(c.rev,1)).join('')+'</tr>'
+    +'<tr><td style="text-align:left"><b>LNST (tỷ)</b></td>'+cols.map(c=>cell(c.np,1)).join('')+'</tr>'
+    +'<tr><td style="text-align:left">%YoY DT</td>'+cols.map(c=>cell(c.ydt,1,'%',true)).join('')+'</tr>'
+    +'<tr><td style="text-align:left">%YoY LN</td>'+cols.map(c=>cell(c.yln,1,'%',true)).join('')+'</tr>'
+    +'<tr><td style="text-align:left">ROE (%)</td>'+cols.map(c=>cell(c.roe,1,'%',true)).join('')+'</tr>'
+    +'<tr><td style="text-align:left">Xu hướng LN</td>'+trend.join('')+'</tr>'
+    +'<tr><td style="text-align:left">P/E</td>'+cols.map(c=>cell(c.pe,2)).join('')+'</tr>'
+    +'<tr><td style="text-align:left">P/B</td>'+cols.map(c=>cell(c.pb,2)).join('')+'</tr>';
 }
 function drawCanslim(r, qs){
   const np = qs.map(x=>pick(x,NPAT));
