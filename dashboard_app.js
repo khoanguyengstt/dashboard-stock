@@ -104,7 +104,7 @@ inits.market = async function(){
       <div style="height:330px"><canvas id="cvPerf"></canvas></div>
     </div>
     <div class="card" style="margin-bottom:0;display:flex;flex-direction:column">
-      <h2 style="text-align:center;letter-spacing:.02em">TÍN HIỆU 6 THÁNG QUA</h2>
+      <h2 style="text-align:center;letter-spacing:.02em">TOP TÍN HIỆU 6 THÁNG QUA</h2>
       <div style="flex:1;overflow:auto"><table class="sigtb"><tr><th>Mã · Ngày mua</th><th>Ngày bán</th><th>Lợi suất</th></tr>
       ${(tpn.recent||[]).map(d=>`<tr class="row" onclick="openDetail('${d.t}')">
         <td><div class="l1">${d.t} ${d.open?'<span class="chip a">Đang mở</span>':''}</div><div class="l2">Mua ${d.bd} giá ${d.bp}</div></td>
