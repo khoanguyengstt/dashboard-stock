@@ -359,7 +359,6 @@ inits.detail = function(t){
         <h2 style="margin:0">Khoa KAFI Signal <span class="hint">tín hiệu AI độc quyền</span></h2>
         <div class="search-wrap"><input id="dQ" placeholder="Nhập mã hoặc tên công ty…" style="width:230px"><div id="sugg"></div></div>
         <div id="dTitle" style="font-size:16px;font-weight:700"></div>
-        <button class="btn" id="btnCmpAdd" style="margin-left:auto">+ Thêm vào So sánh</button>
       </div>
       <div id="dTpn"></div></div>
       <div id="dBody" style="display:none">
@@ -410,7 +409,6 @@ inits.detail = function(t){
       loadProChart();
     };
     $('#ckBoll').onchange = () => { const b = $('#dRanges .btn.active'); drawPrice(b?+b.dataset.y:14); };
-    $('#btnCmpAdd').onclick = () => { if (curT) addCmp(curT); };
     $('#btnLog').onclick = function(){ useLog = !useLog; this.classList.toggle('active', useLog); const b = $('#dRanges .btn.rng.active'); drawPrice(b?+b.dataset.y:14); };
     $('#btnFull').onclick = () => { const el = $('#chartSigWrap'); if (document.fullscreenElement) document.exitFullscreen(); else { el.style.background='#fff'; el.requestFullscreen(); } };
   }
@@ -659,31 +657,20 @@ window.addCmp = t => { if (!cmpList.includes(t)) { if (cmpList.length>=4) return
 inits.compare = function(){
   const el = $('#view-compare');
   if (!cmpInit) { cmpInit = true;
-    el.innerHTML = `<div class="card"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <input id="cQ" placeholder="Thêm mã (Enter)…" style="width:170px"><span id="cChips"></span>
-      <select id="cRange"><option value="0.5">6 tháng</option><option value="1" selected>1 năm</option><option value="3">3 năm</option></select>
-    </div></div>
-    <div class="card"><h2>Biến động giá (chuẩn hóa % từ đầu kỳ)</h2><canvas id="cvCmp" height="130"></canvas></div>
-    <div class="card"><h2>So sánh chỉ số</h2><div style="overflow:auto"><table id="tbCmp"></table></div></div>
-    <div class="card"><h2>Định giá theo dòng <span class="hint">khoảng P/B lịch sử 6 năm · vạch sáng = hiện tại, cập nhật theo phiên</span></h2>
+    el.innerHTML = `<div class="card"><h2>Định giá theo dòng <span class="hint">P/B lịch sử 6 năm + ROE — cập nhật theo phiên</span></h2>
       <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
         <div class="seg" id="secGrp"><button data-g="bank" class="on">Ngân hàng</button><button data-g="sec">Chứng khoán</button></div>
-        <div class="seg" id="secMet"><button data-m="pb" class="on">P/B</button><button data-m="roe">ROE %</button></div>
+        <span class="mini" style="align-self:center"><span style="display:inline-block;width:10px;height:10px;background:#128A3E;border-radius:3px;vertical-align:-1px"></span> khoảng P/B &nbsp; <span style="display:inline-block;width:10px;height:10px;background:#67D98B;border-radius:3px;vertical-align:-1px"></span> P/B hiện tại &nbsp; <span style="display:inline-block;width:10px;height:10px;background:#D97706;border-radius:50%;vertical-align:-1px"></span> ROE hiện tại</span>
         <span class="mini" id="secSt" style="align-self:center"></span>
       </div>
       <div style="height:380px"><canvas id="cvSec"></canvas></div></div>`;
     $('#secGrp').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#secGrp button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); secGrp = b.dataset.g; drawSec(); });
-    $('#secMet').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#secMet button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); secMet = b.dataset.m; drawSec(); });
-    $('#cQ').addEventListener('keydown', e => { if (e.key==='Enter') { const t = e.target.value.toUpperCase().trim(); if (byT[t]) { if (!cmpList.includes(t) && cmpList.length<4) cmpList.push(t); e.target.value=''; renderCmp(); } else toast('Không tìm thấy mã '+t); } });
-    $('#cRange').onchange = renderCmp;
   }
-  if (!cmpList.length) cmpList = ['FPT','HPG'];
-  renderCmp();
   drawSec();
 };
 // ===== DINH GIA THEO DONG (khoang P/B & ROE lich su, hien tai theo phien) =====
 const SEC_GROUPS = { bank:['VCB','BID','CTG','TCB','MBB','ACB','STB','SHB','VPB','TPB','VIB','MSB','OCB'], sec:['SSI','VND','VCI','HCM','MBS','VDS','BSI','SHS','VIX','FTS','ORS'] };
-let secCache = {}, secChart = null, secGrp = 'bank', secMet = 'pb';
+let secCache = {}, secChart = null, secGrp = 'bank';
 async function drawSec(){
   const st = $('#secSt'); const codes = SEC_GROUPS[secGrp];
   if (!secCache[secGrp]) {
@@ -701,48 +688,36 @@ async function drawSec(){
     secCache[secGrp] = out;
     if (st) st.textContent = '';
   }
-  const D = secCache[secGrp], met = secMet;
-  const items = codes.filter(c => D[c] && D[c][met+'Lo']!=null && isFinite(D[c][met+'Lo']));
-  const cur = items.map(c => met==='pb' ? D[c].curPb : D[c].curRoe);
+  const D = secCache[secGrp];
+  const items = codes.filter(c => D[c] && D[c].pbLo!=null && isFinite(D[c].pbLo));
   if (secChart) secChart.destroy();
   const secLbl = { id:'secLbl', afterDatasetsDraw(chart){ const ctx = chart.ctx; const meta = chart.getDatasetMeta(0);
-    meta.data.forEach((bar,i)=>{ const c = items[i]; const hi = D[c][met+'Hi'];
+    meta.data.forEach((bar,i)=>{ const d = D[items[i]];
       ctx.save(); ctx.font = '700 11px Inter, sans-serif'; ctx.fillStyle = '#1F2937'; ctx.textAlign = 'center';
-      ctx.fillText(met==='pb'?hi.toFixed(1):hi.toFixed(0), bar.x, bar.y-6);
-      const cv = cur[i];
-      if (cv!=null && isFinite(cv)) { const yPix = chart.scales.y.getPixelForValue(cv);
+      ctx.fillText(d.pbHi.toFixed(1), bar.x, bar.y-6);
+      if (d.curPb!=null && isFinite(d.curPb)) { const yPix = chart.scales.y.getPixelForValue(d.curPb);
         ctx.strokeStyle = '#67D98B'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(bar.x-bar.width/2, yPix); ctx.lineTo(bar.x+bar.width/2, yPix); ctx.stroke();
-        ctx.fillStyle = '#128A3E'; ctx.textAlign = 'left'; ctx.fillText(met==='pb'?(+cv).toFixed(1):(+cv).toFixed(0), bar.x+bar.width/2+4, yPix+4); }
+        ctx.fillStyle = '#128A3E'; ctx.textAlign = 'left'; ctx.fillText((+d.curPb).toFixed(1), bar.x+bar.width/2+4, yPix+4); }
       ctx.restore(); }); }};
-  secChart = new Chart($('#cvSec'), { type:'bar',
-    data:{ labels: items, datasets:[{ data: items.map(c=>[D[c][met+'Lo'], D[c][met+'Hi']]), backgroundColor:'#128A3E', borderRadius:5, barPercentage:.42 }] },
+  secChart = new Chart($('#cvSec'), {
+    data:{ labels: items, datasets:[
+      { type:'bar', data: items.map(c=>[D[c].pbLo, D[c].pbHi]), backgroundColor:'#128A3E', borderRadius:5, barPercentage:.42, yAxisID:'y', order:2 },
+      { type:'line', showLine:false, data: items.map(c=>D[c].curRoe), pointBackgroundColor:'#D97706', pointBorderColor:'#fff', pointBorderWidth:1.5, pointRadius:5.5, yAxisID:'y2', order:1 }
+    ]},
     options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{ label: c => { const t = items[c.dataIndex], d = D[t];
-        return met==='pb'
-          ? ['Cao nhất: '+d.pbHi.toFixed(2), 'Thấp nhất: '+d.pbLo.toFixed(2), 'Hiện tại: '+(d.curPb!=null?(+d.curPb).toFixed(2):'--'), 'ROE hiện tại: '+(d.curRoe!=null?d.curRoe.toFixed(1)+'%':'--')]
-          : ['Cao nhất: '+d.roeHi.toFixed(1)+'%', 'Thấp nhất: '+d.roeLo.toFixed(1)+'%', 'Hiện tại: '+(d.curRoe!=null?d.curRoe.toFixed(1)+'%':'--')]; } }} },
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{ label: c => { const d = D[items[c.dataIndex]];
+        return c.datasetIndex===1 ? 'ROE hiện tại: '+(d.curRoe!=null?d.curRoe.toFixed(1)+'%':'--')
+          : ['P/B cao nhất: '+d.pbHi.toFixed(2), 'P/B thấp nhất: '+d.pbLo.toFixed(2), 'P/B hiện tại: '+(d.curPb!=null?(+d.curPb).toFixed(2):'--')]; } }} },
       scales:{ x:{grid:{display:false}, ticks:{color:'#1F2937', font:{weight:600, size:12, family:'Inter'}}},
-               y:{beginAtZero:true, grid:{color:'#F1F3F6'}, ticks:{color:'#7A828E', font:{size:11}}} } },
+               y:{beginAtZero:true, grid:{color:'#F1F3F6'}, ticks:{color:'#7A828E', font:{size:11}}, title:{display:true, text:'P/B', color:'#7A828E', font:{size:11}}},
+               y2:{position:'right', beginAtZero:true, grid:{drawOnChartArea:false}, ticks:{color:'#D97706', font:{size:11}, callback:v=>v+'%'}, title:{display:true, text:'ROE', color:'#D97706', font:{size:11}}} } },
     plugins:[secLbl] });
 }
+
 async function renderCmp(){
   $('#cChips').innerHTML = cmpList.map(t=>`<span class="cmp-chip">${t}<span onclick="rmCmp('${t}')">✕</span></span>`).join('');
   window.rmCmp = t => { cmpList = cmpList.filter(x=>x!==t); renderCmp(); };
-  if (!cmpList.length) { if (cmpChart) cmpChart.destroy(); $('#tbCmp').innerHTML=''; return; }
-  const years = +$('#cRange').value;
-  try {
-    const days = Math.round(365*years)+10;
-    const data = await Promise.all(cmpList.map(t=>api.ohlc(t, days)));
-    const colors = ['#18a34b','#2563eb','#d97706','#8b5cf6'];
-    // dùng trục thời gian của mã có ít nến nhất
-    const base = data.reduce((a,b)=>(a.t||[]).length<=(b.t||[]).length?a:b);
-    const labels = base.t.map(t=>new Date(t*1000).toISOString().slice(0,10));
-    const ds = data.map((d,i)=>{ const map = {}; d.t.forEach((t,j)=>map[t]=d.c[j]); let first = null;
-      const vals = base.t.map(t=>{ const v = map[t]; if (v!=null && first==null) first = v; return v!=null&&first?(v/first-1)*100:null; });
-      return {type:'line', label:cmpList[i], data:vals, borderColor:colors[i], pointRadius:0, borderWidth:2, tension:.1}; });
-    if (cmpChart) cmpChart.destroy();
-    cmpChart = new Chart($('#cvCmp'), {data:{labels, datasets:ds}, options:{responsive:true, plugins:{legend:{labels:{color:'#374151'}}}, scales:{x:{ticks:{color:'#6b7280',maxTicksLimit:12},grid:{color:'#eef1f4'}}, y:{ticks:{color:'#6b7280',callback:v=>v+'%'},grid:{color:'#eef1f4'}}}}});
-  } catch(e){ toast('Lỗi tải giá so sánh: '+e.message); }
+  if (!cmpList.length) { $('#tbCmp').innerHTML=''; return; }
   const metrics = [['Giá','p',2],['P/E','pe',1],['P/B','pb',2],['ROE %','roe',1],['LNST YoY %','npatYoY',1],['DT YoY %','revYoY',1],['LN 3 năm %/n','cagr3',1],['RS','rs',0],['CANSLIM','csTong',0],['Vốn hóa (tỷ)','cap',0],['Cổ tức %','dy',1],['Cách đỉnh 52T %','dHi',1]];
   $('#tbCmp').innerHTML = '<tr><th>Chỉ số</th>' + cmpList.map(t=>`<th>${t}</th>`).join('') + '</tr>' +
     metrics.map(m=>`<tr><td><b>${m[0]}</b></td>${cmpList.map(t=>{ const v = (byT[t]||{})[m[1]]; return `<td>${fmt(v,m[2])}</td>`; }).join('')}</tr>`).join('');
