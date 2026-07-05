@@ -136,7 +136,6 @@ inits.market = async function(){
       <div class="perf-row"><span class="l">Phí giao dịch</span><span class="v mut">0.3%/chiều</span></div></div>
   </div>
   <div style="height:16px"></div>
-  <div class="card"><h2>VN-Index <span id="vniNow" class="hint"></span></h2><div id="mBanner" style="margin-bottom:10px"></div><div id="chartVni" style="height:340px"></div></div>
   <div class="grid g2">
     <div class="card"><h2>Top tăng giá hôm nay <span class="hint">GTGD TB20 ≥ 20 tỷ · cuối phiên gần nhất</span></h2><div id="topCs"></div></div>
     <div class="card"><h2>Top khối lượng hôm nay <span class="hint">GTGD TB20 ≥ 20 tỷ · cuối phiên gần nhất</span></h2><div id="topRs"></div></div>
@@ -151,21 +150,6 @@ inits.market = async function(){
   const thanhKhoan = r => (r.val20||0) >= 20000 && r.chg!=null;
   $('#topCs').innerHTML = mini([...ROWS()].filter(thanhKhoan).sort((a,b)=>(b.chg||-99)-(a.chg||-99)).slice(0,10), gainCols);
   $('#topRs').innerHTML = mini([...ROWS()].filter(thanhKhoan).sort((a,b)=>((b.vx||0)*(b.v20||0))-((a.vx||0)*(a.v20||0))).slice(0,10), gainCols);
-  try {
-    const d = await api.ohlc('VNINDEX', 1500);
-    const c = d.c, last = c[c.length-1], prev = c[c.length-2];
-    const ma50 = smaS(c,50), ma200 = smaS(c,200);
-    M_STATUS = last > ma50[ma50.length-1];
-    $('#vniNow').innerHTML = `${fmt(last,2)} <span class="${cls(last-prev)}">(${pct((last/prev-1)*100,2)})</span>`;
-    $('#mBanner').innerHTML = M_STATUS
-      ? `<span class="tag" style="background:#e7f6ec;color:#128a3e">M — Xu hướng thị trường: TÍCH CỰC (VN-Index trên MA50) ✓</span>`
-      : `<span class="tag" style="background:#fdecec;color:#e5484d">M — Xu hướng thị trường: THẬN TRỌNG (VN-Index dưới MA50)</span>`;
-    const ch = LightweightCharts.createChart($('#chartVni'), chartOpts());
-    const cs = ch.addCandlestickSeries(candleOpts());
-    cs.setData(d.t.map((t,i)=>({time:t, open:d.o[i], high:d.h[i], low:d.l[i], close:d.c[i]})));
-    addLine(ch, d.t, ma50, '#d97706', 'MA50'); addLine(ch, d.t, ma200, '#8b5cf6', 'MA200');
-    ch.timeScale().fitContent();
-  } catch(e){ $('#mBanner').innerHTML = '<span class="mini">Không tải được VN-Index: '+e+'</span>'; }
 };
 
 function chartOpts(){ return {layout:{background:{color:'transparent'},textColor:'#6b7280'},grid:{vertLines:{color:'#eef1f4'},horzLines:{color:'#eef1f4'}},timeScale:{borderColor:'#e4e8ec'},rightPriceScale:{borderColor:'#e4e8ec'},autoSize:true}; }
