@@ -35,20 +35,113 @@ function bollS(c,n=20,k=2){ const ma=smaS(c,n); return c.map((_,i)=>{ if(ma[i]==
 
 // ================= ĐIỀU HƯỚNG =================
 const views = ['market','screener','detail','compare'];
-$$('nav .btn').forEach(b => b.onclick = () => showView(b.dataset.view));
-function showView(v, skip){ views.forEach(x => { $('#view-'+x).style.display = x===v?'':'none'; }); $$('nav .btn').forEach(b=>b.classList.toggle('active', b.dataset.view===v)); if(!skip) inits[v] && inits[v](); }
+$$('.nav-link').forEach(b => b.onclick = () => showView(b.dataset.view));
+function showView(v, skip){ views.forEach(x => { $('#view-'+x).style.display = x===v?'':'none'; }); $$('.nav-link').forEach(b=>b.classList.toggle('active', b.dataset.view===v)); if(!skip) inits[v] && inits[v](); }
+window.showView = showView;
 const inits = {};
+// ===== Tim kiem tren navbar =====
+(function(){
+  const q = $('#navQ'), box = $('#navSugg');
+  if (!q) return;
+  q.addEventListener('input', () => {
+    const s = q.value.toUpperCase();
+    if (!s) { box.style.display='none'; return; }
+    const hits = ROWS().filter(r=>r.t.startsWith(s) || (r.n||'').toUpperCase().includes(s)).slice(0,10);
+    box.innerHTML = hits.map(r=>`<div onclick="openDetail('${r.t}');document.getElementById('navQ').value='';document.getElementById('navSugg').style.display='none'"><b>${r.t}</b> <span class="mini">${r.n||''} · ${r.b==='HO'?'HOSE':'HNX'}</span></div>`).join('');
+    box.style.display = hits.length?'block':'none';
+  });
+  q.addEventListener('keydown', e => { if (e.key==='Enter') { const t = q.value.toUpperCase().trim(); if (byT[t]) { window.openDetail(t); q.value=''; box.style.display='none'; } } });
+  document.addEventListener('click', e => { if (!e.target.closest('.searchbox')) box.style.display='none'; });
+})();
 
 // ================= 1. THỊ TRƯỜNG =================
-let mktDone = false, M_STATUS = null;
+let mktDone = false, M_STATUS = null, perfChart = null, perfRange = 'all';
+function rrect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+const endBadge = { id:'endBadge', afterDatasetsDraw(chart){
+  const ctx = chart.ctx;
+  chart.data.datasets.forEach((ds,di)=>{
+    const meta = chart.getDatasetMeta(di); const pt = meta.data[meta.data.length-1]; if (!pt) return;
+    const val = ds.data[ds.data.length-1];
+    const txt = (val>=0?'+':'')+val.toFixed(1)+'%';
+    ctx.save(); ctx.font = '700 12px Inter, sans-serif';
+    const w = ctx.measureText(txt).width + 16;
+    ctx.fillStyle = ds.borderColor; rrect(ctx, pt.x+7, pt.y-12, w, 24, 7); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(txt, pt.x+15, pt.y+1); ctx.restore();
+  });
+}};
+function drawPerf(){
+  const tpn = SUM.tpn; if (!tpn || !tpn.curve || !tpn.curve.length) return;
+  let cv = tpn.curve;
+  if (perfRange !== 'all') cv = cv.slice(perfRange==='1y' ? -52 : -26);
+  const b0 = cv[0];
+  const labels = cv.map(x => x[0].slice(5,7)+'/'+x[0].slice(2,4));
+  const dsT = cv.map(x => +(((1+x[1]/100)/(1+b0[1]/100)-1)*100).toFixed(1));
+  const dsV = cv.map(x => +(((1+x[2]/100)/(1+b0[2]/100)-1)*100).toFixed(1));
+  if (perfChart) perfChart.destroy();
+  perfChart = new Chart(document.getElementById('cvPerf'), { type:'line',
+    data:{ labels, datasets:[
+      {label:'Hệ Trần Phá Nền', data:dsT, borderColor:'#128A3E', backgroundColor:'#128A3E', pointRadius:0, borderWidth:2.5, tension:.35},
+      {label:'VN-Index', data:dsV, borderColor:'#E5484D', backgroundColor:'#E5484D', pointRadius:0, borderWidth:2, tension:.35}]},
+    options:{ responsive:true, maintainAspectRatio:false, layout:{padding:{right:70}}, interaction:{mode:'index',intersect:false},
+      plugins:{ legend:{labels:{color:'#1F2937', usePointStyle:true, pointStyle:'circle', boxWidth:7, boxHeight:7, font:{weight:600, size:12, family:'Inter'}}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.parsed.y>=0?'+':'')+c.parsed.y+'%'}} },
+      scales:{ x:{ticks:{color:'#7A828E', maxTicksLimit:10, font:{size:11}}, grid:{display:false}},
+               y:{ticks:{color:'#7A828E', callback:v=>v+'%', font:{size:11}}, grid:{color:'#F1F3F6'}} } },
+    plugins:[endBadge] });
+}
 inits.market = async function(){
   if (mktDone) return; mktDone = true;
   const el = $('#view-market');
-  el.innerHTML = `<div class="card"><h2>VN-Index &nbsp;<span id="vniNow" class="mini"></span></h2><div id="mBanner" style="margin-bottom:10px"></div><div id="chartVni" style="height:380px"></div></div>
+  const tpn = SUM.tpn || {stats:{}, recent:[], curve:[]};
+  const st = tpn.stats || {};
+  el.innerHTML = `
+  <div class="hero">
+    <div class="card" style="margin-bottom:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+        <h2 style="margin:0">Hiệu suất hệ Trần Phá Nền <span class="hint">so với VN-Index · backtest sau phí</span></h2>
+        <div class="seg" id="perfSeg"><button data-r="all" class="on">Tất cả</button><button data-r="1y">1 năm</button><button data-r="6m">6 tháng</button></div>
+      </div>
+      <div style="height:330px"><canvas id="cvPerf"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:0;display:flex;flex-direction:column">
+      <h2 style="text-align:center;letter-spacing:.02em">TÍN HIỆU 6 THÁNG QUA</h2>
+      <div style="flex:1;overflow:auto"><table class="sigtb"><tr><th>Mã · Ngày mua</th><th>Ngày bán</th><th>Lợi suất</th></tr>
+      ${(tpn.recent||[]).map(d=>`<tr class="row" onclick="openDetail('${d.t}')">
+        <td><div class="l1">${d.t} ${d.open?'<span class="chip a">Đang mở</span>':''}</div><div class="l2">Mua ${d.bd} giá ${d.bp}</div></td>
+        <td class="l2">${d.sd}</td>
+        <td><span class="${d.ret>=0?'up':'down'}" style="font-size:14px">${d.ret>=0?'+':''}${d.ret}%</span></td></tr>`).join('')}
+      </table></div>
+      <button class="btn-cta" style="width:100%;margin-top:12px" onclick="showView('screener')">KHÁM PHÁ BỘ LỌC 702 MÃ</button>
+    </div>
+  </div>
+  <div style="height:16px"></div>
+  <div class="stats4">
+    <div class="card" style="margin:0"><h2>Lợi suất hệ TPN</h2>
+      <div class="perf-row"><span class="l">1 năm</span><span class="v up">${st.y1>=0?'+':''}${st.y1}%</span></div>
+      <div class="perf-row"><span class="l">3 năm</span><span class="v up">+${st.y3}%</span></div>
+      <div class="perf-row"><span class="l">Từ 2019</span><span class="v up">+${st.all}%</span></div></div>
+    <div class="card" style="margin:0"><h2>VN-Index cùng kỳ</h2>
+      <div class="perf-row"><span class="l">1 năm</span><span class="v">${st.vy1>=0?'+':''}${st.vy1}%</span></div>
+      <div class="perf-row"><span class="l">3 năm</span><span class="v">+${st.vy3}%</span></div>
+      <div class="perf-row"><span class="l">Từ 2019</span><span class="v">+${st.vall}%</span></div></div>
+    <div class="card" style="margin:0"><h2>Chất lượng hệ</h2>
+      <div class="perf-row"><span class="l">R:R</span><span class="v">${st.rr}</span></div>
+      <div class="perf-row"><span class="l">Win rate</span><span class="v">${st.winrate}%</span></div>
+      <div class="perf-row"><span class="l">Tổng số deal</span><span class="v">${st.ndeal}</span></div></div>
+    <div class="card" style="margin:0"><h2>Rủi ro</h2>
+      <div class="perf-row"><span class="l">Max Drawdown hệ</span><span class="v down">${st.maxdd}%</span></div>
+      <div class="perf-row"><span class="l">Max DD VN-Index</span><span class="v mut">−40.3%</span></div>
+      <div class="perf-row"><span class="l">Phí giao dịch</span><span class="v mut">0.3%/chiều</span></div></div>
+  </div>
+  <div style="height:16px"></div>
+  <div class="card"><h2>VN-Index <span id="vniNow" class="hint"></span></h2><div id="mBanner" style="margin-bottom:10px"></div><div id="chartVni" style="height:340px"></div></div>
   <div class="grid g2">
-    <div class="card"><h2>Top CANSLIM hôm nay</h2><div id="topCs"></div></div>
-    <div class="card"><h2>Top sức mạnh giá (RS)</h2><div id="topRs"></div></div>
+    <div class="card"><h2>Top CANSLIM hôm nay <span class="hint">GTGD ≥ 20 tỷ/ngày</span></h2><div id="topCs"></div></div>
+    <div class="card"><h2>Top sức mạnh giá (RS) <span class="hint">GTGD ≥ 20 tỷ/ngày</span></h2><div id="topRs"></div></div>
   </div>`;
+  drawPerf();
+  $('#perfSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+    $$('#perfSeg button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); perfRange = b.dataset.r; drawPerf(); });
   const mini = (rows, cols) => `<table><tr><th>Mã</th>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr>` +
     rows.map(r=>`<tr class="row" onclick="openDetail('${r.t}')"><td><b>${r.t}</b> <span class="mini">${(r.n||'').slice(0,22)}</span></td>${cols.map(c=>`<td class="${c[2]?c[2](r):''}">${c[1](r)}</td>`).join('')}</tr>`).join('') + '</table>';
   const csCols = [['CANSLIM',r=>r.csTong+'/6'],['RS',r=>r.rs??'—'],['LNST YoY',r=>pct(r.npatYoY),r=>cls(r.npatYoY)],['Cách đỉnh',r=>pct(r.dHi),r=>cls(r.dHi)],['GTGD (tỷ)',r=>fmt((r.val20||0)/1000,0)]];
@@ -242,7 +335,7 @@ function loadProChart(){
   if (window.klinecharts) init();
   else { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/klinecharts@9/dist/klinecharts.min.js'; s.onload = init; s.onerror = () => toast('Không tải được thư viện chart'); document.head.appendChild(s); }
 }
-window.openDetail = t => { showView('detail', true); $$('nav .btn').forEach(b=>b.classList.toggle('active', b.dataset.view==='detail')); inits.detail(t); };
+window.openDetail = t => { showView('detail', true); $$('.nav-link').forEach(b=>b.classList.toggle('active', b.dataset.view==='detail')); inits.detail(t); };
 inits.detail = function(t){
   const el = $('#view-detail');
   if (!dtInit) { dtInit = true;
