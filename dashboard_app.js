@@ -279,7 +279,7 @@ function addProBadges(){
     const i = tix[m.time]; if (i == null) return;
     const isBuy = m.position === 'belowBar';
     proChart.createOverlay({ name: 'simpleAnnotation', lock: true,
-      extendData: isBuy ? '▲ BUY' : '▼ ' + m.text,
+      extendData: isBuy ? '▲ ' + m.text : '▼ ' + m.text,
       points: [{ timestamp: m.time*1000, value: isBuy ? curOhlc.l[i] : curOhlc.h[i] }],
       styles: { text: { color: '#fff', backgroundColor: m.color, borderRadius: 4, paddingLeft: 5, paddingRight: 5, paddingTop: 3, paddingBottom: 3 } } });
   });
@@ -406,13 +406,7 @@ async function loadDetail(t){
   try {
     const [oh, qs, rts] = await Promise.all([api.ohlc(t, 5100), api.kqkd(t), api.ratios(t)]);
     curOhlc = oh;
-    const tpn = computeTPN(oh, r.b || 'HO');
-    curMarkers = tpn.markers;
-    renderTPN(tpn.state);
-    if (proLoadedFor && proLoadedFor !== t) { proLoadedFor = null; if (document.getElementById('chartProWrap').style.display !== 'none') loadProChart(); }
-    $('#dTitle').innerHTML = `${t} <span class="mini">— ${r.n||''} (${r.b==='HO'?'HOSE':'HNX'})</span>`;
-    // KPI
-    // Chuan bi du lieu as-of cho bang so lieu chay theo con tro
+    // du lieu quy as-of (theo ngay cong bo) — dung cho ca bang KPI va engine tin hieu
     const qsAv = [];
     qs.forEach(q => {
       if (!q.publicDate) return;
@@ -426,6 +420,12 @@ async function loadDetail(t){
       qsAv.push({pub: Date.parse(q.publicDate.slice(0,10))/1000, revY, npY});
     });
     qsAv.sort((a,b)=>a.pub-b.pub);
+    const tpn = computeTPN(oh, r.b || 'HO', qsAv);
+    curMarkers = tpn.markers;
+    renderTPN(tpn.state);
+    if (proLoadedFor && proLoadedFor !== t) { proLoadedFor = null; if (document.getElementById('chartProWrap').style.display !== 'none') loadProChart(); }
+    $('#dTitle').innerHTML = `${t} <span class="mini">— ${r.n||''} (${r.b==='HO'?'HOSE':'HNX'})</span>`;
+    // KPI
     const rtsAv = rts.map(x => ({
       av: Date.UTC(x.yearReport, x.quarter*3, 1)/1000 + 45*86400,  // sau khi het quy ~45 ngay (BCTC ra)
       pe: x.pe, pb: x.pb, cap: x.marketCap, roe: x.roe
@@ -438,10 +438,11 @@ async function loadDetail(t){
     drawRt(rts);
   } catch(e){ toast('Lỗi tải dữ liệu '+t+': '+e.message); }
 }
-// ===== HỆ TRẦN PHÁ NỀN v1.1 — tín hiệu trên chart =====
-// Mua: cây trần ĐẦU TIÊN (30 phiên trước không trần) phá nền tích lũy (biên độ 30 phiên <=12%),
-//      vol >= 2.5x TB20, GTGD TB20 >= 20 tỷ. Bán: T+3 lỗ chém / cắt lỗ -7% / gãy MA20 hai phiên.
-function computeTPN(oh, boardCode){
+// ===== Khoa KAFI Signal engine v2 =====
+function computeTPN(oh, boardCode, qsAv){
+  // xep hang do tin cay tin hieu theo du lieu co ban as-of (chi tiet thuat toan khong cong bo)
+  const npYAt = ts => { let y = null; (qsAv||[]).forEach(q => { if (q.pub <= ts) y = q.npY; }); return y; };
+  const gradeAt = ts => { const y = npYAt(ts); return (y != null && y >= 0 && y < 25) ? 0 : 1; };
   const c = oh.c, v = oh.v, t = oh.t, n = c.length;
   const ceilThr = boardCode === 'HN' ? 8.8 : 6.3;
   const markers = [];
@@ -461,15 +462,21 @@ function computeTPN(oh, boardCode){
     }
     return {rng: (hi-lo)/lo*100, hasCeil};
   };
-  let inPos = false, fill = 0, ei = 0;
+  let inPos = false, fill = 0, ei = 0, lastWeakIdx = -9;
   for (let i = 31; i < n; i++) {
     if (!inPos) {
       const chg = (c[i]/c[i-1]-1)*100;
       if (chg < ceilThr) continue;
-      if (!v20[i] || v[i] < 2.5*v20[i]) continue;
-      if (c[i]*v20[i]/1e6 < 20) continue;                    // GTGD TB >= 20 tỷ
+      if (!v20[i] || v[i] < 2.0*v20[i]) continue;
+      if (c[i]*v20[i]/1e6 < 20) continue;
       const b = baseInfo(i);
       if (b.hasCeil || b.rng > 12) continue;
+      if (!gradeAt(t[i])) {
+        // tin hieu YEU: chi hien thi doc lap — KHONG mo vi the, khong anh huong model chinh
+        lastWeakIdx = i;
+        markers.push({time: t[i], position:'belowBar', color:'#b45309', shape:'arrowUp', text:'WEAK'});
+        continue;
+      }
       inPos = true; fill = c[i]; ei = i;
       markers.push({time: t[i], position:'belowBar', color:'#18a34b', shape:'arrowUp', text:'BUY'});
     } else {
@@ -491,7 +498,8 @@ function computeTPN(oh, boardCode){
     rng: b.rng, hasCeil: b.hasCeil, chg: chgL, ma20: ma20[L], close: c[L], ceilThr,
     buyToday: !inPos ? false : ei === L, fill, holdDays: inPos ? L-ei : 0,
     pnl: inPos ? (c[L]/fill-1)*100 : 0, buyDate: inPos ? new Date(t[ei]*1000).toISOString().slice(0,10) : null,
-    belowMa20: ma20[L] ? c[L] < ma20[L] : false
+    belowMa20: ma20[L] ? c[L] < ma20[L] : false,
+    weakToday: lastWeakIdx === L
   };
   return {markers, state};
 }
@@ -505,6 +513,7 @@ function renderTPN(s){
     chip = [`ĐANG NẮM GIỮ — T+${s.holdDays}, ${s.pnl>0?'+':''}${s.pnl.toFixed(1)}%`, s.pnl>0?'#e7f6ec':'#fdecec', s.pnl>0?'#128a3e':'#e5484d'];
     desc = `Tín hiệu MUA ${s.buyDate} giá ${s.fill.toFixed(2)}. ` + (s.holdDays<3 ? `Đang chờ hàng về — hệ thống sẽ phán quyết giữ hay bán ngay khi hàng về.` : (s.belowMa20 ? `⚠️ Cấu trúc tăng giá đang suy yếu — chuẩn bị tín hiệu BÁN.` : `Đang trong xu hướng tăng — giữ vị thế tới khi hệ thống phát tín hiệu BÁN. Cắt lỗ tự động −7%.`));
   }
+  else if (s.weakToday) { chip = ['TÍN HIỆU YẾU (WEAK) — ĐỨNG NGOÀI', '#fef6e7', '#b45309']; desc = `Có tín hiệu kỹ thuật trong phiên nhưng bộ xếp hạng AI đánh giá độ tin cậy thấp — hệ thống KHÔNG khuyến nghị vào lệnh, chỉ hiển thị để quan sát.`; }
   else if (!s.hasCeil && s.rng <= 12 && s.gtgd >= 20) { chip = ['VÙNG THEO DÕI — CHỜ ĐIỂM MUA', '#fef9e7', '#b45309']; desc = `Cổ phiếu đã vào vùng theo dõi của thuật toán — cấu trúc tích lũy và dòng tiền đạt chuẩn. Chờ phiên bùng nổ kích hoạt tín hiệu MUA.`; }
   else { chip = ['CHƯA CÓ TÍN HIỆU', '#f3f5f7', '#6b7280']; desc = 'Cổ phiếu chưa vào vùng theo dõi của thuật toán. Hệ thống quét tự động mỗi phiên.'; }
   el.innerHTML = `<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
