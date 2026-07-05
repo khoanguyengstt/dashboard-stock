@@ -138,19 +138,19 @@ inits.market = async function(){
   <div style="height:16px"></div>
   <div class="card"><h2>VN-Index <span id="vniNow" class="hint"></span></h2><div id="mBanner" style="margin-bottom:10px"></div><div id="chartVni" style="height:340px"></div></div>
   <div class="grid g2">
-    <div class="card"><h2>Top CANSLIM hôm nay <span class="hint">GTGD ≥ 20 tỷ/ngày</span></h2><div id="topCs"></div></div>
-    <div class="card"><h2>Top sức mạnh giá (RS) <span class="hint">GTGD ≥ 20 tỷ/ngày</span></h2><div id="topRs"></div></div>
+    <div class="card"><h2>Top tăng giá hôm nay <span class="hint">GTGD TB20 ≥ 20 tỷ · cuối phiên gần nhất</span></h2><div id="topCs"></div></div>
+    <div class="card"><h2>Top khối lượng hôm nay <span class="hint">GTGD TB20 ≥ 20 tỷ · cuối phiên gần nhất</span></h2><div id="topRs"></div></div>
   </div>`;
   drawPerf();
   $('#perfSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
     $$('#perfSeg button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); perfRange = b.dataset.r; drawPerf(); });
   const mini = (rows, cols) => `<table><tr><th>Mã</th>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr>` +
     rows.map(r=>`<tr class="row" onclick="openDetail('${r.t}')"><td><b>${r.t}</b> <span class="mini">${(r.n||'').slice(0,22)}</span></td>${cols.map(c=>`<td class="${c[2]?c[2](r):''}">${c[1](r)}</td>`).join('')}</tr>`).join('') + '</table>';
-  const csCols = [['CANSLIM',r=>r.csTong+'/6'],['RS',r=>r.rs??'—'],['LNST YoY',r=>pct(r.npatYoY),r=>cls(r.npatYoY)],['Cách đỉnh',r=>pct(r.dHi),r=>cls(r.dHi)],['GTGD (tỷ)',r=>fmt((r.val20||0)/1000,0)]];
-  // Chỉ lấy mã thanh khoản >= 20 tỷ/ngày (giá close x volume TB 20 phiên) để loại mã rác
-  const thanhKhoan = r => (r.val20||0) >= 20000;
-  $('#topCs').innerHTML = mini([...ROWS()].filter(thanhKhoan).sort((a,b)=>b.csTong-a.csTong||(b.rs||0)-(a.rs||0)).slice(0,10), csCols);
-  $('#topRs').innerHTML = mini([...ROWS()].filter(thanhKhoan).sort((a,b)=>(b.rs||0)-(a.rs||0)||(b.r3||0)-(a.r3||0)).slice(0,10), csCols);
+  const gainCols = [['Giá',r=>fmt(r.p,2)],['+/- %',r=>pct(r.chg,2),r=>cls(r.chg)],['KL (tr)',r=>r.vx&&r.v20?fmt(r.vx*r.v20/1e6,2):'—'],['KL xTB20',r=>r.vx?fmt(r.vx,1)+'x':'—',r=>(r.vx||0)>=1.5?'up':'mut'],['GTGD TB20 (tỷ)',r=>fmt((r.val20||0)/1000,0)]];
+  // Chỉ lấy mã thanh khoản >= 20 tỷ/ngày để loại mã rác
+  const thanhKhoan = r => (r.val20||0) >= 20000 && r.chg!=null;
+  $('#topCs').innerHTML = mini([...ROWS()].filter(thanhKhoan).sort((a,b)=>(b.chg||-99)-(a.chg||-99)).slice(0,10), gainCols);
+  $('#topRs').innerHTML = mini([...ROWS()].filter(thanhKhoan).sort((a,b)=>((b.vx||0)*(b.v20||0))-((a.vx||0)*(a.v20||0))).slice(0,10), gainCols);
   try {
     const d = await api.ohlc('VNINDEX', 1500);
     const c = d.c, last = c[c.length-1], prev = c[c.length-2];
@@ -804,6 +804,7 @@ $('#btnRefresh').onclick = async function(){
       ]);
       const c = oh.c||[], v = oh.v||[], o = {t:tk.t, b:tk.b==='HOSE'?'HO':'HN', n:tk.n};
       if (c.length>30) { const last = c[c.length-1]; o.p = last;
+        o.chg = c[c.length-2] ? +((last/c[c.length-2]-1)*100).toFixed(2) : null;
         o.hi52 = Math.max(...c); o.lo52 = Math.min(...c); o.dHi = +((last/o.hi52-1)*100).toFixed(1);
         o.ma20 = +(last/sma(c,20)-1).toFixed(3); o.ma50 = c.length>=50?+(last/sma(c,50)-1).toFixed(3):null; o.ma200 = c.length>=200?+(last/sma(c,200)-1).toFixed(3):null;
         const rr = rsiS(c); o.rsi = rr[rr.length-1]!=null?Math.round(rr[rr.length-1]):null;
