@@ -201,6 +201,7 @@ async function loadDetail(t){
   try {
     const [oh, qs, rts] = await Promise.all([api.ohlc(t, 5100), api.kqkd(t), api.ratios(t)]);
     curOhlc = oh;
+    curMarkers = computeTPN(oh, r.b || 'HO');
     $('#dTitle').innerHTML = `${t} <span class="mini">— ${r.n||''} (${r.b==='HO'?'HOSE':'HNX'})</span>`;
     // KPI
     const c = oh.c||[], last = c[c.length-1], prev = c[c.length-2]||last;
@@ -218,6 +219,52 @@ async function loadDetail(t){
     drawRt(rts);
   } catch(e){ toast('Lỗi tải dữ liệu '+t+': '+e.message); }
 }
+// ===== HỆ TRẦN PHÁ NỀN v1.1 — tín hiệu trên chart =====
+// Mua: cây trần ĐẦU TIÊN (30 phiên trước không trần) phá nền tích lũy (biên độ 30 phiên <=12%),
+//      vol >= 2.5x TB20, GTGD TB20 >= 20 tỷ. Bán: T+3 lỗ chém / cắt lỗ -7% / gãy MA20 hai phiên.
+function computeTPN(oh, boardCode){
+  const c = oh.c, v = oh.v, t = oh.t, n = c.length;
+  const ceilThr = boardCode === 'HN' ? 8.8 : 6.3;
+  const markers = [];
+  const ma20 = [], v20 = [];
+  for (let i = 0; i < n; i++) {
+    if (i >= 19) {
+      let s = 0, sv = 0;
+      for (let k = i-19; k <= i; k++) { s += c[k]; sv += v[k]; }
+      ma20.push(s/20); v20.push(sv/20);
+    } else { ma20.push(null); v20.push(null); }
+  }
+  let inPos = false, fill = 0, ei = 0;
+  for (let i = 31; i < n; i++) {
+    if (!inPos) {
+      const chg = (c[i]/c[i-1]-1)*100;
+      if (chg < ceilThr) continue;
+      if (!v20[i] || v[i] < 2.5*v20[i]) continue;
+      if (c[i]*v20[i]/1e6 < 20) continue;                    // GTGD TB >= 20 tỷ
+      let hi = -1e9, lo = 1e9, hasCeil = false;
+      for (let k = i-30; k < i; k++) {
+        if (c[k] > hi) hi = c[k]; if (c[k] < lo) lo = c[k];
+        if (k > 0 && (c[k]/c[k-1]-1)*100 >= ceilThr) hasCeil = true;
+      }
+      if (hasCeil || (hi-lo)/lo > 0.12) continue;
+      inPos = true; fill = c[i]; ei = i;
+      markers.push({time: t[i], position:'belowBar', color:'#18a34b', shape:'arrowUp', text:'MUA TPN'});
+    } else {
+      const h = i - ei, pnl = c[i]/fill - 1;
+      let reason = null;
+      if (h === 3 && pnl <= 0) reason = 'T+3 CHÉM ' + (pnl*100).toFixed(1) + '%';
+      else if (h >= 3 && pnl <= -0.07) reason = 'CẮT LỖ ' + (pnl*100).toFixed(1) + '%';
+      else if (h > 3 && ma20[i] && c[i] < ma20[i] && c[i-1] < ma20[i-1]) reason = 'GÃY MA20 ' + (pnl>0?'+':'') + (pnl*100).toFixed(1) + '%';
+      if (reason) {
+        markers.push({time: t[i], position:'aboveBar', color: pnl>0 ? '#2563eb' : '#e5484d', shape:'arrowDown', text: reason});
+        inPos = false;
+      }
+    }
+  }
+  return markers;
+}
+let curMarkers = [];
+
 function drawPrice(years){
   if (!curOhlc) return;
   dtCharts.forEach(c=>c.remove()); dtCharts = [];
@@ -228,6 +275,7 @@ function drawPrice(years){
   const ch = LightweightCharts.createChart($('#chartMain'), chartOpts()); dtCharts.push(ch);
   const cs = ch.addCandlestickSeries(candleOpts());
   cs.setData(T.map((t,i)=>({time:t,open:O[i],high:H[i],low:Lo[i],close:C[i]})));
+  if (curMarkers.length) cs.setMarkers(curMarkers.filter(m=>m.time>=T[0]));
   const vs = ch.addHistogramSeries({priceScaleId:'vol', priceFormat:{type:'volume'}});
   ch.priceScale('vol').applyOptions({scaleMargins:{top:0.82,bottom:0}});
   vs.setData(T.map((t,i)=>({time:t,value:V[i],color: C[i]>=O[i] ? 'rgba(24,163,75,.35)':'rgba(229,72,77,.35)'})));
