@@ -150,6 +150,34 @@ function renderSc(){
 
 // ================= 3. CHI TIẾT MÃ =================
 let dtInit = false, dtCharts = [], kqChart = null, rtChart = null, curT = null, curOhlc = null;
+let dtData = null;
+function updateKpis(i){
+  if (!dtData) return;
+  const oh = dtData.oh, c = oh.c, v = oh.v, t = oh.t, n = c.length;
+  if (i == null || i < 0 || i >= n) i = n-1;
+  const prev = i>0 ? c[i-1] : c[i];
+  const chgPct = (c[i]/prev-1)*100;
+  let sVal = 0, sVol = 0, cnt = 0;
+  for (let k = Math.max(0, i-19); k <= i; k++){ sVal += c[k]*(v[k]||0); sVol += (v[k]||0); cnt++; }
+  const gtgd20 = sVal/cnt/1e6, volPct = sVol>0 ? v[i]/(sVol/cnt)*100 : null;
+  const ts = t[i];
+  const rt = dtData.rtsAv.filter(x=>x.av<=ts).slice(-1)[0] || {};
+  const qq = dtData.qsAv.filter(x=>x.pub<=ts).slice(-1)[0] || {};
+  const dstr = new Date(ts*1000).toISOString().slice(0,10).split('-').reverse().join('/');
+  document.getElementById('dKpis').innerHTML = [
+    ['Ngày', dstr],
+    ['Giá', fmt(c[i],2)],
+    ['+/- Giá', `<span class="${cls(chgPct)}">${pct(chgPct,2)}</span>`],
+    ['Khối lượng', v[i]!=null?fmt(v[i]/1e6,2)+' tr':'—'],
+    ['% KL / TB20', volPct!=null?`<span class="${volPct>=100?'up':'mut'}">${fmt(volPct,0)}%</span>`:'—'],
+    ['GTGD TB20', fmt(gtgd20,0)+' tỷ'],
+    ['P/E', fmt(rt.pe,1)], ['P/B', fmt(rt.pb,2)],
+    ['Vốn hóa', rt.cap?fmt(rt.cap/1e12,1)+' nghìn tỷ':'—'],
+    ['ROE', rt.roe!=null?fmt(rt.roe*100,1)+'%':'—'],
+    ['+/- DT Q gần nhất', `<span class="${cls(qq.revY)}">${pct(qq.revY,1)}</span>`],
+    ['+/- LN Q gần nhất', `<span class="${cls(qq.npY)}">${pct(qq.npY,1)}</span>`]
+  ].map(k=>`<div class="kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div></div>`).join('');
+}
 let proLoadedFor = null, proChart = null, useLog = false;
 function addProBadges(){
   if (!proChart || !curOhlc) return;
@@ -217,8 +245,7 @@ inits.detail = function(t){
         <button class="btn" id="btnCmpAdd">+ Thêm vào So sánh</button>
       </div></div>
       <div id="dBody" style="display:none">
-      <div class="card"><div class="kpis" id="dKpis"></div></div>
-      <div class="card"><h2>Tín hiệu Trần Phá Nền v1.1</h2><div id="dTpn"></div></div>
+      <div class="card"><h2>Tín hiệu Trần Phá Nền v1.1</h2><div id="dTpn"></div><div class="kpis" id="dKpis" style="margin-top:10px"></div></div>
       <div class="card"><h2 id="dChartTitle">Biểu đồ giá</h2>
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center" id="dRanges">
           <button class="btn active" id="btnChartSig">Chart Tín hiệu</button>
@@ -284,15 +311,26 @@ async function loadDetail(t){
     if (proLoadedFor && proLoadedFor !== t) { proLoadedFor = null; if (document.getElementById('chartProWrap').style.display !== 'none') loadProChart(); }
     $('#dTitle').innerHTML = `${t} <span class="mini">— ${r.n||''} (${r.b==='HO'?'HOSE':'HNX'})</span>`;
     // KPI
-    const c = oh.c||[], last = c[c.length-1], prev = c[c.length-2]||last;
-    const L = rts[rts.length-1]||{};
-    $('#dKpis').innerHTML = [
-      ['Giá', `${fmt(last,2)} <span class="${cls(last-prev)}" style="font-size:13px">${pct((last/prev-1)*100,2)}</span>`],
-      ['P/E', fmt(L.pe,1)], ['P/B', fmt(L.pb,2)], ['ROE', L.roe!=null?fmt(L.roe*100,1)+'%':'—'],
-      ['Vốn hóa', L.marketCap?fmt(L.marketCap/1e12,1)+' nghìn tỷ':'—'],
-      ['EV/EBITDA', fmt(L.evToEbitda,1)], ['Cổ tức', L.dividendYield!=null?fmt(L.dividendYield*100,1)+'%':'—'],
-      ['RS', r.rs??'—'], ['RSI14', r.rsi??'—'], ['Cách đỉnh 52T', `<span class="${cls(r.dHi)}">${pct(r.dHi)}</span>`]
-    ].map(k=>`<div class="kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div></div>`).join('');
+    // Chuan bi du lieu as-of cho bang so lieu chay theo con tro
+    const qsAv = [];
+    qs.forEach(q => {
+      if (!q.publicDate) return;
+      const pv = qs.find(x=>x.yearReport===q.yearReport-1 && x.lengthReport===q.lengthReport);
+      let revY = null, npY = null;
+      if (pv) {
+        const r1 = pick(q,REV), r0 = pick(pv,REV), n1 = pick(q,NPAT), n0 = pick(pv,NPAT);
+        if (r1!=null && r0) revY = (r1/Math.abs(r0)-1)*100;
+        if (n1!=null && n0) npY = (n1/Math.abs(n0)-1)*100;
+      }
+      qsAv.push({pub: Date.parse(q.publicDate.slice(0,10))/1000, revY, npY});
+    });
+    qsAv.sort((a,b)=>a.pub-b.pub);
+    const rtsAv = rts.map(x => ({
+      av: Date.UTC(x.yearReport, x.quarter*3, 1)/1000 + 45*86400,  // sau khi het quy ~45 ngay (BCTC ra)
+      pe: x.pe, pb: x.pb, cap: x.marketCap, roe: x.roe
+    })).sort((a,b)=>a.av-b.av);
+    dtData = {oh, qsAv, rtsAv};
+    updateKpis(null);
     drawPrice(1);
     drawCanslim(r, qs);
     drawKq(qs);
@@ -368,17 +406,9 @@ function renderTPN(s){
   }
   else if (!s.hasCeil && s.rng <= 12 && s.gtgd >= 20) { chip = ['NỀN ĐẠT — CHỜ CÂY TRẦN', '#fef9e7', '#b45309']; desc = `Nền 30 phiên biên độ ${s.rng.toFixed(1)}% (≤12%), chưa có trần, GTGD ${s.gtgd.toFixed(0)} tỷ/phiên. Chỉ chờ phiên kịch trần (+${s.ceilThr}%) với volume ≥2,5× TB là kích hoạt MUA.`; }
   else { chip = ['CHƯA CÓ SETUP', '#f3f5f7', '#6b7280']; const why = []; if (s.rng > 12) why.push(`nền còn rộng ${s.rng.toFixed(1)}% (cần ≤12%)`); if (s.hasCeil) why.push('đã có trần trong 30 phiên (sóng đã mở)'); if (s.gtgd < 20) why.push(`GTGD ${s.gtgd.toFixed(0)} tỷ (cần ≥20)`); desc = 'Thiếu: ' + why.join(' · '); }
-  el.innerHTML = `<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+  el.innerHTML = `<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
     <span class="tag" style="background:${chip[1]};color:${chip[2]};font-size:14px;padding:6px 14px">${chip[0]}</span>
-    <span class="mini">${desc}</span></div>
-  <div class="kpis">
-    <div class="kpi"><div class="l">Biên độ nền 30 phiên</div><div class="v" style="color:${s.rng<=12?'#128a3e':'#e5484d'}">${s.rng.toFixed(1)}%</div></div>
-    <div class="kpi"><div class="l">Trần trong nền</div><div class="v" style="color:${!s.hasCeil?'#128a3e':'#e5484d'}">${s.hasCeil?'Có':'Chưa'}</div></div>
-    <div class="kpi"><div class="l">GTGD TB20</div><div class="v" style="color:${s.gtgd>=20?'#128a3e':'#6b7280'}">${s.gtgd.toFixed(0)} tỷ</div></div>
-    <div class="kpi"><div class="l">Vol hôm nay / TB20</div><div class="v">${s.volx.toFixed(2)}x</div></div>
-    <div class="kpi"><div class="l">% hôm nay</div><div class="v" style="color:${s.chg>0?'#128a3e':'#e5484d'}">${s.chg>0?'+':''}${s.chg.toFixed(2)}%</div></div>
-    <div class="kpi"><div class="l">Ngưỡng trần</div><div class="v">+${s.ceilThr}%</div></div>
-  </div>`;
+    <span class="mini">${desc}</span></div>`;
 }
 
 function drawPrice(years){
@@ -399,7 +429,11 @@ function drawPrice(years){
   const fmtL = (i) => { const chgP = i>0 ? (C[i]/C[i-1]-1)*100 : 0; const cl = C[i]>=O[i] ? '#128a3e' : '#e5484d';
     return `<b>${curT}</b> &nbsp;O <span style="color:${cl}">${O[i]}</span> &nbsp;H <span style="color:${cl}">${H[i]}</span> &nbsp;L <span style="color:${cl}">${Lo[i]}</span> &nbsp;C <span style="color:${cl}">${C[i]}</span> &nbsp;<span style="color:${chgP>=0?'#128a3e':'#e5484d'}">${chgP>=0?'+':''}${chgP.toFixed(2)}%</span> &nbsp;<span class="mini">KL ${(V[i]/1e6).toFixed(2)}tr</span>`; };
   if (leg && T.length) { leg.innerHTML = fmtL(T.length-1);
-    ch.subscribeCrosshairMove(p => { if (!p || !p.time) { leg.innerHTML = fmtL(T.length-1); return; } const ix = T.indexOf(p.time); if (ix>=0) leg.innerHTML = fmtL(ix); }); }
+    ch.subscribeCrosshairMove(p => {
+      if (!p || !p.time) { leg.innerHTML = fmtL(T.length-1); updateKpis(null); return; }
+      const ix = T.indexOf(p.time);
+      if (ix>=0) { leg.innerHTML = fmtL(ix); updateKpis(from + ix); }   // bang so lieu chay theo con tro
+    }); }
   const vs = ch.addHistogramSeries({priceScaleId:'vol', priceFormat:{type:'volume'}});
   ch.priceScale('vol').applyOptions({scaleMargins:{top:0.82,bottom:0}});
   vs.setData(T.map((t,i)=>({time:t,value:V[i],color: C[i]>=O[i] ? 'rgba(24,163,75,.35)':'rgba(229,72,77,.35)'})));
