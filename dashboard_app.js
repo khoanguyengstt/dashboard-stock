@@ -150,6 +150,23 @@ function renderSc(){
 
 // ================= 3. CHI TIẾT MÃ =================
 let dtInit = false, dtCharts = [], kqChart = null, rtChart = null, curT = null, curOhlc = null;
+let tvLoadedFor = null;
+function loadTvWidget(){
+  if (!curT || tvLoadedFor === curT) return;
+  tvLoadedFor = curT;
+  const r = byT[curT] || {};
+  const sym = (r.b === 'HN' ? 'HNX:' : 'HOSE:') + curT;
+  const wrap = document.getElementById('chartProWrap');
+  wrap.innerHTML = '<div id="tvw" style="height:100%"></div>';
+  const init = () => new TradingView.widget({
+    container_id: 'tvw', symbol: sym, interval: 'D', timezone: 'Asia/Ho_Chi_Minh',
+    theme: 'light', style: 1, locale: 'vi_VN', autosize: true,
+    hide_side_toolbar: false, allow_symbol_change: false, withdateranges: true,
+    studies: ['MASimple@tv-basicstudies']
+  });
+  if (window.TradingView) init();
+  else { const s = document.createElement('script'); s.src = 'https://s3.tradingview.com/tv.js'; s.onload = init; document.head.appendChild(s); }
+}
 window.openDetail = t => { showView('detail', true); $$('nav .btn').forEach(b=>b.classList.toggle('active', b.dataset.view==='detail')); inits.detail(t); };
 inits.detail = function(t){
   const el = $('#view-detail');
@@ -164,11 +181,15 @@ inits.detail = function(t){
       <div class="card"><div class="kpis" id="dKpis"></div></div>
       <div class="card"><h2>Tín hiệu Trần Phá Nền v1.1</h2><div id="dTpn"></div></div>
       <div class="card"><h2 id="dChartTitle">Biểu đồ giá</h2>
-        <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap" id="dRanges">
-          ${[['3T',0.25],['6T',0.5],['1N',1],['3N',3],['5N',5],['Tất cả',14]].map((x,i)=>`<button class="btn ${i===2?'active':''}" data-y="${x[1]}">${x[0]}</button>`).join('')}
+        <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center" id="dRanges">
+          <button class="btn active" id="btnChartSig">Chart Tín hiệu</button>
+          <button class="btn" id="btnChartPro">Chart Pro (TradingView)</button>
+          <span style="width:14px"></span>
+          ${[['3T',0.25],['6T',0.5],['1N',1],['3N',3],['5N',5],['Tất cả',14]].map((x,i)=>`<button class="btn rng ${i===2?'active':''}" data-y="${x[1]}">${x[0]}</button>`).join('')}
           <label class="mini" style="margin-left:10px"><input type="checkbox" id="ckBoll"> Bollinger</label>
         </div>
-        <div id="chartMain"></div><div id="chartRsi"></div><div id="chartMacd"></div>
+        <div id="chartSigWrap"><div id="chartMain"></div><div id="chartRsi"></div><div id="chartMacd"></div></div>
+        <div id="chartProWrap" style="display:none;height:640px"></div>
       </div>
       <div class="card"><h2>Đánh giá CANSLIM tự động</h2><div id="dCs"></div></div>
       <div class="grid g2">
@@ -177,7 +198,8 @@ inits.detail = function(t){
       </div>
       <div class="card"><h2>Bảng KQKD 12 quý gần nhất</h2><div style="overflow:auto"><table id="tbKq"></table></div></div>
       </div>`;
-    const dq = $('#dQ');
+      // eslint-disable-next-line
+  const dq = $('#dQ');
     dq.addEventListener('input', () => {
       const q = dq.value.toUpperCase(); const box = $('#sugg');
       if (!q) { box.style.display='none'; return; }
@@ -187,7 +209,13 @@ inits.detail = function(t){
     });
     dq.addEventListener('keydown', e => { if (e.key==='Enter') { const q = dq.value.toUpperCase().trim(); if (byT[q]) openDetail(q); } });
     document.addEventListener('click', e => { if (!e.target.closest('.search-wrap')) $('#sugg').style.display='none'; });
-    $('#dRanges').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#dRanges .btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); drawPrice(+b.dataset.y); });
+    $('#dRanges').addEventListener('click', e => { const b = e.target.closest('button.rng'); if (!b) return; $$('#dRanges .btn.rng').forEach(x=>x.classList.remove('active')); b.classList.add('active'); drawPrice(+b.dataset.y); });
+    $('#btnChartSig').onclick = () => { $('#chartSigWrap').style.display=''; $('#chartProWrap').style.display='none'; $('#btnChartSig').classList.add('active'); $('#btnChartPro').classList.remove('active'); };
+    $('#btnChartPro').onclick = () => {
+      $('#chartSigWrap').style.display='none'; $('#chartProWrap').style.display='';
+      $('#btnChartPro').classList.add('active'); $('#btnChartSig').classList.remove('active');
+      loadTvWidget();
+    };
     $('#ckBoll').onchange = () => { const b = $('#dRanges .btn.active'); drawPrice(b?+b.dataset.y:1); };
     $('#btnCmpAdd').onclick = () => { if (curT) addCmp(curT); };
   }
@@ -205,6 +233,7 @@ async function loadDetail(t){
     const tpn = computeTPN(oh, r.b || 'HO');
     curMarkers = tpn.markers;
     renderTPN(tpn.state);
+    if (tvLoadedFor && tvLoadedFor !== t) { tvLoadedFor = null; if (document.getElementById('chartProWrap').style.display !== 'none') loadTvWidget(); }
     $('#dTitle').innerHTML = `${t} <span class="mini">— ${r.n||''} (${r.b==='HO'?'HOSE':'HNX'})</span>`;
     // KPI
     const c = oh.c||[], last = c[c.length-1], prev = c[c.length-2]||last;
