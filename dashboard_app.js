@@ -371,14 +371,16 @@ inits.detail = function(t){
 
           <label class="mini" style="margin-left:10px"><input type="checkbox" id="ckBoll"> Bollinger</label>
         </div>
-        <div id="chartSigWrap" style="position:relative">
-          <div id="ohlcLegend" style="position:absolute;top:6px;left:8px;z-index:20;font-size:12.5px;color:#374151;background:rgba(255,255,255,.85);padding:3px 10px;border-radius:6px;border:1px solid #e4e8ec"></div>
-          <div style="position:absolute;top:6px;right:76px;z-index:20;display:flex;gap:6px">
-            <button class="btn" id="btnLog" style="padding:2px 10px;font-size:11px">Log</button>
-            <button class="btn" id="btnFull" style="padding:2px 10px;font-size:11px">⛶ Toàn màn hình</button>
-          </div>
+        <div id="chartSigWrap">
           <div style="display:flex;gap:16px;align-items:stretch">
-            <div style="flex:1;min-width:0"><div id="chartMain"></div><div id="chartVol"></div></div>
+            <div style="flex:1;min-width:0;position:relative">
+              <div id="ohlcLegend" style="position:absolute;top:6px;left:8px;z-index:20;font-size:12.5px;color:#374151;background:rgba(255,255,255,.85);padding:3px 10px;border-radius:6px;border:1px solid #e4e8ec"></div>
+              <div style="position:absolute;top:6px;right:76px;z-index:20;display:flex;gap:6px">
+                <button class="btn" id="btnLog" style="padding:2px 10px;font-size:11px">Log</button>
+                <button class="btn" id="btnFull" style="padding:2px 10px;font-size:11px">⛶ Toàn màn hình</button>
+              </div>
+              <div id="chartMain"></div><div id="chartVol"></div>
+            </div>
             <div style="width:285px;flex:none" id="dSide"></div>
           </div>
         </div>
