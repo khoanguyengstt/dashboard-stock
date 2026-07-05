@@ -162,6 +162,7 @@ inits.detail = function(t){
       </div></div>
       <div id="dBody" style="display:none">
       <div class="card"><div class="kpis" id="dKpis"></div></div>
+      <div class="card"><h2>Tín hiệu Trần Phá Nền v1.1</h2><div id="dTpn"></div></div>
       <div class="card"><h2 id="dChartTitle">Biểu đồ giá</h2>
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap" id="dRanges">
           ${[['3T',0.25],['6T',0.5],['1N',1],['3N',3],['5N',5],['Tất cả',14]].map((x,i)=>`<button class="btn ${i===2?'active':''}" data-y="${x[1]}">${x[0]}</button>`).join('')}
@@ -201,7 +202,9 @@ async function loadDetail(t){
   try {
     const [oh, qs, rts] = await Promise.all([api.ohlc(t, 5100), api.kqkd(t), api.ratios(t)]);
     curOhlc = oh;
-    curMarkers = computeTPN(oh, r.b || 'HO');
+    const tpn = computeTPN(oh, r.b || 'HO');
+    curMarkers = tpn.markers;
+    renderTPN(tpn.state);
     $('#dTitle').innerHTML = `${t} <span class="mini">— ${r.n||''} (${r.b==='HO'?'HOSE':'HNX'})</span>`;
     // KPI
     const c = oh.c||[], last = c[c.length-1], prev = c[c.length-2]||last;
@@ -234,6 +237,14 @@ function computeTPN(oh, boardCode){
       ma20.push(s/20); v20.push(sv/20);
     } else { ma20.push(null); v20.push(null); }
   }
+  const baseInfo = i => {   // thong tin nen 30 phien truoc bar i
+    let hi = -1e9, lo = 1e9, hasCeil = false;
+    for (let k = i-30; k < i; k++) {
+      if (c[k] > hi) hi = c[k]; if (c[k] < lo) lo = c[k];
+      if (k > 0 && (c[k]/c[k-1]-1)*100 >= ceilThr) hasCeil = true;
+    }
+    return {rng: (hi-lo)/lo*100, hasCeil};
+  };
   let inPos = false, fill = 0, ei = 0;
   for (let i = 31; i < n; i++) {
     if (!inPos) {
@@ -241,29 +252,57 @@ function computeTPN(oh, boardCode){
       if (chg < ceilThr) continue;
       if (!v20[i] || v[i] < 2.5*v20[i]) continue;
       if (c[i]*v20[i]/1e6 < 20) continue;                    // GTGD TB >= 20 tỷ
-      let hi = -1e9, lo = 1e9, hasCeil = false;
-      for (let k = i-30; k < i; k++) {
-        if (c[k] > hi) hi = c[k]; if (c[k] < lo) lo = c[k];
-        if (k > 0 && (c[k]/c[k-1]-1)*100 >= ceilThr) hasCeil = true;
-      }
-      if (hasCeil || (hi-lo)/lo > 0.12) continue;
+      const b = baseInfo(i);
+      if (b.hasCeil || b.rng > 12) continue;
       inPos = true; fill = c[i]; ei = i;
-      markers.push({time: t[i], position:'belowBar', color:'#18a34b', shape:'arrowUp', text:'MUA TPN'});
+      markers.push({time: t[i], position:'belowBar', color:'#18a34b', shape:'circle', text:'B'});
     } else {
       const h = i - ei, pnl = c[i]/fill - 1;
       let reason = null;
-      if (h === 3 && pnl <= 0) reason = 'T+3 CHÉM ' + (pnl*100).toFixed(1) + '%';
-      else if (h >= 3 && pnl <= -0.07) reason = 'CẮT LỖ ' + (pnl*100).toFixed(1) + '%';
-      else if (h > 3 && ma20[i] && c[i] < ma20[i] && c[i-1] < ma20[i-1]) reason = 'GÃY MA20 ' + (pnl>0?'+':'') + (pnl*100).toFixed(1) + '%';
+      if (h === 3 && pnl <= 0) reason = 'T+3';
+      else if (h >= 3 && pnl <= -0.07) reason = 'CL7';
+      else if (h > 3 && ma20[i] && c[i] < ma20[i] && c[i-1] < ma20[i-1]) reason = 'MA20';
       if (reason) {
-        markers.push({time: t[i], position:'aboveBar', color: pnl>0 ? '#2563eb' : '#e5484d', shape:'arrowDown', text: reason});
+        markers.push({time: t[i], position:'aboveBar', color: pnl>0 ? '#2563eb' : '#e5484d', shape:'circle', text:'S ' + (pnl>0?'+':'') + (pnl*100).toFixed(0) + '%'});
         inPos = false;
       }
     }
   }
-  return markers;
+  // trang thai hien tai (bar cuoi)
+  const L = n-1, b = baseInfo(L+0), chgL = (c[L]/c[L-1]-1)*100;
+  const state = {
+    inPos, gtgd: v20[L] ? c[L]*v20[L]/1e6 : 0, volx: v20[L] ? v[L]/v20[L] : 0,
+    rng: b.rng, hasCeil: b.hasCeil, chg: chgL, ma20: ma20[L], close: c[L], ceilThr,
+    buyToday: !inPos ? false : ei === L, fill, holdDays: inPos ? L-ei : 0,
+    pnl: inPos ? (c[L]/fill-1)*100 : 0, buyDate: inPos ? new Date(t[ei]*1000).toISOString().slice(0,10) : null,
+    belowMa20: ma20[L] ? c[L] < ma20[L] : false
+  };
+  return {markers, state};
 }
 let curMarkers = [];
+function renderTPN(s){
+  const el = document.getElementById('dTpn');
+  if (!el) return;
+  let chip, desc;
+  if (s.inPos && s.buyToday) { chip = ['MUA HÔM NAY', '#e7f6ec', '#128a3e']; desc = `Cây trần phá nền vừa xuất hiện — theo luật: quét giá tím trong phiên. Phán quyết T+3: hàng về lỗ là bán.`; }
+  else if (s.inPos) {
+    chip = [`ĐANG GỒNG — T+${s.holdDays}, ${s.pnl>0?'+':''}${s.pnl.toFixed(1)}%`, s.pnl>0?'#e7f6ec':'#fdecec', s.pnl>0?'#128a3e':'#e5484d'];
+    desc = `Mua ${s.buyDate} giá ${s.fill.toFixed(2)}. ` + (s.holdDays<3 ? `Chờ hàng về (T+3) — nếu đóng cửa ≤ giá mua thì BÁN.` : (s.belowMa20 ? `⚠️ Đang thủng MA20 — thêm 1 phiên đóng dưới nữa là BÁN.` : `Gồng tới khi đóng cửa dưới MA20 hai phiên liên tiếp. Cắt lỗ cứng −7%.`));
+  }
+  else if (!s.hasCeil && s.rng <= 12 && s.gtgd >= 20) { chip = ['NỀN ĐẠT — CHỜ CÂY TRẦN', '#fef9e7', '#b45309']; desc = `Nền 30 phiên biên độ ${s.rng.toFixed(1)}% (≤12%), chưa có trần, GTGD ${s.gtgd.toFixed(0)} tỷ/phiên. Chỉ chờ phiên kịch trần (+${s.ceilThr}%) với volume ≥2,5× TB là kích hoạt MUA.`; }
+  else { chip = ['CHƯA CÓ SETUP', '#f3f5f7', '#6b7280']; const why = []; if (s.rng > 12) why.push(`nền còn rộng ${s.rng.toFixed(1)}% (cần ≤12%)`); if (s.hasCeil) why.push('đã có trần trong 30 phiên (sóng đã mở)'); if (s.gtgd < 20) why.push(`GTGD ${s.gtgd.toFixed(0)} tỷ (cần ≥20)`); desc = 'Thiếu: ' + why.join(' · '); }
+  el.innerHTML = `<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+    <span class="tag" style="background:${chip[1]};color:${chip[2]};font-size:14px;padding:6px 14px">${chip[0]}</span>
+    <span class="mini">${desc}</span></div>
+  <div class="kpis">
+    <div class="kpi"><div class="l">Biên độ nền 30 phiên</div><div class="v" style="color:${s.rng<=12?'#128a3e':'#e5484d'}">${s.rng.toFixed(1)}%</div></div>
+    <div class="kpi"><div class="l">Trần trong nền</div><div class="v" style="color:${!s.hasCeil?'#128a3e':'#e5484d'}">${s.hasCeil?'Có':'Chưa'}</div></div>
+    <div class="kpi"><div class="l">GTGD TB20</div><div class="v" style="color:${s.gtgd>=20?'#128a3e':'#6b7280'}">${s.gtgd.toFixed(0)} tỷ</div></div>
+    <div class="kpi"><div class="l">Vol hôm nay / TB20</div><div class="v">${s.volx.toFixed(2)}x</div></div>
+    <div class="kpi"><div class="l">% hôm nay</div><div class="v" style="color:${s.chg>0?'#128a3e':'#e5484d'}">${s.chg>0?'+':''}${s.chg.toFixed(2)}%</div></div>
+    <div class="kpi"><div class="l">Ngưỡng trần</div><div class="v">+${s.ceilThr}%</div></div>
+  </div>`;
+}
 
 function drawPrice(years){
   if (!curOhlc) return;
