@@ -3,7 +3,7 @@
 'use strict';
 // ================= DỮ LIỆU & TIỆN ÍCH =================
 let SUM = window.SUMMARY;
-try { const ls = localStorage.getItem('summary_v1'); if (ls) { const p = JSON.parse(ls); if (p && p.rows && p.rows.length > 500) SUM = p; } } catch(e){}
+try { const ls = localStorage.getItem('summary_v1'); if (ls) { const p = JSON.parse(ls); if (p && p.rows && p.rows.length > 500) { if (!p.rows.some(r=>r.watch) && window.SUMMARY.rows.some(r=>r.watch)) { const wm={}; window.SUMMARY.rows.forEach(r=>{ if(r.watch) wm[r.t]=r; }); p.rows.forEach(r=>{ const w=wm[r.t]; if(w){ r.watch=1; r.wrng=w.wrng; r.wdb=w.wdb; r.wgrade=w.wgrade; } }); } SUM = p; } } } catch(e){}
 const ROWS = () => SUM.rows;
 const byT = {}; SUM.rows.forEach(r => byT[r.t] = r);
 document.getElementById('bgeData').textContent = 'Dữ liệu screener: ' + SUM.updated;
@@ -34,7 +34,7 @@ function macdS(c){ const e12=emaS(c,12), e26=emaS(c,26); const m=c.map((_,i)=>e1
 function bollS(c,n=20,k=2){ const ma=smaS(c,n); return c.map((_,i)=>{ if(ma[i]==null) return [null,null]; let s=0; for(let j=i-n+1;j<=i;j++) s+=Math.pow(c[j]-ma[i],2); const sd=Math.sqrt(s/n); return [ma[i]+k*sd, ma[i]-k*sd]; }); }
 
 // ================= ĐIỀU HƯỚNG =================
-const views = ['market','screener','detail','compare'];
+const views = ['market','screener','watch','detail','compare'];
 $$('.nav-link').forEach(b => b.onclick = () => showView(b.dataset.view));
 function showView(v, skip){ views.forEach(x => { $('#view-'+x).style.display = x===v?'':'none'; }); $$('.nav-link').forEach(b=>b.classList.toggle('active', b.dataset.view===v)); if(!skip) inits[v] && inits[v](); }
 window.showView = showView;
@@ -653,6 +653,22 @@ async function renderCmp(){
 }
 
 // ================= CẬP NHẬT DỮ LIỆU (client-side) =================
+// ================= TAB THEO DÕI (quét cuối phiên — canh phiên bùng nổ) =================
+inits.watch = function(){
+  const el = $('#view-watch');
+  const ws = ROWS().filter(r=>r.watch).sort((a,b)=>(a.wrng??99)-(b.wrng??99));
+  el.innerHTML = `<div class="card">
+    <h2>Vùng theo dõi — canh phiên bùng nổ <span class="hint">quét cuối phiên · ${ws.length} mã đạt chuẩn nền · ${(SUM.updated||'')}</span></h2>
+    <div class="mini" style="margin-bottom:10px">Danh sách mã đã đạt chuẩn tích lũy + dòng tiền của Khoa KAFI Signal tính đến hết phiên gần nhất. Sáng mai chỉ cần tập trung các mã này: mã nào bùng nổ đạt chuẩn trong phiên là tín hiệu MUA được kích hoạt. Độ nén càng thấp — lò xo càng chặt.</div>
+    <table><tr><th>Mã</th><th style="text-align:left">Tên</th><th>Sàn</th><th>Giá</th><th>GTGD TB20 (tỷ)</th><th>Độ nén nền</th><th>Cách đỉnh nền</th><th>RS</th><th>Hạng AI</th></tr>
+    ${ws.map(r=>`<tr class="row" onclick="openDetail('${r.t}')">
+      <td><b>${r.t}</b></td><td style="text-align:left" class="mini">${r.n||''}</td><td>${r.b==='HO'?'HOSE':'HNX'}</td>
+      <td>${fmt(r.p,2)}</td><td>${fmt((r.val20||0)/1000,0)}</td>
+      <td><span class="chip ${r.wrng<=8?'g':'a'}">${r.wrng}%</span></td>
+      <td class="${cls(r.wdb)}">${pct(r.wdb)}</td><td>${r.rs??'—'}</td>
+      <td><span class="chip ${r.wgrade==='weak'?'a':'g'}">${r.wgrade==='weak'?'Yếu':'Mạnh'}</span></td></tr>`).join('')}
+    </table>${ws.length?'':'<div class="mini" style="padding:14px">Chưa có mã nào đạt chuẩn nền — bấm "Cập nhật dữ liệu" để quét lại cuối phiên.</div>'}</div>`;
+};
 $('#btnRefresh').onclick = async function(){
   if (!confirm('Tải lại toàn bộ dữ liệu 702 mã từ API? Mất khoảng 1-2 phút.')) return;
   this.disabled = true; const st = $('#refreshStatus');
@@ -674,7 +690,15 @@ $('#btnRefresh').onclick = async function(){
         o.v20 = Math.round(sma(v,20)||0); o.vx = o.v20?+(v[v.length-1]/o.v20).toFixed(2):null;
         o.val20 = Math.round((sma(v,20)||0)*last/1000);
         const ret = n => c.length>n?+((last/c[c.length-1-n]-1)*100).toFixed(1):null;
-        o.r3 = ret(63); o.r6 = ret(126); o.r12 = ret(250); }
+        o.r3 = ret(63); o.r6 = ret(126); o.r12 = ret(250);
+        // trạng thái vùng theo dõi của engine tín hiệu (chi tiết thuật toán không công bố)
+        if (c.length>32 && (o.val20||0)>=20000) {
+          const thr = o.b==='HN'?8.8:6.3; const L2 = c.length-1;
+          let hi=-1e9, lo=1e9, hc=false;
+          for (let k=L2-29;k<=L2;k++){ if(c[k]>hi)hi=c[k]; if(c[k]<lo)lo=c[k]; if(k>0&&(c[k]/c[k-1]-1)*100>=thr)hc=true; }
+          const rng=(hi-lo)/lo*100;
+          if (!hc && rng<=12) { o.watch=1; o.wrng=+rng.toFixed(1); o.wdb=+((c[L2]/hi-1)*100).toFixed(1); }
+        } }
       const qs = qsArr;
       if (qs.length) { const rev = qs.map(x=>pick(x,REV)), np2 = qs.map(x=>pick(x,NPAT)); const n = qs.length;
         o.q = qs.slice(-9).map((x,i,arr)=>{ const idx = n-arr.length+i; return [x.yearReport,x.lengthReport,rev[idx],np2[idx]]; });
@@ -686,6 +710,7 @@ $('#btnRefresh').onclick = async function(){
         o.roe = L.roe!=null?+(L.roe*100).toFixed(1):null; o.roa = L.roa!=null?+(L.roa*100).toFixed(1):null;
         o.cap = L.marketCap?Math.round(L.marketCap/1e9):null; o.dte = L.debtToEquity!=null?+L.debtToEquity.toFixed(2):null;
         o.gm = L.grossMargin!=null?+(L.grossMargin*100).toFixed(1):null; o.dy = L.dividendYield!=null?+(L.dividendYield*100).toFixed(2):null; }
+      if (o.watch) o.wgrade = (o.npatYoY!=null && o.npatYoY>=0 && o.npatYoY<25) ? 'weak' : 'strong';
       out.push(o);
     } catch(e){} };
     for (let i=0;i<list.length;i+=CONC) { await Promise.all(list.slice(i,i+CONC).map(one)); st.innerHTML = `<span class="spin"></span> ${Math.min(i+CONC,list.length)}/${list.length} mã…`; }
@@ -700,7 +725,7 @@ $('#btnRefresh').onclick = async function(){
     try { localStorage.setItem('summary_v1', JSON.stringify(SUM)); } catch(e){}
     Object.keys(byT).forEach(k=>delete byT[k]); SUM.rows.forEach(r=>byT[r.t]=r);
     $('#bgeData').textContent = 'Dữ liệu screener: ' + SUM.updated;
-    st.textContent = '✓ Đã cập nhật ' + out.length + ' mã';
+    st.textContent = '\u2713 Đã cập nhật ' + out.length + ' mã';
     scInit = false; mktDone = false;
     const cur = views.find(v=>$('#view-'+v).style.display!=='none');
     inits[cur] && inits[cur]();
