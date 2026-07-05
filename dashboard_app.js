@@ -184,8 +184,10 @@ function addProBadges(){
   const tix = {}; curOhlc.t.forEach((tt,i)=>tix[tt]=i);
   curMarkers.forEach(m => {
     const i = tix[m.time]; if (i == null) return;
-    proChart.createOverlay({ name: 'simpleAnnotation', lock: true, extendData: m.text,
-      points: [{ timestamp: m.time*1000, value: m.position==='belowBar' ? curOhlc.l[i] : curOhlc.h[i] }],
+    const isBuy = m.position === 'belowBar';
+    proChart.createOverlay({ name: 'simpleAnnotation', lock: true,
+      extendData: isBuy ? '▲ BUY' : '▼ ' + m.text,
+      points: [{ timestamp: m.time*1000, value: isBuy ? curOhlc.l[i] : curOhlc.h[i] }],
       styles: { text: { color: '#fff', backgroundColor: m.color, borderRadius: 4, paddingLeft: 5, paddingRight: 5, paddingTop: 3, paddingBottom: 3 } } });
   });
 }
@@ -376,7 +378,7 @@ function computeTPN(oh, boardCode){
       const b = baseInfo(i);
       if (b.hasCeil || b.rng > 12) continue;
       inPos = true; fill = c[i]; ei = i;
-      markers.push({time: t[i], position:'belowBar', color:'#18a34b', shape:'circle', text:'B'});
+      markers.push({time: t[i], position:'belowBar', color:'#18a34b', shape:'arrowUp', text:'BUY'});
     } else {
       const h = i - ei, pnl = c[i]/fill - 1;
       let reason = null;
@@ -384,7 +386,7 @@ function computeTPN(oh, boardCode){
       else if (h >= 3 && pnl <= -0.07) reason = 'CL7';
       else if (h > 3 && ma20[i] && c[i] < ma20[i] && c[i-1] < ma20[i-1]) reason = 'MA20';
       if (reason) {
-        markers.push({time: t[i], position:'aboveBar', color: pnl>0 ? '#2563eb' : '#e5484d', shape:'circle', text:'S ' + (pnl>0?'+':'') + (pnl*100).toFixed(0) + '%'});
+        markers.push({time: t[i], position:'aboveBar', color:'#e5484d', shape:'arrowDown', text: (pnl>0?'+':'') + (pnl*100).toFixed(0) + '%'});
         inPos = false;
       }
     }
