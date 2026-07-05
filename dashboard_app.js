@@ -259,19 +259,32 @@ function updateKpis(i){
   const rt = dtData.rtsAv.filter(x=>x.av<=ts).slice(-1)[0] || {};
   const qq = dtData.qsAv.filter(x=>x.pub<=ts).slice(-1)[0] || {};
   const dstr = new Date(ts*1000).toISOString().slice(0,10).split('-').reverse().join('/');
-  document.getElementById('dKpis').innerHTML = [
-    ['Ngày', dstr],
-    ['Giá', fmt(c[i],2)],
-    ['+/- Giá', `<span class="${cls(chgPct)}">${pct(chgPct,2)}</span>`],
+  const ret = p => i>=p && c[i-p] ? (c[i]/c[i-p]-1)*100 : null;
+  const r = byT[curT] || {};
+  const rows = [
+    ['Ngày', `<b>${dstr}</b>`],
+    ['Giá', `<b>${fmt(c[i],2)}</b> <span class="${cls(chgPct)}">${pct(chgPct,2)}</span>`],
+    ['Sàn', r.b==='HN'?'HNX':'HOSE'],
     ['Khối lượng', v[i]!=null?fmt(v[i]/1e6,2)+' tr':'—'],
     ['% KL / TB20', volPct!=null?`<span class="${volPct>=100?'up':'mut'}">${fmt(volPct,0)}%</span>`:'—'],
-    ['GTGD TB20', fmt(gtgd20,0)+' tỷ'],
-    ['P/E', fmt(rt.pe,1)], ['P/B', fmt(rt.pb,2)],
+    ['TB GTGD 20 phiên', fmt(gtgd20,0)+' tỷ'],
     ['Vốn hóa', rt.cap?fmt(rt.cap/1e12,1)+' nghìn tỷ':'—'],
+    ['P/E', fmt(rt.pe,1)],
+    ['P/B', fmt(rt.pb,2)],
     ['ROE', rt.roe!=null?fmt(rt.roe*100,1)+'%':'—'],
-    ['+/- DT Q gần nhất', `<span class="${cls(qq.revY)}">${pct(qq.revY,1)}</span>`],
-    ['+/- LN Q gần nhất', `<span class="${cls(qq.npY)}">${pct(qq.npY,1)}</span>`]
-  ].map(k=>`<div class="kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div></div>`).join('');
+    ['RS', r.rs!=null?r.rs+'/99':'—'],
+    ['+/- DT quý gần nhất', `<span class="${cls(qq.revY)}">${pct(qq.revY,1)}</span>`],
+    ['+/- LN quý gần nhất', `<span class="${cls(qq.npY)}">${pct(qq.npY,1)}</span>`],
+    ['+/- 5 phiên', `<span class="${cls(ret(5))}">${pct(ret(5),1)}</span>`],
+    ['+/- 20 phiên', `<span class="${cls(ret(20))}">${pct(ret(20),1)}</span>`],
+    ['+/- 60 phiên', `<span class="${cls(ret(60))}">${pct(ret(60),1)}</span>`]
+  ];
+  const el = document.getElementById('dSide');
+  if (el) el.innerHTML = `<div style="background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;height:100%">
+    <div style="font-weight:700;font-size:14px;margin-bottom:8px">Chỉ số cơ bản <span class="hint" style="font-weight:500">chạy theo con trỏ</span></div>
+    ${rows.map(k=>`<div style="display:flex;justify-content:space-between;align-items:baseline;padding:5.5px 0;border-bottom:1px solid var(--border);font-size:13px">
+      <span style="color:var(--muted)">${k[0]}</span><span style="font-weight:600">${k[1]}</span></div>`).join('')}
+  </div>`;
 }
 let proLoadedFor = null, proChart = null, useLog = false;
 function addProBadges(){
@@ -342,13 +355,14 @@ inits.detail = function(t){
   const el = $('#view-detail');
   if (!dtInit) { dtInit = true;
     el.innerHTML = `<div class="card">
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <div class="search-wrap"><input id="dQ" placeholder="Nhập mã hoặc tên công ty…" style="width:260px"><div id="sugg"></div></div>
-        <div id="dTitle" style="font-size:17px;font-weight:700"></div>
-        <button class="btn" id="btnCmpAdd">+ Thêm vào So sánh</button>
-      </div></div>
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+        <h2 style="margin:0">Khoa KAFI Signal <span class="hint">tín hiệu AI độc quyền</span></h2>
+        <div class="search-wrap"><input id="dQ" placeholder="Nhập mã hoặc tên công ty…" style="width:230px"><div id="sugg"></div></div>
+        <div id="dTitle" style="font-size:16px;font-weight:700"></div>
+        <button class="btn" id="btnCmpAdd" style="margin-left:auto">+ Thêm vào So sánh</button>
+      </div>
+      <div id="dTpn"></div></div>
       <div id="dBody" style="display:none">
-      <div class="card"><h2>Khoa KAFI Signal <span class="hint">tín hiệu AI độc quyền</span></h2><div id="dTpn"></div><div class="kpis" id="dKpis" style="margin-top:10px"></div></div>
       <div class="card"><h2 id="dChartTitle">Biểu đồ giá</h2>
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center" id="dRanges">
           <button class="btn active" id="btnChartSig">Chart Tín hiệu</button>
@@ -363,7 +377,10 @@ inits.detail = function(t){
             <button class="btn" id="btnLog" style="padding:2px 10px;font-size:11px">Log</button>
             <button class="btn" id="btnFull" style="padding:2px 10px;font-size:11px">⛶ Toàn màn hình</button>
           </div>
-          <div id="chartMain"></div><div id="chartVol"></div>
+          <div style="display:flex;gap:16px;align-items:stretch">
+            <div style="flex:1;min-width:0"><div id="chartMain"></div><div id="chartVol"></div></div>
+            <div style="width:285px;flex:none" id="dSide"></div>
+          </div>
         </div>
         <div id="chartProWrap" style="display:none;height:640px"></div>
       </div>
@@ -645,13 +662,67 @@ inits.compare = function(){
       <select id="cRange"><option value="0.5">6 tháng</option><option value="1" selected>1 năm</option><option value="3">3 năm</option></select>
     </div></div>
     <div class="card"><h2>Biến động giá (chuẩn hóa % từ đầu kỳ)</h2><canvas id="cvCmp" height="130"></canvas></div>
-    <div class="card"><h2>So sánh chỉ số</h2><div style="overflow:auto"><table id="tbCmp"></table></div></div>`;
+    <div class="card"><h2>So sánh chỉ số</h2><div style="overflow:auto"><table id="tbCmp"></table></div></div>
+    <div class="card"><h2>Định giá theo dòng <span class="hint">khoảng P/B lịch sử 6 năm · vạch sáng = hiện tại, cập nhật theo phiên</span></h2>
+      <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <div class="seg" id="secGrp"><button data-g="bank" class="on">Ngân hàng</button><button data-g="sec">Chứng khoán</button></div>
+        <div class="seg" id="secMet"><button data-m="pb" class="on">P/B</button><button data-m="roe">ROE %</button></div>
+        <span class="mini" id="secSt" style="align-self:center"></span>
+      </div>
+      <div style="height:380px"><canvas id="cvSec"></canvas></div></div>`;
+    $('#secGrp').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#secGrp button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); secGrp = b.dataset.g; drawSec(); });
+    $('#secMet').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#secMet button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); secMet = b.dataset.m; drawSec(); });
     $('#cQ').addEventListener('keydown', e => { if (e.key==='Enter') { const t = e.target.value.toUpperCase().trim(); if (byT[t]) { if (!cmpList.includes(t) && cmpList.length<4) cmpList.push(t); e.target.value=''; renderCmp(); } else toast('Không tìm thấy mã '+t); } });
     $('#cRange').onchange = renderCmp;
   }
   if (!cmpList.length) cmpList = ['FPT','HPG'];
   renderCmp();
+  drawSec();
 };
+// ===== DINH GIA THEO DONG (khoang P/B & ROE lich su, hien tai theo phien) =====
+const SEC_GROUPS = { bank:['VCB','BID','CTG','TCB','MBB','ACB','STB','SHB','VPB','TPB','VIB','MSB','OCB'], sec:['SSI','VND','VCI','HCM','MBS','VDS','BSI','SHS','VIX','FTS','ORS'] };
+let secCache = {}, secChart = null, secGrp = 'bank', secMet = 'pb';
+async function drawSec(){
+  const st = $('#secSt'); const codes = SEC_GROUPS[secGrp];
+  if (!secCache[secGrp]) {
+    if (st) st.innerHTML = '<span class="spin"></span> đang tải…';
+    const out = {};
+    try { const f = await jget('https://api-finfo.vndirect.com.vn/v4/ratios/latest?filter=ratioCode:PRICE_TO_BOOK&where=code:'+codes.join(',')+'&size=50');
+      (f.data||[]).forEach(x=>{ out[x.code] = {curPb: x.value}; }); } catch(e){}
+    for (let i=0;i<codes.length;i+=6) await Promise.all(codes.slice(i,i+6).map(async t => { try {
+      const rts = await api.ratios(t); const h = rts.slice(-24);
+      const pbs = h.map(x=>x.pb).filter(v=>v!=null&&isFinite(v)), roes = h.map(x=>x.roe!=null?x.roe*100:null).filter(v=>v!=null&&isFinite(v));
+      out[t] = Object.assign(out[t]||{}, { pbLo:Math.min(...pbs), pbHi:Math.max(...pbs), roeLo:Math.min(...roes), roeHi:Math.max(...roes),
+        curRoe: rts.length && rts[rts.length-1].roe!=null ? rts[rts.length-1].roe*100 : null });
+      if (out[t].curPb == null) out[t].curPb = rts.length ? rts[rts.length-1].pb : null;
+    } catch(e){} }));
+    secCache[secGrp] = out;
+    if (st) st.textContent = '';
+  }
+  const D = secCache[secGrp], met = secMet;
+  const items = codes.filter(c => D[c] && D[c][met+'Lo']!=null && isFinite(D[c][met+'Lo']));
+  const cur = items.map(c => met==='pb' ? D[c].curPb : D[c].curRoe);
+  if (secChart) secChart.destroy();
+  const secLbl = { id:'secLbl', afterDatasetsDraw(chart){ const ctx = chart.ctx; const meta = chart.getDatasetMeta(0);
+    meta.data.forEach((bar,i)=>{ const c = items[i]; const hi = D[c][met+'Hi'];
+      ctx.save(); ctx.font = '700 11px Inter, sans-serif'; ctx.fillStyle = '#1F2937'; ctx.textAlign = 'center';
+      ctx.fillText(met==='pb'?hi.toFixed(1):hi.toFixed(0), bar.x, bar.y-6);
+      const cv = cur[i];
+      if (cv!=null && isFinite(cv)) { const yPix = chart.scales.y.getPixelForValue(cv);
+        ctx.strokeStyle = '#67D98B'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(bar.x-bar.width/2, yPix); ctx.lineTo(bar.x+bar.width/2, yPix); ctx.stroke();
+        ctx.fillStyle = '#128A3E'; ctx.textAlign = 'left'; ctx.fillText(met==='pb'?(+cv).toFixed(1):(+cv).toFixed(0), bar.x+bar.width/2+4, yPix+4); }
+      ctx.restore(); }); }};
+  secChart = new Chart($('#cvSec'), { type:'bar',
+    data:{ labels: items, datasets:[{ data: items.map(c=>[D[c][met+'Lo'], D[c][met+'Hi']]), backgroundColor:'#128A3E', borderRadius:5, barPercentage:.42 }] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{ label: c => { const t = items[c.dataIndex], d = D[t];
+        return met==='pb'
+          ? ['Cao nhất: '+d.pbHi.toFixed(2), 'Thấp nhất: '+d.pbLo.toFixed(2), 'Hiện tại: '+(d.curPb!=null?(+d.curPb).toFixed(2):'--'), 'ROE hiện tại: '+(d.curRoe!=null?d.curRoe.toFixed(1)+'%':'--')]
+          : ['Cao nhất: '+d.roeHi.toFixed(1)+'%', 'Thấp nhất: '+d.roeLo.toFixed(1)+'%', 'Hiện tại: '+(d.curRoe!=null?d.curRoe.toFixed(1)+'%':'--')]; } }} },
+      scales:{ x:{grid:{display:false}, ticks:{color:'#1F2937', font:{weight:600, size:12, family:'Inter'}}},
+               y:{beginAtZero:true, grid:{color:'#F1F3F6'}, ticks:{color:'#7A828E', font:{size:11}}} } },
+    plugins:[secLbl] });
+}
 async function renderCmp(){
   $('#cChips').innerHTML = cmpList.map(t=>`<span class="cmp-chip">${t}<span onclick="rmCmp('${t}')">✕</span></span>`).join('');
   window.rmCmp = t => { cmpList = cmpList.filter(x=>x!==t); renderCmp(); };
