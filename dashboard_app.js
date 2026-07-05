@@ -72,7 +72,8 @@ const endBadge = { id:'endBadge', afterDatasetsDraw(chart){
 function drawPerf(){
   const tpn = SUM.tpn; if (!tpn || !tpn.curve || !tpn.curve.length) return;
   let cv = tpn.curve;
-  if (perfRange !== 'all') cv = cv.slice(perfRange==='1y' ? -52 : -26);
+  if (/^20\d\d$/.test(perfRange)) cv = cv.filter(x=>x[0].startsWith(perfRange));
+  else if (perfRange !== 'all') cv = cv.slice(perfRange==='1y' ? -52 : -26);
   const b0 = cv[0];
   const labels = cv.map(x => x[0].slice(5,7)+'/'+x[0].slice(2,4));
   const dsT = cv.map(x => +(((1+x[1]/100)/(1+b0[1]/100)-1)*100).toFixed(1));
@@ -99,17 +100,18 @@ inits.market = async function(){
     <div class="card" style="margin-bottom:0">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
         <h2 style="margin:0">Hiệu suất Khoa KAFI Signal <span class="hint">so với VN-Index · backtest sau phí</span></h2>
-        <div class="seg" id="perfSeg"><button data-r="all" class="on">Tất cả</button><button data-r="1y">1 năm</button><button data-r="6m">6 tháng</button></div>
+        <div class="seg" id="perfSeg"><button data-r="all" class="on">Tất cả</button><button data-r="1y">1 năm</button><button data-r="6m">6 tháng</button><button data-r="2025">2025</button><button data-r="2026">2026</button></div>
       </div>
       <div style="height:330px"><canvas id="cvPerf"></canvas></div>
     </div>
     <div class="card" style="margin-bottom:0;display:flex;flex-direction:column">
       <h2 style="text-align:center;letter-spacing:.02em">TOP TÍN HIỆU 6 THÁNG QUA</h2>
-      <div style="flex:1;overflow:auto"><table class="sigtb"><tr><th>Mã · Ngày mua</th><th>Ngày bán</th><th>Lợi suất</th></tr>
-      ${(tpn.recent||[]).map(d=>`<tr class="row" onclick="openDetail('${d.t}')">
-        <td><div class="l1">${d.t} ${d.open?'<span class="chip a">Đang mở</span>':''}</div><div class="l2">Mua ${d.bd} giá ${d.bp}</div></td>
-        <td class="l2">${d.sd}</td>
-        <td><span class="${d.ret>=0?'up':'down'}" style="font-size:14px">${d.ret>=0?'+':''}${d.ret}%</span></td></tr>`).join('')}
+      <div style="flex:1;overflow:auto"><table class="sigtb"><tr><th>Mã</th><th>Giá mua</th><th>Giá bán / TT</th><th>Lợi suất</th></tr>
+      ${(tpn.recent||[]).map(d=>{ const sp=(d.bp*(1+(d.ret+0.6)/100)); return `<tr class="row" onclick="openDetail('${d.t}')">
+        <td><div class="l1">${d.t} ${d.open?'<span class="chip a">Đang mở</span>':''}</div><div class="l2">${d.bd}</div></td>
+        <td><div class="l1" style="font-size:13px">${d.bp}</div><div class="l2">đề xuất</div></td>
+        <td><div class="l1" style="font-size:13px">${sp>=100?sp.toFixed(1):sp.toFixed(2)}</div><div class="l2">${d.open?'giá TT':'bán '+d.sd}</div></td>
+        <td><span class="${d.ret>=0?'up':'down'}" style="font-size:14px">${d.ret>=0?'+':''}${d.ret}%</span></td></tr>`;}).join('')}
       </table></div>
       <button class="btn-cta" style="width:100%;margin-top:12px" onclick="showView('screener')">KHÁM PHÁ BỘ LỌC 702 MÃ</button>
     </div>
