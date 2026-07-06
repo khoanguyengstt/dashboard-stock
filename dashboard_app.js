@@ -709,23 +709,34 @@ async function renderCmp(){
 
 // ================= CẬP NHẬT DỮ LIỆU (client-side) =================
 // ================= TAB THEO DÕI (quét cuối phiên — canh phiên bùng nổ) =================
+let wSortK='wrng', wSortD=1;
+window.sortWatch = k => { if (wSortK===k) wSortD=-wSortD; else { wSortK=k; wSortD=(k==='t'||k==='n'||k==='b'||k==='wrng')?1:-1; } inits.watch(); };
 inits.watch = function(){
   const el = $('#view-watch');
-  const ws = ROWS().filter(r=>r.watch).sort((a,b)=>(a.wrng??99)-(b.wrng??99));
+  const ws = ROWS().filter(r=>r.watch).sort((a,b)=>{
+    let x=a[wSortK], y=b[wSortK];
+    if (wSortK==='wgrade'){ x=a.wgrade==='weak'?0:1; y=b.wgrade==='weak'?0:1; }
+    if (typeof x==='string'||typeof y==='string'){ return wSortD*String(x||'').localeCompare(String(y||'')); }
+    x=(x==null?-1e18:x); y=(y==null?-1e18:y); return wSortD*(x-y);
+  });
+  const H=(k,lb,left)=>`<th ${left?'style="text-align:left"':''}class="${wSortK===k?'on':''}" onclick="event.stopPropagation();sortWatch('${k}')">${lb}${wSortK===k?(wSortD>0?' ▲':' ▼'):''}</th>`;
   el.innerHTML = `<div class="card">
     <h2>Vùng theo dõi — canh phiên bùng nổ <span class="hint">quét cuối phiên · ${ws.length} mã đạt chuẩn nền · ${(SUM.updated||'')}</span></h2>
-    <div class="mini" style="margin-bottom:10px">Danh sách mã đã đạt chuẩn tích lũy + dòng tiền của Khoa KAFI Signal tính đến hết phiên gần nhất. Sáng mai chỉ cần tập trung các mã này: mã nào bùng nổ đạt chuẩn trong phiên là tín hiệu MUA được kích hoạt. Độ nén càng thấp — lò xo càng chặt.</div>
+    <div class="mini" style="margin-bottom:10px">Danh sách mã đã đạt chuẩn tích lũy + dòng tiền của Khoa KAFI Signal tính đến hết phiên gần nhất. Sáng mai chỉ cần tập trung các mã này: mã nào bùng nổ đạt chuẩn trong phiên là tín hiệu MUA được kích hoạt. Độ nén càng thấp — lò xo càng chặt. Bấm tiêu đề cột để sắp xếp.</div>
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
       <button class="btn" id="btnLive">Bật trực chiến trong phiên</button>
       <span class="mini" id="liveSt"></span>
     </div>
-    <div style="overflow:auto"><table><tr><th>Mã</th><th style="text-align:left">Tên</th><th>Sàn</th><th>Giá</th><th>Trong phiên</th><th>GTGD TB20 (tỷ)</th><th>Độ nén nền</th><th>Cách đỉnh nền</th><th>RS</th><th>Hạng AI</th></tr>
-    ${ws.map(r=>`<tr class="row" onclick="openDetail('${r.t}')">
+    <div style="overflow:auto"><table><tr>${H('t','Mã')}${H('n','Tên',1)}${H('b','Sàn')}${H('p','Giá')}${H('_lv','Trong phiên')}${H('val20','GTGD TB20 (tỷ)')}${H('wrng','Độ nén nền')}${H('wdb','Cách đỉnh nền')}${H('rs','RS')}${H('wgrade','Hạng AI')}</tr>
+    ${ws.map(r=>{ const lv=r._lv, vv=r._lvv||0;
+      const lvtxt = lv!=null ? ((lv>=0?'+':'')+lv.toFixed(1)+'%'+(vv>=1.5?' · KL x'+vv.toFixed(1):'')) : '—';
+      const lvcls = lv!=null ? (lv>=3?'up':(lv<=-2?'down':'mut')) : 'mut';
+      return `<tr class="row" onclick="openDetail('${r.t}')">
       <td><b>${r.t}</b></td><td style="text-align:left" class="mini">${r.n||''}</td><td>${r.b==='HO'?'HOSE':'HNX'}</td>
-      <td>${fmt(r.p,2)}</td><td id="lv_${r.t}" class="mut">—</td><td>${fmt((r.val20||0)/1000,0)}</td>
+      <td>${fmt(r.p,2)}</td><td id="lv_${r.t}" class="${lvcls}">${lvtxt}</td><td>${fmt((r.val20||0)/1000,0)}</td>
       <td><span class="chip ${r.wrng<=8?'g':'a'}">${r.wrng}%</span></td>
       <td class="${cls(r.wdb)}">${pct(r.wdb)}</td><td>${r.rs??'—'}</td>
-      <td><span class="chip ${r.wgrade==='weak'?'a':'g'}">${r.wgrade==='weak'?'Yếu':'Mạnh'}</span></td></tr>`).join('')}
+      <td><span class="chip ${r.wgrade==='weak'?'a':'g'}">${r.wgrade==='weak'?'Yếu':'Mạnh'}</span></td></tr>`;}).join('')}
     </table></div>${ws.length?'':'<div class="mini" style="padding:14px">Chưa có mã nào đạt chuẩn nền — bấm "Cập nhật dữ liệu" để quét lại cuối phiên.</div>'}</div>`;
   $('#btnLive').onclick = () => liveWatch.toggle(ws);
   liveWatch.paint();
@@ -763,6 +774,7 @@ const liveWatch = {
       const c = d.c||[], v = d.v||[]; if (c.length < 2) return;
       const px = c[c.length-1], chg = (px/c[c.length-2]-1)*100;
       const volR = m.v20 ? (v[v.length-1]/elapsed)/m.v20 : 0;
+      const rw = byT[m.t]; if (rw) { rw._lv = chg; rw._lvv = volR; }
       const cell = document.getElementById('lv_'+m.t);
       if (cell) { cell.textContent = (chg>=0?'+':'')+chg.toFixed(1)+'%' + (volR>=1.5?' · KL x'+volR.toFixed(1):''); cell.className = chg>=3?'up':(chg<=-2?'down':'mut'); }
       const thr = m.b==='HN' ? 8.8 : 6.3;
