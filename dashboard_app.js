@@ -751,7 +751,7 @@ const liveWatch = {
     b.textContent = this.timer ? 'Đang trực chiến — bấm để tắt' : 'Bật trực chiến trong phiên';
     if (st && !this.timer) st.textContent = 'Quét mỗi 90 giây trong giờ giao dịch, báo ngay khi có mã bùng nổ. Giữ tab này mở.'; },
   async toggle(ws){
-    if (this.timer) { clearInterval(this.timer); this.timer = null; document.querySelectorAll('#view-watch tr.row').forEach(tr=>tr.style.display=''); this.paint(); return; }
+    if (this.timer) { clearInterval(this.timer); this.timer = null; document.querySelectorAll('#view-watch tr.row').forEach(tr=>tr.style.display=''); const em=document.getElementById('liveEmpty'); if(em) em.textContent=''; this.paint(); return; }
     if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission();
     this.list = ws.map(r=>({t:r.t, b:r.b, v20:r.v20||0}));
     this.timer = setInterval(()=>this.tick(), 90000);
@@ -765,6 +765,10 @@ const liveWatch = {
       const r = byT[t]; const on = r && r._lv != null && r._lv >= 2;
       tr.style.display = on ? '' : 'none'; if (on) shown++;
     });
+    let em = document.getElementById('liveEmpty');
+    const tb = document.querySelector('#view-watch table');
+    if (!em && tb) { em = document.createElement('div'); em.id='liveEmpty'; em.className='mini'; em.style.padding='16px 4px'; tb.parentNode.appendChild(em); }
+    if (em) em.textContent = shown ? '' : 'Chưa mã nào trong vùng theo dõi tăng ≥2% — bảng sẽ tự hiện ngay khi có hàng nóng máy. Máy quét vẫn chạy mỗi 90 giây.';
     return shown;
   },
   notified: {},
