@@ -26,6 +26,7 @@ const api = {
   ratios: async t => ((await jget(`https://iq.vietcap.com.vn/api/iq-insight-service/v1/company/${t}/statistics-financial`))?.data||[]).filter(x=>x.ratioType==='RATIO_TTM'&&x.quarter>=1&&x.quarter<=4)
 };
 
+const ga = (n,p) => { try { window.gtag && gtag('event', n, p||{}); } catch(e){} };
 // ============ CHỈ BÁO KỸ THUẬT ============
 function smaS(a,n){ const o=[]; let s=0; for(let i=0;i<a.length;i++){ s+=a[i]; if(i>=n) s-=a[i-n]; o.push(i>=n-1 ? s/n : null);} return o; }
 function emaS(a,n){ const o=[]; const k=2/(n+1); let e=null; for(let i=0;i<a.length;i++){ e = e==null ? a[i] : a[i]*k + e*(1-k); o.push(i>=n-1?e:null);} return o; }
@@ -36,7 +37,7 @@ function bollS(c,n=20,k=2){ const ma=smaS(c,n); return c.map((_,i)=>{ if(ma[i]==
 // ================= ĐIỀU HƯỚNG =================
 const views = ['market','screener','watch','detail','compare'];
 $$('.nav-link').forEach(b => b.onclick = () => showView(b.dataset.view));
-function showView(v, skip){ views.forEach(x => { $('#view-'+x).style.display = x===v?'':'none'; }); $$('.nav-link').forEach(b=>b.classList.toggle('active', b.dataset.view===v)); if(!skip) inits[v] && inits[v](); }
+function showView(v, skip){ ga('view_tab', {tab_name: v}); views.forEach(x => { $('#view-'+x).style.display = x===v?'':'none'; }); $$('.nav-link').forEach(b=>b.classList.toggle('active', b.dataset.view===v)); if(!skip) inits[v] && inits[v](); }
 window.showView = showView;
 const inits = {};
 // ===== Tim kiem tren navbar =====
@@ -334,7 +335,7 @@ function loadProChart(){
   if (window.klinecharts) init();
   else { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/klinecharts@9/dist/klinecharts.min.js'; s.onload = init; s.onerror = () => toast('Không tải được thư viện chart'); document.head.appendChild(s); }
 }
-window.openDetail = t => { showView('detail', true); $$('.nav-link').forEach(b=>b.classList.toggle('active', b.dataset.view==='detail')); inits.detail(t); };
+window.openDetail = t => { ga('view_ticker', {ticker: t}); showView('detail', true); $$('.nav-link').forEach(b=>b.classList.toggle('active', b.dataset.view==='detail')); inits.detail(t); };
 inits.detail = function(t){
   const el = $('#view-detail');
   if (!dtInit) { dtInit = true;
@@ -752,6 +753,7 @@ const liveWatch = {
     if (st && !this.timer) st.textContent = 'Quét mỗi 90 giây trong giờ giao dịch, báo ngay khi có mã bùng nổ. Giữ tab này mở.'; },
   async toggle(ws){
     if (this.timer) { clearInterval(this.timer); this.timer = null; document.querySelectorAll('#view-watch tr.row').forEach(tr=>tr.style.display=''); const em=document.getElementById('liveEmpty'); if(em) em.textContent=''; this.paint(); return; }
+    ga('live_watch_on');
     if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission();
     this.list = ws.map(r=>({t:r.t, b:r.b, v20:r.v20||0}));
     this.timer = setInterval(()=>this.tick(), 90000);
@@ -803,6 +805,7 @@ const liveWatch = {
 };
 $('#btnRefresh').onclick = async function(){
   if (!confirm('Tải lại toàn bộ dữ liệu 702 mã từ API? Mất khoảng 1-2 phút.')) return;
+  ga('refresh_data');
   this.disabled = true; const st = $('#refreshStatus');
   try {
     const list = SUM.rows.map(r=>({t:r.t, b:r.b==='HO'?'HOSE':'HNX', n:r.n}));
