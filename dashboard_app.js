@@ -740,6 +740,7 @@ inits.watch = function(){
     </table></div>${ws.length?'':'<div class="mini" style="padding:14px">Chưa có mã nào đạt chuẩn nền — bấm "Cập nhật dữ liệu" để quét lại cuối phiên.</div>'}</div>`;
   $('#btnLive').onclick = () => liveWatch.toggle(ws);
   liveWatch.paint();
+  if (liveWatch.timer) liveWatch.applyFilter();
 };
 // ===== TRỰC CHIẾN TRONG PHIÊN: poll giá realtime các mã vùng theo dõi, báo khi bùng nổ =====
 const liveWatch = {
@@ -750,11 +751,21 @@ const liveWatch = {
     b.textContent = this.timer ? 'Đang trực chiến — bấm để tắt' : 'Bật trực chiến trong phiên';
     if (st && !this.timer) st.textContent = 'Quét mỗi 90 giây trong giờ giao dịch, báo ngay khi có mã bùng nổ. Giữ tab này mở.'; },
   async toggle(ws){
-    if (this.timer) { clearInterval(this.timer); this.timer = null; this.paint(); return; }
+    if (this.timer) { clearInterval(this.timer); this.timer = null; document.querySelectorAll('#view-watch tr.row').forEach(tr=>tr.style.display=''); this.paint(); return; }
     if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission();
     this.list = ws.map(r=>({t:r.t, b:r.b, v20:r.v20||0}));
     this.timer = setInterval(()=>this.tick(), 90000);
     this.paint(); this.tick();
+  },
+  applyFilter(){
+    if (!this.timer) return 0;
+    let shown = 0;
+    document.querySelectorAll('#view-watch tr.row').forEach(tr=>{
+      const t = (tr.cells[0] ? tr.cells[0].textContent : '').trim();
+      const r = byT[t]; const on = r && r._lv != null && r._lv >= 2;
+      tr.style.display = on ? '' : 'none'; if (on) shown++;
+    });
+    return shown;
   },
   notified: {},
   notify(key, title, body){
@@ -782,7 +793,8 @@ const liveWatch = {
       else if (chg >= 4) { hot++; this.notify('L1'+m.t, m.t+' +'+chg.toFixed(1)+'% — đang nóng máy', 'Mã trong vùng theo dõi đang tăng tốc. Canh chặt tới cuối phiên.'); }
     } catch(e){} };
     for (let i=0;i<this.list.length;i+=6) await Promise.all(this.list.slice(i,i+6).map(one));
-    if (st) st.textContent = 'Quét lúc ' + new Date().toTimeString().slice(0,5) + ' — ' + this.list.length + ' mã' + (hot ? ' · ' + hot + ' mã đang nóng' : ' · chưa mã nào bùng nổ');
+    const shown = this.applyFilter();
+    if (st) st.textContent = 'Quét lúc ' + new Date().toTimeString().slice(0,5) + ' — đang lọc trực chiến: ' + shown + ' mã tăng ≥2% / ' + this.list.length + ' mã nền' + (hot ? ' · ' + hot + ' mã nóng' : '');
   }
 };
 $('#btnRefresh').onclick = async function(){
