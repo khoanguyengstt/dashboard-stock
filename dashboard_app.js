@@ -91,6 +91,48 @@ function drawPerf(){
                y:{ticks:{color:'#7A828E', callback:v=>v+'%', font:{size:11}}, grid:{color:'#F1F3F6'}} } },
     plugins:[endBadge] });
 }
+async function liveQuote(){
+  try {
+    const d0 = new Date(Date.now()-4*86400000).toISOString().slice(0,10);
+    const r = await jget(`https://api-finfo.vndirect.com.vn/v4/stock_prices?sort=code&q=date:gte:${d0}&size=3000`);
+    if (!r.data || !r.data.length) return false;
+    const latest = {};
+    r.data.forEach(d=>{ if (!latest[d.code] || d.date > latest[d.code].date) latest[d.code] = d; });
+    let n = 0;
+    Object.values(latest).forEach(d=>{ const row = byT[d.code]; if (!row) return;
+      if (d.close!=null) row.p = d.close;
+      if (d.pctChange!=null) row.chg = +(+d.pctChange).toFixed(2);
+      if (row.v20 && d.nmVolume!=null) row.vx = +(d.nmVolume/row.v20).toFixed(2);
+      n++; });
+    if (n) { const el = document.getElementById('bgeData'); if (el) el.textContent = 'Giá cập nhật lúc ' + new Date().toTimeString().slice(0,5) + ' · FA/screener: ' + (SUM.updated||''); }
+    return n > 0;
+  } catch(e){ return false; }
+}
+function renderTops(){
+  const el = document.getElementById('topCs'); if (!el) return;
+  const mini2 = (rows, cols) => `<table><tr><th>Mã</th>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr>` +
+    rows.map(r=>`<tr class="row" onclick="openDetail('${r.t}')"><td><b>${r.t}</b> <span class="mini">${(r.n||'').slice(0,22)}</span></td>${cols.map(c=>`<td class="${c[2]?c[2](r):''}">${c[1](r)}</td>`).join('')}</tr>`).join('') + '</table>';
+  const gCols = [['Giá',r=>fmt(r.p,2)],['+/- %',r=>pct(r.chg,2),r=>cls(r.chg)],['KL (tr)',r=>r.vx&&r.v20?fmt(r.vx*r.v20/1e6,2):'—'],['KL xTB20',r=>r.vx?fmt(r.vx,1)+'x':'—',r=>(r.vx||0)>=1.5?'up':'mut'],['GTGD TB20 (tỷ)',r=>fmt((r.val20||0)/1000,0)]];
+  const lq = r => (r.val20||0) >= 20000 && r.chg != null;
+  el.innerHTML = mini2([...ROWS()].filter(lq).sort((a,b)=>(b.chg||-99)-(a.chg||-99)).slice(0,10), gCols);
+  const el2 = document.getElementById('topRs');
+  if (el2) el2.innerHTML = mini2([...ROWS()].filter(lq).sort((a,b)=>((b.vx||0)*(b.v20||0))-((a.vx||0)*(a.v20||0))).slice(0,10), gCols);
+}
+async function refreshOpenDeals(){
+  const tpn = SUM.tpn; if (!tpn || !tpn.recent) return;
+  const opens = tpn.recent.filter(d=>d.open);
+  if (!opens.length) return;
+  const now = NOW();
+  await Promise.all(opens.map(async d => { try {
+    const r = await jget(`https://dchart-api.vndirect.com.vn/dchart/history?symbol=${d.t}&resolution=D&from=${now-86400*7}&to=${now}`);
+    const px = r.c[r.c.length-1];
+    const ret = (px/d.bp-1)*100 - 0.6;
+    const pe = document.getElementById('ttp_'+d.t), re = document.getElementById('ttr_'+d.t);
+    if (pe) pe.textContent = px>=100?px.toFixed(1):px.toFixed(2);
+    if (re){ re.textContent = (ret>=0?'+':'')+ret.toFixed(1)+'%'; re.className = ret>=0?'up':'down'; }
+    d.ret = +ret.toFixed(1);
+  } catch(e){} }));
+}
 inits.market = async function(){
   if (mktDone) return; mktDone = true;
   const el = $('#view-market');
@@ -111,8 +153,8 @@ inits.market = async function(){
       ${(tpn.recent||[]).map(d=>{ const sp=(d.bp*(1+(d.ret+0.6)/100)); return `<tr class="row" onclick="openDetail('${d.t}')">
         <td><div class="l1">${d.t} ${d.open?'<span class="chip a">Đang mở</span>':''}</div><div class="l2">${d.bd}</div></td>
         <td><div class="l1" style="font-size:13px">${d.bp}</div></td>
-        <td><div class="l1" style="font-size:13px">${sp>=100?sp.toFixed(1):sp.toFixed(2)}</div><div class="l2">${d.open?'giá TT':'bán '+d.sd}</div></td>
-        <td><span class="${d.ret>=0?'up':'down'}" style="font-size:14px">${d.ret>=0?'+':''}${d.ret}%</span></td></tr>`;}).join('')}
+        <td><div class="l1" style="font-size:13px" ${d.open?`id="ttp_${d.t}"`:''}>${sp>=100?sp.toFixed(1):sp.toFixed(2)}</div><div class="l2">${d.open?'giá TT':'bán '+d.sd}</div></td>
+        <td><span ${d.open?`id="ttr_${d.t}"`:''} class="${d.ret>=0?'up':'down'}" style="font-size:14px">${d.ret>=0?'+':''}${d.ret}%</span></td></tr>`;}).join('')}
       </table></div>
       <button class="btn-cta" style="width:100%;margin-top:12px" onclick="showView('screener')">KHÁM PHÁ BỘ LỌC 702 MÃ</button>
     </div>
@@ -142,15 +184,13 @@ inits.market = async function(){
     <div class="card"><h2>Top khối lượng hôm nay <span class="hint">GTGD TB20 ≥ 20 tỷ · cuối phiên gần nhất</span></h2><div id="topRs"></div></div>
   </div>`;
   drawPerf();
+  refreshOpenDeals();
+  if (!window._odTimer) window._odTimer = setInterval(refreshOpenDeals, 120000);
   $('#perfSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
     $$('#perfSeg button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); perfRange = b.dataset.r; drawPerf(); });
   const mini = (rows, cols) => `<table><tr><th>Mã</th>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr>` +
     rows.map(r=>`<tr class="row" onclick="openDetail('${r.t}')"><td><b>${r.t}</b> <span class="mini">${(r.n||'').slice(0,22)}</span></td>${cols.map(c=>`<td class="${c[2]?c[2](r):''}">${c[1](r)}</td>`).join('')}</tr>`).join('') + '</table>';
-  const gainCols = [['Giá',r=>fmt(r.p,2)],['+/- %',r=>pct(r.chg,2),r=>cls(r.chg)],['KL (tr)',r=>r.vx&&r.v20?fmt(r.vx*r.v20/1e6,2):'—'],['KL xTB20',r=>r.vx?fmt(r.vx,1)+'x':'—',r=>(r.vx||0)>=1.5?'up':'mut'],['GTGD TB20 (tỷ)',r=>fmt((r.val20||0)/1000,0)]];
-  // Chỉ lấy mã thanh khoản >= 20 tỷ/ngày để loại mã rác
-  const thanhKhoan = r => (r.val20||0) >= 20000 && r.chg!=null;
-  $('#topCs').innerHTML = mini([...ROWS()].filter(thanhKhoan).sort((a,b)=>(b.chg||-99)-(a.chg||-99)).slice(0,10), gainCols);
-  $('#topRs').innerHTML = mini([...ROWS()].filter(thanhKhoan).sort((a,b)=>((b.vx||0)*(b.v20||0))-((a.vx||0)*(a.v20||0))).slice(0,10), gainCols);
+  renderTops();
 };
 
 function chartOpts(){ return {layout:{background:{color:'transparent'},textColor:'#6b7280'},grid:{vertLines:{color:'#eef1f4'},horzLines:{color:'#eef1f4'}},timeScale:{borderColor:'#e4e8ec'},rightPriceScale:{borderColor:'#e4e8ec'},autoSize:true}; }
@@ -870,5 +910,6 @@ $('#btnRefresh').onclick = async function(){
 };
 
 // ================= KHỞI ĐỘNG =================
-inits.market();
+(async () => { try { await liveQuote(); } catch(e){} inits.market(); })();
+setInterval(async () => { if (await liveQuote()) renderTops(); }, 120000);
 })();
