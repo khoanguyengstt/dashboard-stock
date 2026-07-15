@@ -139,7 +139,8 @@ async function refreshOpenDeals(){
     const c = r.c, tt = r.t; if (!c || c.length < 5) return;
     let gi = -1; for (let i = 0; i < tt.length; i++){ if (tt[i] >= bts - 43200){ gi = i; break; } }
     if (gi < 0) return;
-    const fill = d.bp;
+    const fill = c[gi] || d.bp;   // lay close ngay tin hieu tu chuoi da dieu chinh (tranh lech khi chia co tuc/quyen)
+    d.bp = +fill.toFixed(2);
     const sma = (i,n) => { if (i < n-1) return null; let x = 0; for (let k = i-n+1; k <= i; k++) x += c[k]; return x/n; };
     let big = false, closed = false;
     for (let i = gi+3; i < c.length; i++){
