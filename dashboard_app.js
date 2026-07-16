@@ -179,6 +179,18 @@ function scanNewSignals(){
   saveLiveDeals(store);
   if (tpn.recent.length > 12) tpn.recent = tpn.recent.slice(0,12);
 }
+function checkWatchAlerts(){
+  try {
+    if (!liveWatch.inSession()) return;
+    ROWS().forEach(r=>{
+      if (!r.watch || r.wgrade === 'weak' || r.chg == null) return;
+      const thr = r.b === 'HN' ? 8.8 : 6.3;
+      if (r.chg >= thr) return;  // da co thong bao TIN HIEU MUA lo
+      if (r.chg >= 4) notifyPush('W4'+r.t, r.t+' +'+(+r.chg).toFixed(1)+'% — NÓNG MÁY', 'Mã trong vùng theo dõi đang tăng tốc mạnh. Canh chặt tới cuối phiên.', 10*60000);
+      else if (r.chg >= 2) notifyPush('W2'+r.t, r.t+' +'+(+r.chg).toFixed(1)+'% — khởi động', 'Mã trong vùng theo dõi bắt đầu chạy. Để mắt.', 15*60000);
+    });
+  } catch(e){}
+}
 async function refreshOpenDeals(){
   const tpn = SUM.tpn; if (!tpn || !tpn.recent) return;
   const opens = tpn.recent.filter(d=>d.open && d.bdate);
@@ -914,7 +926,8 @@ const liveWatch = {
       if (cell) { cell.textContent = (chg>=0?'+':'')+chg.toFixed(1)+'%' + (volR>=1.5?' · KL x'+volR.toFixed(1):''); cell.className = chg>=3?'up':(chg<=-2?'down':'mut'); }
       const thr = m.b==='HN' ? 8.8 : 6.3;
       if (chg >= thr-0.15 && volR >= 1.8) { hot++; this.notify('L2'+m.t, m.t+' '+(chg>=0?'+':'')+chg.toFixed(1)+'% kèm dòng tiền mạnh', 'Tín hiệu MUA có thể kích hoạt cuối phiên — mở dashboard kiểm tra ngay.', 5*60000); }
-      else if (chg >= 4) { hot++; this.notify('L1'+m.t, m.t+' +'+chg.toFixed(1)+'% — đang nóng máy', 'Mã trong vùng theo dõi đang tăng tốc. Canh chặt tới cuối phiên.', 10*60000); }
+      else if (chg >= 4) { hot++; this.notify('W4'+m.t, m.t+' +'+chg.toFixed(1)+'% — NÓNG MÁY', 'Mã trong vùng theo dõi đang tăng tốc mạnh. Canh chặt tới cuối phiên.', 10*60000); }
+      else if (chg >= 2) { hot++; this.notify('W2'+m.t, m.t+' +'+chg.toFixed(1)+'% — khởi động', 'Mã trong vùng theo dõi bắt đầu chạy. Để mắt.', 15*60000); }
     } catch(e){} };
     for (let i=0;i<this.list.length;i+=6) await Promise.all(this.list.slice(i,i+6).map(one));
     const shown = this.applyFilter();
@@ -988,6 +1001,6 @@ $('#btnRefresh').onclick = async function(){
 };
 
 // ================= KHỞI ĐỘNG =================
-(async () => { try { await liveQuote(); mergeLiveDeals(); scanNewSignals(); } catch(e){} inits.market(); })();
-setInterval(async () => { if (await liveQuote()) { renderTops(); scanNewSignals(); renderRecent(); } }, 120000);
+(async () => { try { await liveQuote(); mergeLiveDeals(); scanNewSignals(); checkWatchAlerts(); } catch(e){} inits.market(); })();
+setInterval(async () => { if (await liveQuote()) { renderTops(); scanNewSignals(); checkWatchAlerts(); renderRecent(); } }, 120000);
 })();
