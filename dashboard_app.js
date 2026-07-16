@@ -124,7 +124,7 @@ function renderRecent(){
   const el = document.getElementById('recentWrap'); if (!el) return;
   const tpn = SUM.tpn; if (!tpn || !tpn.recent) return;
   el.innerHTML = `<table class="sigtb"><tr><th>Mã</th><th>Giá mua</th><th>Giá bán / TT</th><th>Lợi suất</th></tr>` +
-    tpn.recent.map(d=>{ const sp = d.bp*(1+(d.ret+0.6)/100); return `<tr class="row" onclick="openDetail('${d.t}')">
+    tpn.recent.map(d=>{ const sp = d.bp*(1+(d.ret+(d.open?0.15:0.4))/100); return `<tr class="row" onclick="openDetail('${d.t}')">
       <td><div class="l1">${d.t} ${d.open?(d.today?'<span class="chip g">Mua hôm nay</span>':'<span class="chip a">Đang mở</span>'):''}</div><div class="l2">${d.bd}</div></td>
       <td><div class="l1" style="font-size:13px">${d.bp}</div></td>
       <td><div class="l1" style="font-size:13px">${sp>=100?sp.toFixed(1):sp.toFixed(2)}</div><div class="l2">${d.open?'giá TT':'bán '+d.sd}</div></td>
@@ -138,7 +138,7 @@ function mergeLiveDeals(){
   const store = loadLiveDeals().filter(x => new Date(x.bdate).getTime() > cut);
   store.forEach(x => {
     if (tpn.recent.some(y => y.t === x.t && y.bdate === x.bdate)) return;
-    tpn.recent.unshift({t:x.t, bd:x.bd, bdate:x.bdate, bp:x.bp, sd:'—', ret:-0.6, open:true});
+    tpn.recent.unshift({t:x.t, bd:x.bd, bdate:x.bdate, bp:x.bp, sd:'—', ret:-0.15, open:true});
   });
   saveLiveDeals(store);
 }
@@ -157,7 +157,7 @@ function scanNewSignals(){
     if (!r.watch || r.wgrade === 'weak') return;
     if (!qualify(r.t)) return;
     if (tpn.recent.some(x => x.t === r.t && (x.open || x.bdate === biso))) return;
-    const nd = {t:r.t, bd:dstr, bdate:biso, bp:+(+r.p).toFixed(2), sd:'—', ret:-0.6, open:true, today:1};
+    const nd = {t:r.t, bd:dstr, bdate:biso, bp:+(+r.p).toFixed(2), sd:'—', ret:-0.15, open:true, today:1};
     tpn.recent.unshift(nd);
     if (!store.some(x => x.t === r.t && x.bdate === biso)) store.push({t:r.t, bd:dstr, bdate:biso, bp:nd.bp});
   });
@@ -186,13 +186,13 @@ async function refreshOpenDeals(){
       const m20 = sma(i,20), m20p = sma(i-1,20), m10 = sma(i,10), m10p = sma(i-1,10);
       const brk = big ? (m10 && c[i] < m10 && c[i-1] < m10p) : (h > 3 && m20 && c[i] < m20 && c[i-1] < m20p);
       if (gate || brk){
-        d.open = false; d.ret = +((pnl*100)-0.6).toFixed(1);
+        d.open = false; d.ret = +((pnl*100)-0.4).toFixed(1);
         const dt = new Date(tt[i]*1000);
         d.sd = ('0'+dt.getDate()).slice(-2)+'/'+('0'+(dt.getMonth()+1)).slice(-2)+'/'+String(dt.getFullYear()).slice(2);
         closed = true; break;
       }
     }
-    if (!closed){ d.ret = +(((c[c.length-1]/fill-1)*100)-0.6).toFixed(1); }
+    if (!closed){ d.ret = +(((c[c.length-1]/fill-1)*100)-0.15).toFixed(1); }
   } catch(e){} }));
   renderRecent();
 }
@@ -233,7 +233,7 @@ inits.market = async function(){
     <div class="card" style="margin:0"><h2>Rủi ro</h2>
       <div class="perf-row"><span class="l">Max Drawdown hệ</span><span class="v down">${st.maxdd}%</span></div>
       <div class="perf-row"><span class="l">Max DD VN-Index</span><span class="v mut">−40.3%</span></div>
-      <div class="perf-row"><span class="l">Phí giao dịch</span><span class="v mut">0.3%/chiều</span></div></div>
+      <div class="perf-row"><span class="l">Phí giao dịch</span><span class="v mut">0,15% mua · 0,25% bán</span></div></div>
   </div>
   <div style="height:16px"></div>
   <div class="grid g2">
