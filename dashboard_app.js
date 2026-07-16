@@ -27,6 +27,20 @@ const api = {
 };
 
 const ga = (n,p) => { try { window.gtag && gtag('event', n, p||{}); } catch(e){} };
+const _ntf = {};
+function beepSound(){ try { const a = new (window.AudioContext||window.webkitAudioContext)(); const o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination); o.frequency.value = 880; g.gain.value = 0.12; o.start(); o.stop(a.currentTime + 0.3); } catch(e){} }
+function notifyPush(key, title, body, repeatMs){
+  const now = Date.now();
+  if (_ntf[key] && now - _ntf[key] < (repeatMs || 8.64e7)) return;
+  _ntf[key] = now;
+  toast(title + ' — ' + body);
+  beepSound();
+  try { if ('Notification' in window && Notification.permission === 'granted') {
+    const n = new Notification(title, {body, tag: key, requireInteraction: true, renotify: true});
+    n.onclick = () => { window.focus(); n.close(); };
+  } } catch(e){}
+}
+document.addEventListener('click', () => { try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); } catch(e){} }, {once:true});
 // ============ CHỈ BÁO KỸ THUẬT ============
 function smaS(a,n){ const o=[]; let s=0; for(let i=0;i<a.length;i++){ s+=a[i]; if(i>=n) s-=a[i-n]; o.push(i>=n-1 ? s/n : null);} return o; }
 function emaS(a,n){ const o=[]; const k=2/(n+1); let e=null; for(let i=0;i<a.length;i++){ e = e==null ? a[i] : a[i]*k + e*(1-k); o.push(i>=n-1?e:null);} return o; }
@@ -159,6 +173,7 @@ function scanNewSignals(){
     if (tpn.recent.some(x => x.t === r.t && (x.open || x.bdate === biso))) return;
     const nd = {t:r.t, bd:dstr, bdate:biso, bp:+(+r.p).toFixed(2), sd:'—', ret:-0.15, open:true, today:1};
     tpn.recent.unshift(nd);
+    notifyPush('SIG'+r.t+biso, r.t+' — TÍN HIỆU MUA KÍCH HOẠT', 'Cây bùng nổ đạt chuẩn kèm dòng tiền tại giá '+nd.bp+'. Mở dashboard xem chi tiết.', 15*60000);
     if (!store.some(x => x.t === r.t && x.bdate === biso)) store.push({t:r.t, bd:dstr, bdate:biso, bp:nd.bp});
   });
   saveLiveDeals(store);
@@ -882,13 +897,7 @@ const liveWatch = {
     if (em) em.textContent = shown ? '' : 'Chưa mã nào trong vùng theo dõi tăng ≥2% — bảng sẽ tự hiện ngay khi có hàng nóng máy. Máy quét vẫn chạy mỗi 90 giây.';
     return shown;
   },
-  notified: {},
-  notify(key, title, body){
-    const day = new Date().toISOString().slice(0,10);
-    if (this.notified[key] === day) return; this.notified[key] = day;
-    toast(title + ' — ' + body);
-    if ('Notification' in window && Notification.permission === 'granted') new Notification(title, {body});
-  },
+  notify(key, title, body, repeatMs){ notifyPush(key, title, body, repeatMs); },
   async tick(){
     const st = document.getElementById('liveSt');
     if (!this.inSession()) { if (st) st.textContent = 'Ngoài giờ giao dịch — chờ phiên sau (quét tự động 9:00-11:30, 13:00-14:50).'; return; }
@@ -904,8 +913,8 @@ const liveWatch = {
       const cell = document.getElementById('lv_'+m.t);
       if (cell) { cell.textContent = (chg>=0?'+':'')+chg.toFixed(1)+'%' + (volR>=1.5?' · KL x'+volR.toFixed(1):''); cell.className = chg>=3?'up':(chg<=-2?'down':'mut'); }
       const thr = m.b==='HN' ? 8.8 : 6.3;
-      if (chg >= thr-0.15 && volR >= 1.8) { hot++; this.notify('L2'+m.t, m.t+' '+(chg>=0?'+':'')+chg.toFixed(1)+'% kèm dòng tiền mạnh', 'Tín hiệu MUA có thể kích hoạt cuối phiên — mở dashboard kiểm tra ngay.'); }
-      else if (chg >= 4) { hot++; this.notify('L1'+m.t, m.t+' +'+chg.toFixed(1)+'% — đang nóng máy', 'Mã trong vùng theo dõi đang tăng tốc. Canh chặt tới cuối phiên.'); }
+      if (chg >= thr-0.15 && volR >= 1.8) { hot++; this.notify('L2'+m.t, m.t+' '+(chg>=0?'+':'')+chg.toFixed(1)+'% kèm dòng tiền mạnh', 'Tín hiệu MUA có thể kích hoạt cuối phiên — mở dashboard kiểm tra ngay.', 5*60000); }
+      else if (chg >= 4) { hot++; this.notify('L1'+m.t, m.t+' +'+chg.toFixed(1)+'% — đang nóng máy', 'Mã trong vùng theo dõi đang tăng tốc. Canh chặt tới cuối phiên.', 10*60000); }
     } catch(e){} };
     for (let i=0;i<this.list.length;i+=6) await Promise.all(this.list.slice(i,i+6).map(one));
     const shown = this.applyFilter();
