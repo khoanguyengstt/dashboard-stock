@@ -612,7 +612,7 @@ function computeTPN(oh, boardCode, qsAv){
     } else {
       const h = i - ei, pnl = c[i]/fill - 1;
       if (pnl >= 0.25) big = true;
-      if (!added && h > 3 && h <= 10 && pnl >= 0.10 && hi10[i] && c[i] >= hi10[i]*0.999) {
+      if (!added && h > 3 && h <= 7 && pnl >= 0.10 && hi10[i] && c[i] >= hi10[i]*0.999) {
         added = true;
         markers.push({time: t[i], position:'belowBar', color:'#67c98b', shape:'arrowUp', text:'ADD'});
       }
