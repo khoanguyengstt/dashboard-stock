@@ -664,14 +664,14 @@ function renderTPN(s){
     } else {
       if (!s.addedPos && s.holdDays >= 3 && s.holdDays < 7) {
         const addTrig = Math.max(s.fill*1.10, s.hi10L || 0);
-        parts.push(`BỒI (1 lần, cửa sổ đến T+7): nếu đóng cửa ≥ ${f2(addTrig)} → mua thêm nửa suất.`);
+        parts.push(`BỒI (1 lần): nếu đóng cửa ≥ ${f2(addTrig)} → mua thêm nửa suất.`);
       }
       let sells = [`đóng ≤ ${f2(stop7)} (cắt lỗ −7%)`];
       if (maLv) sells.push(belowMa
-        ? `đóng dưới ${maName} ${f2(maLv)} (hôm qua đã dưới — hôm nay đóng dưới là BÁN)`
-        : `gãy ${maName} ${f2(maLv)} hai phiên liên tiếp`);
+        ? `đóng dưới ${f2(maLv)} (hôm qua đã vi phạm — hôm nay đóng dưới là BÁN)`
+        : `đóng dưới ${f2(maLv)} hai phiên liên tiếp`);
       parts.push(`BÁN cuối phiên nếu: ` + sells.join(' · ') + '.');
-      if (s.bigPos) parts.push(`Deal đã đạt +25% — đang dùng van MA10 siết chặt.`);
+      if (s.bigPos) parts.push(`Deal lãi lớn — van bán đang ở chế độ siết chặt.`);
       parts.push(`Các ngưỡng tự cập nhật theo từng phiên.`);
     }
     desc = parts.join(' ');
@@ -680,7 +680,7 @@ function renderTPN(s){
   else if (!s.hasCeil && s.rng <= 12 && s.gtgd >= 15) {
     chip = ['VÙNG THEO DÕI — CHỜ ĐIỂM MUA', '#fef9e7', '#b45309'];
     const buyPx = s.close*(1+s.ceilThr/100);
-    desc = `MUA nếu phiên tới đóng cửa TRẦN ≥ ${f2(buyPx)} (+${s.ceilThr}%) kèm khối lượng ≥ ${(2*s.v20L/1e6).toFixed(1)} triệu cp (2× TB20). Ngưỡng trailing tự cập nhật mỗi phiên.`;
+    desc = `MUA nếu phiên tới đóng cửa ≥ ${f2(buyPx)} kèm khối lượng tối thiểu ${(2*s.v20L/1e6).toFixed(1)} triệu cp. Ngưỡng trailing tự cập nhật mỗi phiên.`;
   }
   else { chip = ['CHƯA CÓ TÍN HIỆU', '#f3f5f7', '#6b7280']; desc = ''; }
   el.innerHTML = `<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
