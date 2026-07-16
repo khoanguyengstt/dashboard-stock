@@ -635,7 +635,9 @@ function computeTPN(oh, boardCode, qsAv){
     buyToday: !inPos ? false : ei === L, fill, holdDays: inPos ? L-ei : 0,
     pnl: inPos ? (c[L]/fill-1)*100 : 0, buyDate: inPos ? new Date(t[ei]*1000).toISOString().slice(0,10) : null,
     belowMa20: ma20[L] ? c[L] < ma20[L] : false,
-    weakToday: lastWeakIdx === L
+    weakToday: lastWeakIdx === L,
+    v20L: v20[L] || 0, hi10L: hi10[L] || null, ma10L: ma10[L] || null, ma20L: ma20[L] || null,
+    bigPos: inPos ? big : false, addedPos: inPos ? added : false
   };
   return {markers, state};
 }
@@ -644,14 +646,43 @@ function renderTPN(s){
   const el = document.getElementById('dTpn');
   if (!el) return;
   let chip, desc;
-  if (s.inPos && s.buyToday) { chip = ['TÍN HIỆU MUA HÔM NAY', '#e7f6ec', '#128a3e']; desc = `Thuật toán vừa kích hoạt điểm MUA — vào lệnh ngay trong phiên. Hệ thống sẽ phán quyết giữ/bán khi hàng về tài khoản.`; }
+  const f2 = x => x >= 100 ? x.toFixed(1) : x.toFixed(2);
+  if (s.inPos && s.buyToday) {
+    chip = ['TÍN HIỆU MUA HÔM NAY', '#e7f6ec', '#128a3e'];
+    desc = `Vào lệnh ngay trong phiên tại ${f2(s.fill)}. T+3 hệ thống sẽ phán quyết giữ/bán khi hàng về.`;
+  }
   else if (s.inPos) {
     chip = [`ĐANG NẮM GIỮ — T+${s.holdDays}, ${s.pnl>0?'+':''}${s.pnl.toFixed(1)}%`, s.pnl>0?'#e7f6ec':'#fdecec', s.pnl>0?'#128a3e':'#e5484d'];
-    desc = `Tín hiệu MUA ${s.buyDate} giá ${s.fill.toFixed(2)}. ` + (s.holdDays<3 ? `Đang chờ hàng về — hệ thống sẽ phán quyết giữ hay bán ngay khi hàng về.` : (s.belowMa20 ? `⚠️ Cấu trúc tăng giá đang suy yếu — chuẩn bị tín hiệu BÁN.` : `Đang trong xu hướng tăng — giữ vị thế tới khi hệ thống phát tín hiệu BÁN. Cắt lỗ tự động −7%.`));
+    const stop7 = s.fill*0.93;
+    const maLv = s.bigPos ? s.ma10L : s.ma20L;
+    const maName = s.bigPos ? 'MA10' : 'MA20';
+    const belowMa = maLv ? s.close < maLv : false;
+    let parts = [`Giá vốn ${f2(s.fill)}.`];
+    if (s.holdDays < 3) {
+      parts.push(`Chờ hàng về — T+3: đóng cửa ≤ ${f2(s.fill)} là BÁN toàn bộ.`);
+      parts.push(`Van cắt lỗ: đóng dưới ${f2(stop7)} (−7%).`);
+    } else {
+      if (!s.addedPos && s.holdDays >= 3 && s.holdDays < 7) {
+        const addTrig = Math.max(s.fill*1.10, s.hi10L || 0);
+        parts.push(`BỒI (1 lần, cửa sổ đến T+7): nếu đóng cửa ≥ ${f2(addTrig)} → mua thêm nửa suất.`);
+      }
+      let sells = [`đóng ≤ ${f2(stop7)} (cắt lỗ −7%)`];
+      if (maLv) sells.push(belowMa
+        ? `đóng dưới ${maName} ${f2(maLv)} (hôm qua đã dưới — hôm nay đóng dưới là BÁN)`
+        : `gãy ${maName} ${f2(maLv)} hai phiên liên tiếp`);
+      parts.push(`BÁN cuối phiên nếu: ` + sells.join(' · ') + '.');
+      if (s.bigPos) parts.push(`Deal đã đạt +25% — đang dùng van MA10 siết chặt.`);
+      parts.push(`Các ngưỡng tự cập nhật theo từng phiên.`);
+    }
+    desc = parts.join(' ');
   }
-  else if (s.weakToday) { chip = ['TÍN HIỆU YẾU (WEAK) — ĐỨNG NGOÀI', '#fef6e7', '#b45309']; desc = `Có tín hiệu kỹ thuật trong phiên nhưng bộ xếp hạng AI đánh giá độ tin cậy thấp — hệ thống KHÔNG khuyến nghị vào lệnh, chỉ hiển thị để quan sát.`; }
-  else if (!s.hasCeil && s.rng <= 12 && s.gtgd >= 15) { chip = ['VÙNG THEO DÕI — CHỜ ĐIỂM MUA', '#fef9e7', '#b45309']; desc = `Cổ phiếu đã vào vùng theo dõi của thuật toán — cấu trúc tích lũy và dòng tiền đạt chuẩn. Chờ phiên bùng nổ kích hoạt tín hiệu MUA.`; }
-  else { chip = ['CHƯA CÓ TÍN HIỆU', '#f3f5f7', '#6b7280']; desc = 'Cổ phiếu chưa vào vùng theo dõi của thuật toán. Hệ thống quét tự động mỗi phiên.'; }
+  else if (s.weakToday) { chip = ['TÍN HIỆU YẾU (WEAK) — ĐỨNG NGOÀI', '#fef6e7', '#b45309']; desc = `Có tín hiệu kỹ thuật trong phiên nhưng bộ xếp hạng AI đánh giá độ tin cậy thấp — không khuyến nghị vào lệnh.`; }
+  else if (!s.hasCeil && s.rng <= 12 && s.gtgd >= 15) {
+    chip = ['VÙNG THEO DÕI — CHỜ ĐIỂM MUA', '#fef9e7', '#b45309'];
+    const buyPx = s.close*(1+s.ceilThr/100);
+    desc = `MUA nếu phiên tới đóng cửa TRẦN ≥ ${f2(buyPx)} (+${s.ceilThr}%) kèm khối lượng ≥ ${(2*s.v20L/1e6).toFixed(1)} triệu cp (2× TB20). Ngưỡng trailing tự cập nhật mỗi phiên.`;
+  }
+  else { chip = ['CHƯA CÓ TÍN HIỆU', '#f3f5f7', '#6b7280']; desc = ''; }
   el.innerHTML = `<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
     <span class="tag" style="background:${chip[1]};color:${chip[2]};font-size:14px;padding:6px 14px">${chip[0]}</span>
     <span class="mini">${desc}</span></div>`;
