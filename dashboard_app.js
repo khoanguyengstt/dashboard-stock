@@ -130,19 +130,38 @@ function renderRecent(){
       <td><div class="l1" style="font-size:13px">${sp>=100?sp.toFixed(1):sp.toFixed(2)}</div><div class="l2">${d.open?'giá TT':'bán '+d.sd}</div></td>
       <td><span class="${d.ret>=0?'up':'down'}" style="font-size:14px">${d.ret>=0?'+':''}${d.ret}%</span></td></tr>`;}).join('') + '</table>';
 }
+function loadLiveDeals(){ try { return JSON.parse(localStorage.getItem('kafi_live_deals')) || []; } catch(e){ return []; } }
+function saveLiveDeals(a){ try { localStorage.setItem('kafi_live_deals', JSON.stringify(a.slice(-20))); } catch(e){} }
+function mergeLiveDeals(){
+  const tpn = SUM.tpn; if (!tpn || !tpn.recent) return;
+  const cut = Date.now() - 185*86400000;
+  const store = loadLiveDeals().filter(x => new Date(x.bdate).getTime() > cut);
+  store.forEach(x => {
+    if (tpn.recent.some(y => y.t === x.t && y.bdate === x.bdate)) return;
+    tpn.recent.unshift({t:x.t, bd:x.bd, bdate:x.bdate, bp:x.bp, sd:'—', ret:-0.6, open:true});
+  });
+  saveLiveDeals(store);
+}
 function scanNewSignals(){
   const tpn = SUM.tpn; if (!tpn || !tpn.recent) return;
   const now = new Date();
   const dstr = ('0'+now.getDate()).slice(-2)+'/'+('0'+(now.getMonth()+1)).slice(-2)+'/'+String(now.getFullYear()).slice(2);
   const biso = now.toISOString().slice(0,10);
-  ROWS().forEach(r=>{
-    if (!r.watch || r.wgrade === 'weak') return;              // phai dang trong vung theo doi + hang Manh
+  const qualify = t => { const r = byT[t]; if (!r) return false;
     const thr = r.b === 'HN' ? 8.8 : 6.3;
-    if (r.chg == null || r.chg < thr) return;                  // hom nay tran
-    if (!r.vx || r.vx < 2.0) return;                           // kem dong tien
+    return r.chg != null && r.chg >= thr && r.vx >= 2.0; };
+  // tin hieu trong phien rot chuan -> tu rut khoi bang + so
+  tpn.recent = tpn.recent.filter(x => !(x.today && x.bdate === biso && !qualify(x.t)));
+  let store = loadLiveDeals().filter(x => !(x.bdate === biso && !qualify(x.t)));
+  ROWS().forEach(r=>{
+    if (!r.watch || r.wgrade === 'weak') return;
+    if (!qualify(r.t)) return;
     if (tpn.recent.some(x => x.t === r.t && (x.open || x.bdate === biso))) return;
-    tpn.recent.unshift({t:r.t, bd:dstr, bdate:biso, bp:+(+r.p).toFixed(2), sd:'—', ret:-0.6, open:true, today:1});
+    const nd = {t:r.t, bd:dstr, bdate:biso, bp:+(+r.p).toFixed(2), sd:'—', ret:-0.6, open:true, today:1};
+    tpn.recent.unshift(nd);
+    if (!store.some(x => x.t === r.t && x.bdate === biso)) store.push({t:r.t, bd:dstr, bdate:biso, bp:nd.bp});
   });
+  saveLiveDeals(store);
   if (tpn.recent.length > 12) tpn.recent = tpn.recent.slice(0,12);
 }
 async function refreshOpenDeals(){
@@ -960,6 +979,6 @@ $('#btnRefresh').onclick = async function(){
 };
 
 // ================= KHỞI ĐỘNG =================
-(async () => { try { await liveQuote(); scanNewSignals(); } catch(e){} inits.market(); })();
+(async () => { try { await liveQuote(); mergeLiveDeals(); scanNewSignals(); } catch(e){} inits.market(); })();
 setInterval(async () => { if (await liveQuote()) { renderTops(); scanNewSignals(); renderRecent(); } }, 120000);
 })();
