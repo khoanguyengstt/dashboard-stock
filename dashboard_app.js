@@ -148,16 +148,27 @@ function renderMonthly(){
     if (!yend[y]) yorder.push(y);
     yend[y] = cur; prev = cur;
   });
-  const cell = v => v==null ? '<td class="mut">—</td>' : `<td class="${v>=0.05?'up':(v<=-0.05?'down':'mut')}">${v>0?'+':''}${v.toFixed(1)}</td>`;
-  const head = '<tr><th style="text-align:left">Năm</th>' + Array.from({length:12},(_,i)=>`<th>T${i+1}</th>`).join('') + '<th>Cả năm</th><th>VN-Index</th></tr>';
+  const G = ['#EAF6EE','#D2EDDC','#B3E1C4','#8FD3A9','#63C287'], R = ['#FDECEC','#FAD8D8','#F6BFBF','#F1A3A3','#EC8686'];
+  let nAct = 0, nPos = 0, best = null, worst = null;
+  yorder.forEach(y => { for (const m in mret[y]) { const v = mret[y][m]; if (Math.abs(v) < 0.05) continue; nAct++; if (v > 0) nPos++; if (best==null || v > best) best = v; if (worst==null || v < worst) worst = v; } });
+  const sum = document.getElementById('moSum');
+  if (sum && nAct) sum.innerHTML = `Tỷ lệ tháng có lãi: <b class="up">${Math.round(nPos/nAct*100)}%</b> &nbsp;·&nbsp; Tháng lãi cao nhất: <b class="up">+${best.toFixed(1)}%</b> &nbsp;·&nbsp; Tháng lỗ sâu nhất: <b class="down">−${Math.abs(worst).toFixed(1)}%</b>`;
+  const cell = v => {
+    if (v==null || Math.abs(v) < 0.05) return '<td style="border-top:none;text-align:center;padding:6px 0;border-radius:4px;background:#FAFBFC;color:#C6CBD1;font-weight:400">·</td>';
+    const i = Math.min(4, Math.floor(Math.abs(v)/15*5));
+    const bg = v>0 ? G[i] : R[i], tc = v>0 ? '#0d6e31' : '#8f1d1d';
+    return `<td style="border-top:none;text-align:center;padding:6px 0;border-radius:4px;background:${bg};color:${tc};font-weight:600">${v>0?'+':'−'}${Math.abs(v).toFixed(1)}</td>`;
+  };
+  const thS = 'border-bottom:none;text-align:center;padding:4px 0;font-size:11px';
+  const head = `<tr><th style="${thS};text-align:left;padding-left:4px">Năm</th>` + Array.from({length:12},(_,i)=>`<th style="${thS}">T${i+1}</th>`).join('') + `<th style="${thS}">Cả năm</th><th style="${thS}">VN-Index</th></tr>`;
   let prevY = null; const rows = [];
   yorder.forEach(y => {
     const e = yend[y], pt = prevY ? prevY[1] : 0, pv = prevY ? prevY[2] : 0;
     const yr = ((1+e[1]/100)/(1+pt/100)-1)*100, vr = ((1+e[2]/100)/(1+pv/100)-1)*100;
-    rows.push(`<tr><td style="text-align:left"><b>${y}</b></td>` + Array.from({length:12},(_,i)=>cell(mret[y]&&mret[y][i+1]!=null?mret[y][i+1]:null)).join('') + `<td class="${yr>=0?'up':'down'}" style="font-weight:800">${yr>0?'+':''}${yr.toFixed(1)}</td><td class="${vr>=0?'up':'down'}" style="opacity:.7">${vr>0?'+':''}${vr.toFixed(1)}</td></tr>`);
+    rows.push(`<tr><td style="border-top:none;text-align:left;padding:6px 4px"><b>${y}</b></td>` + Array.from({length:12},(_,i)=>cell(mret[y]&&mret[y][i+1]!=null?mret[y][i+1]:null)).join('') + `<td style="border-top:none;text-align:center;padding:6px 0;border-radius:4px;background:${yr>=0?'#128A3E':'#E5484D'};color:#fff;font-weight:700">${yr>0?'+':'−'}${Math.abs(yr).toFixed(1)}</td><td style="border-top:none;text-align:center;padding:6px 0;color:#7A828E">${vr>0?'+':'−'}${Math.abs(vr).toFixed(1)}</td></tr>`);
     prevY = e;
   });
-  el.innerHTML = '<table>' + head + rows.reverse().join('') + '</table>';
+  el.innerHTML = `<table style="border-collapse:separate;border-spacing:2px;table-layout:fixed;font-size:12px">` + head + rows.reverse().join('') + '</table>';
 }
 function renderRecent(){
   const el = document.getElementById('recentWrap'); if (!el) return;
@@ -373,7 +384,7 @@ inits.market = async function(){
       <div class="perf-row"><span class="l">Phí giao dịch</span><span class="v mut">0,15% mua · 0,25% bán</span></div></div>
   </div>
   <div style="height:16px"></div>
-  <div class="card"><h2>Lợi suất theo tháng <span class="hint">% · 2 cột cuối: cả năm và VN-Index cùng kỳ</span></h2><div id="moTable" style="overflow-x:auto"></div></div>`;
+  <div class="card"><h2>Lợi suất theo tháng <span class="hint">% · màu đậm = biên độ lớn · chấm mờ = đứng ngoài thị trường</span></h2><div class="mini" id="moSum" style="margin-bottom:10px"></div><div id="moTable" style="overflow-x:auto"></div></div>`;
   drawPerf();
   renderRecent();
   renderMonthly();
