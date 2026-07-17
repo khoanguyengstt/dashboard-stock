@@ -156,6 +156,28 @@ function mergeLiveDeals(){
   });
   saveLiveDeals(store);
 }
+function ensureNotifBanner(){
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'granted') return;
+  const meta = document.getElementById('bgeData');
+  if (!meta || document.getElementById('notifBtn')) return;
+  const b = document.createElement('button');
+  b.id = 'notifBtn'; b.className = 'btn';
+  b.style.cssText = 'margin-left:10px;padding:4px 12px;font-size:12px;background:#fef6e7;border:1px solid #f0c36d;color:#b45309;font-weight:700;border-radius:8px;cursor:pointer';
+  b.textContent = 'Bật cảnh báo mã bùng nổ';
+  b.onclick = async () => {
+    if (Notification.permission === 'denied') {
+      alert('Thông báo của trang đang bị CHẶN.' + String.fromCharCode(10,10) + 'Cách mở: bấm biểu tượng Ổ KHÓA cạnh thanh địa chỉ, chọn Thông báo: Cho phép, rồi tải lại trang.');
+      return;
+    }
+    const p = await Notification.requestPermission();
+    if (p === 'granted') {
+      try { new Notification('Khoa KAFI Signal', {body: 'Đã bật cảnh báo — có mã bùng nổ trong vùng theo dõi sẽ báo ngay tại đây, kể cả khi bạn đang mở tab khác.'}); } catch(e){}
+      b.remove();
+    }
+  };
+  meta.parentNode.appendChild(b);
+}
 function scanNewSignals(){
   const tpn = SUM.tpn; if (!tpn || !tpn.recent) return;
   const now = new Date();
@@ -1051,6 +1073,6 @@ $('#btnRefresh').onclick = async function(){
 };
 
 // ================= KHỞI ĐỘNG =================
-(async () => { try { await liveQuote(); mergeLiveDeals(); scanNewSignals(); checkWatchAlerts(); } catch(e){} inits.market(); })();
+(async () => { try { await liveQuote(); mergeLiveDeals(); scanNewSignals(); checkWatchAlerts(); } catch(e){} inits.market(); ensureNotifBanner(); })();
 setInterval(async () => { if (await liveQuote()) { renderTops(); scanNewSignals(); checkWatchAlerts(); renderRecent(); } }, 120000);
 })();
