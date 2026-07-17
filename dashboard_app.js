@@ -1069,8 +1069,40 @@ const liveWatch = {
     if (st) st.textContent = 'Quét lúc ' + new Date().toTimeString().slice(0,5) + ' — đang lọc trực chiến: ' + shown + ' mã tăng ≥2% / ' + this.list.length + ' mã nền' + (hot ? ' · ' + hot + ' mã nóng' : '');
   }
 };
+async function pushDataToGitHub(){
+  const tk = localStorage.getItem('kafi_gh_token'); if (!tk) return false;
+  const st = document.getElementById('refreshStatus');
+  try {
+    if (st) st.innerHTML = '<span class="spin"></span> đang phát hành dữ liệu cho mọi khách…';
+    const apiU = 'https://api.github.com/repos/khoakafi/khoakafi.github.io/contents/dashboard_data.js';
+    const H = { 'Authorization': 'Bearer ' + tk, 'Accept': 'application/vnd.github+json' };
+    const cur = await fetch(apiU, { headers: H }).then(r => r.json());
+    const content = 'window.SUMMARY=' + JSON.stringify(SUM) + ';';
+    const b64 = btoa(unescape(encodeURIComponent(content)));
+    const res = await fetch(apiU, { method: 'PUT', headers: H, body: JSON.stringify({ message: 'Auto data publish ' + SUM.updated, content: b64, sha: cur.sha }) });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    if (st) st.textContent = 'Đã phát hành dữ liệu mới cho tất cả khách truy cập';
+    return true;
+  } catch(e) { if (st) st.textContent = 'Phát hành lỗi: ' + e.message; return false; }
+}
+async function maybeAutoPublish(){
+  try {
+    if (!localStorage.getItem('kafi_gh_token')) return;
+    const vnNow = new Date(Date.now() + (7*60 + new Date().getTimezoneOffset())*60000);
+    const today = vnNow.toISOString().slice(0,10);
+    if (localStorage.getItem('kafi_autopub') === today) return;
+    const h = vnNow.getHours() + vnNow.getMinutes()/60;
+    if (h < 15.75) return;
+    const m = (SUM.updated || '').match(/\d{4}-\d{2}-\d{2}/);
+    if (m && m[0] >= today) return;
+    localStorage.setItem('kafi_autopub', today);
+    window._autoRefresh = true;
+    const b = document.getElementById('btnRefresh'); if (b) b.click();
+  } catch(e){}
+}
 $('#btnRefresh').onclick = async function(){
-  if (!confirm('Tải lại toàn bộ dữ liệu 702 mã từ API? Mất khoảng 1-2 phút.')) return;
+  if (!window._autoRefresh && !confirm('Tải lại toàn bộ dữ liệu 702 mã từ API? Mất khoảng 1-2 phút.')) return;
+  window._autoRefresh = false;
   ga('refresh_data');
   this.disabled = true; const st = $('#refreshStatus');
   try {
@@ -1128,6 +1160,7 @@ $('#btnRefresh').onclick = async function(){
     Object.keys(byT).forEach(k=>delete byT[k]); SUM.rows.forEach(r=>byT[r.t]=r);
     $('#bgeData').textContent = 'Dữ liệu screener: ' + SUM.updated;
     st.textContent = '\u2713 Đã cập nhật ' + out.length + ' mã';
+    pushDataToGitHub();
     scInit = false; mktDone = false;
     const cur = views.find(v=>$('#view-'+v).style.display!=='none');
     inits[cur] && inits[cur]();
@@ -1136,6 +1169,12 @@ $('#btnRefresh').onclick = async function(){
 };
 
 // ================= KHỞI ĐỘNG =================
-(async () => { try { await liveQuote(); mergeLiveDeals(); scanNewSignals(); checkWatchAlerts(); } catch(e){} inits.market(); ensureNotifBanner(); ensureFreshBanner(); retroScanSignals(); })();
+(async () => { try { await liveQuote(); mergeLiveDeals(); scanNewSignals(); checkWatchAlerts(); } catch(e){} inits.market(); ensureNotifBanner(); ensureFreshBanner(); retroScanSignals();
+  if (location.search.indexOf('setup_publish') >= 0) {
+    const t = prompt('Dán GitHub token (fine-grained, quyền Contents Read&Write của repo khoakafi.github.io) để biến máy này thành máy phát hành:');
+    if (t) { localStorage.setItem('kafi_gh_token', t.trim()); alert('Đã lưu. Từ giờ máy này mở trang sau 15h45 sẽ tự cập nhật dữ liệu và phát hành cho mọi khách.'); }
+  }
+  maybeAutoPublish();
+})();
 setInterval(async () => { if (await liveQuote()) { renderTops(); scanNewSignals(); checkWatchAlerts(); renderRecent(); } }, 120000);
 })();
