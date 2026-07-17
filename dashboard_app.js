@@ -560,15 +560,15 @@ function loadProChart(){
         bars: [{ upColor: 'rgba(8,153,129,.5)', downColor: 'rgba(242,54,69,.5)', noChangeColor: '#888' }],
         tooltip: { text: { color: '#131722' } }
       },
-      xAxis: { axisLine: { color: '#DDE1E6' }, tickText: { color: '#787B86' } },
-      yAxis: { axisLine: { color: '#DDE1E6' }, tickText: { color: '#787B86' } },
+      xAxis: { axisLine: { color: '#DDE1E6' }, tickText: { color: '#787B86', size: 12 } },
+      yAxis: { axisLine: { color: '#DDE1E6' }, tickText: { color: '#787B86', size: 12 } },
       crosshair: { horizontal: { line: { color: '#9598A1' }, text: { backgroundColor: '#131722' } },
                    vertical:   { line: { color: '#9598A1' }, text: { backgroundColor: '#131722' } } }
     });
     proChart.applyNewData(curOhlc.t.map((tt,i)=>({ timestamp: tt*1000, open: curOhlc.o[i], high: curOhlc.h[i], low: curOhlc.l[i], close: curOhlc.c[i], volume: curOhlc.v[i] })));
-    proChart.createIndicator({ name: 'MA', calcParams: [10, 20, 50, 200] }, true, { id: 'candle_pane' });
-    proChart.createIndicator('VOL');
-    proChart.createIndicator('MACD');
+    proChart.createIndicator({ name: 'MA', calcParams: [20, 50, 200] }, true, { id: 'candle_pane' });
+    proChart.createIndicator('VOL', false, { height: 110 });
+    try { proChart.setBarSpace(9); proChart.setOffsetRightDistance(70); } catch(e){}
     addProBadges();
     // bang so lieu chay theo con tro tren Chart Pro
     const tmap = {}; curOhlc.t.forEach((tt,i)=>{ tmap[tt*1000] = i; });
@@ -597,13 +597,13 @@ inits.detail = function(t){
       <div id="dBody" style="display:none">
       <div class="card"><h2 id="dChartTitle">Biểu đồ giá</h2>
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center" id="dRanges">
-          <button class="btn active" id="btnChartSig">Chart Tín hiệu</button>
-          <button class="btn" id="btnChartPro">Chart Pro + Tín hiệu</button>
+          <button class="btn active" id="btnChartPro">Chart Pro + Tín hiệu</button>
+          <button class="btn" id="btnChartSig">Chart Tín hiệu</button>
           <span style="width:14px"></span>
 
           <label class="mini" style="margin-left:10px"><input type="checkbox" id="ckBoll"> Bollinger</label>
         </div>
-        <div id="chartSigWrap">
+        <div id="chartSigWrap" style="display:none">
           <div style="display:flex;gap:16px;align-items:stretch">
             <div style="flex:1;min-width:0;position:relative">
               <div id="ohlcLegend" style="position:absolute;top:6px;left:8px;z-index:20;font-size:12.5px;color:#374151;background:rgba(255,255,255,.85);padding:3px 10px;border-radius:6px;border:1px solid #e4e8ec"></div>
@@ -616,7 +616,7 @@ inits.detail = function(t){
             <div style="width:285px;flex:none" id="dSide"></div>
           </div>
         </div>
-        <div id="chartProWrap" style="display:none;height:640px"></div>
+        <div id="chartProWrap" style="height:640px"></div>
       </div>
       <div class="card"><h2>Dữ liệu cơ bản <span class="hint">Doanh thu · LNST · P/E · P/B — 12 quý gần nhất</span></h2>
         <div class="mini" id="dFundCur" style="margin-bottom:10px;font-size:13px"></div>
@@ -683,6 +683,7 @@ async function loadDetail(t){
     dtData = {oh, qsAv, rtsAv};
     updateKpis(null);
     drawPrice(14);
+    if (document.getElementById('chartProWrap').style.display !== 'none') loadProChart();
     drawFund(r, qs, rts);
   } catch(e){ toast('Lỗi tải dữ liệu '+t+': '+e.message); }
 }
