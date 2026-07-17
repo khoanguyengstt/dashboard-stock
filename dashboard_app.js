@@ -850,15 +850,15 @@ function drawPrice(years){
   addLine(ch, T, cut(smaS(cAll,50)), '#d97706', 'MA50');
   if (cAll.length>=200) addLine(ch, T, cut(smaS(cAll,200)), '#8b5cf6', 'MA200');
   if ($('#ckBoll').checked) { const bb = bollS(cAll); addLine(ch, T, cut(bb.map(x=>x[0])), 'rgba(107,114,128,.55)', 'BB+'); addLine(ch, T, cut(bb.map(x=>x[1])), 'rgba(107,114,128,.55)', 'BB-'); }
-  ch.timeScale().fitContent();
   // Volume — khung rieng tach khoi chart gia
   const chV = LightweightCharts.createChart($('#chartVol'), chartOpts()); dtCharts.push(chV);
   const vs = chV.addHistogramSeries({priceFormat:{type:'volume'}});
   vs.setData(T.map((t,i)=>({time:t,value:V[i],color: C[i]>=O[i] ? 'rgba(24,163,75,.55)':'rgba(229,72,77,.55)'})));
-  chV.timeScale().fitContent();
   // đồng bộ trục thời gian
   const sync = (a,b) => a.timeScale().subscribeVisibleLogicalRangeChange(r => r && b.timeScale().setVisibleLogicalRange(r));
   sync(ch,chV); sync(chV,ch);
+  const SHOW = Math.min(T.length, 130);
+  ch.timeScale().setVisibleLogicalRange({from: T.length - SHOW, to: T.length + 3});
 }
 function drawFund(r, qs, rts){
   const cur = [];
