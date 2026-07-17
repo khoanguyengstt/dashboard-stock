@@ -483,41 +483,32 @@ function updateKpis(i){
   if (!dtData) return;
   const oh = dtData.oh, c = oh.c, v = oh.v, t = oh.t, n = c.length;
   if (i == null || i < 0 || i >= n) i = n-1;
-  const prev = i>0 ? c[i-1] : c[i];
-  const chgPct = (c[i]/prev-1)*100;
-  let sVal = 0, sVol = 0, cnt = 0;
-  for (let k = Math.max(0, i-19); k <= i; k++){ sVal += c[k]*(v[k]||0); sVol += (v[k]||0); cnt++; }
-  const gtgd20 = sVal/cnt/1e6, volPct = sVol>0 ? v[i]/(sVol/cnt)*100 : null;
+  const isNow = i === n-1;
+  let sVal = 0, cnt = 0;
+  for (let k = Math.max(0, i-19); k <= i; k++){ sVal += c[k]*(v[k]||0); cnt++; }
+  const gtgd20 = sVal/cnt/1e6;
   const ts = t[i];
   const rt = dtData.rtsAv.filter(x=>x.av<=ts).slice(-1)[0] || {};
   const qq = dtData.qsAv.filter(x=>x.pub<=ts).slice(-1)[0] || {};
-  const dstr = new Date(ts*1000).toISOString().slice(0,10).split('-').reverse().join('/');
-  const ret = p => i>=p && c[i-p] ? (c[i]/c[i-p]-1)*100 : null;
   const r = byT[curT] || {};
+  const peV = isNow && r.pe != null ? r.pe : rt.pe;
+  const pbV = isNow && r.pb != null ? r.pb : rt.pb;
+  const capT = isNow && r.cap != null ? r.cap/1000 : (rt.cap != null ? rt.cap/1e12 : null);
+  const roeV = isNow && r.roe != null ? r.roe : (rt.roe != null ? rt.roe*100 : null);
   const rows = [
-    ['Ngày', `<b>${dstr}</b>`],
-    ['Giá', `<b>${fmt(c[i],2)}</b> <span class="${cls(chgPct)}">${pct(chgPct,2)}</span>`],
-    ['Sàn', r.b==='HN'?'HNX':'HOSE'],
-    ['Khối lượng', v[i]!=null?fmt(v[i]/1e6,2)+' tr':'—'],
-    ['% KL / TB20', volPct!=null?`<span class="${volPct>=100?'up':'mut'}">${fmt(volPct,0)}%</span>`:'—'],
+    ['Vốn hóa', capT != null ? fmt(capT,1)+' nghìn tỷ' : '—'],
     ['TB GTGD 20 phiên', fmt(gtgd20,0)+' tỷ'],
-    ['Vốn hóa', rt.cap?fmt(rt.cap/1e12,1)+' nghìn tỷ':'—'],
-    ['P/E', fmt(rt.pe,1)],
-    ['P/B', fmt(rt.pb,2)],
-    ['ROE', rt.roe!=null?fmt(rt.roe*100,1)+'%':'—'],
-    ['RS', r.rs!=null?r.rs+'/99':'—'],
+    ['P/E', fmt(peV,1)],
+    ['P/B', fmt(pbV,2)],
+    ['ROE', roeV != null ? fmt(roeV,1)+'%' : '—'],
+    ['RS', r.rs != null ? r.rs+'/99' : '—'],
     ['+/- DT quý gần nhất', `<span class="${cls(qq.revY)}">${pct(qq.revY,1)}</span>`],
-    ['+/- LN quý gần nhất', `<span class="${cls(qq.npY)}">${pct(qq.npY,1)}</span>`],
-    ['+/- 5 phiên', `<span class="${cls(ret(5))}">${pct(ret(5),1)}</span>`],
-    ['+/- 20 phiên', `<span class="${cls(ret(20))}">${pct(ret(20),1)}</span>`],
-    ['+/- 60 phiên', `<span class="${cls(ret(60))}">${pct(ret(60),1)}</span>`]
+    ['+/- LN quý gần nhất', `<span class="${cls(qq.npY)}">${pct(qq.npY,1)}</span>`]
   ];
   const el = document.getElementById('dSide');
-  if (el) el.innerHTML = `<div style="font-weight:700;font-size:14px;margin:2px 0 6px">Chỉ số cơ bản <span class="hint" style="font-weight:500">chạy theo con trỏ</span></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:18px">
-    ${rows.map(k=>`<div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px;padding:6.5px 0;border-bottom:1px solid var(--border);font-size:12.5px;min-width:0">
-      <span style="color:var(--muted);white-space:nowrap">${k[0]}</span><span style="font-weight:700;text-align:right;white-space:nowrap">${k[1]}</span></div>`).join('')}
-    </div>`;
+  if (el) el.innerHTML = `<div style="font-weight:700;font-size:14.5px;margin:4px 0 2px">Chỉ số cơ bản</div>
+    ${rows.map(k=>`<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:9.5px 0;border-bottom:1px solid var(--border);font-size:13.5px">
+      <span style="color:var(--muted)">${k[0]}</span><span style="font-weight:700">${k[1]}</span></div>`).join('')}`;
 }
 function renderDHead(){
   const el = document.getElementById('dHead'); if (!el || !curOhlc) return;
@@ -529,7 +520,9 @@ function renderDHead(){
   const vol = ((curOhlc.v[n-1]||0)/1e6);
   const vx = r.vx != null ? Math.round(r.vx*100) : null;
   el.innerHTML = `<div style="display:flex;align-items:center;gap:10px">
-    <div style="width:42px;height:42px;flex:none;border-radius:50%;background:linear-gradient(135deg,#E7F6EC,#CDEEDb);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${curT.length>3?11:13}px;border:1px solid #B7E4C7">${curT}</div>
+    <div id="dLogo" style="width:44px;height:44px;flex:none;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--green-soft);display:flex;align-items:center;justify-content:center">
+      <span style="color:var(--green-dark);font-weight:800;font-size:${curT.length>3?10:12}px">${curT}</span>
+    </div>
     <div style="flex:1;min-width:0">
       <div style="font-size:19px;font-weight:800;line-height:1.15">${curT} <span class="mini" style="font-weight:600">${r.b==='HN'?'HNX':'HOSE'}</span></div>
       <div class="mini" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.n||''}</div>
@@ -537,8 +530,37 @@ function renderDHead(){
   </div>
   <div style="margin:10px 0 2px;display:flex;justify-content:space-between;align-items:baseline;gap:8px">
     <div style="font-size:27px;font-weight:800;color:${col};line-height:1">${fmt(p,2)} <span style="font-size:15px;font-weight:700">(${chg>0?'+':''}${fmt(chg,1)}%)</span></div>
-    <div class="mini" style="white-space:nowrap">KL ${fmt(vol,2)} tr${vx!=null?' ('+vx+'%)':''}</div>
+    <div style="font-size:14px;font-weight:800;white-space:nowrap">KL ${fmt(vol,2)} tr${vx!=null?` <span style="font-weight:700;color:${vx>=150?'#B45309':'var(--muted)'}">(${vx}%)</span>`:''}</div>
   </div>`;
+  const img = new Image();
+  img.onload = () => { const d = document.getElementById('dLogo'); if (d) { d.innerHTML = ''; img.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#fff'; d.appendChild(img); } };
+  img.src = 'https://cdn.simplize.vn/simplizevn/logo/' + curT + '.jpeg';
+}
+function renderSigTab(){
+  const box = document.getElementById('tab-sig'); if (!box) return;
+  const src = document.getElementById('dTpn');
+  let html = (src && src.innerHTML) || '';
+  const tix = {}; if (curOhlc) curOhlc.t.forEach((tt,ii)=>{ tix[tt]=ii; });
+  const deals = []; let od = null;
+  (curMarkers||[]).forEach(m => {
+    const ii = tix[m.time];
+    const d = new Date(m.time*1000);
+    const ds = ('0'+d.getUTCDate()).slice(-2)+'/'+('0'+(d.getUTCMonth()+1)).slice(-2)+'/'+String(d.getUTCFullYear()).slice(2);
+    if (m.position === 'belowBar') {
+      if (m.text === 'BUY') od = { bd: ds, bp: (ii!=null&&curOhlc)?curOhlc.c[ii]:null, add: false };
+      else if (m.text === 'ADD' && od) od.add = true;
+    } else if (od) { od.sd = ds; od.ret = m.text; deals.push(od); od = null; }
+  });
+  if (od) { od.sd = '—'; od.ret = 'đang mở'; deals.push(od); }
+  if (deals.length) {
+    html += `<div style="font-weight:700;font-size:14.5px;margin:16px 0 4px">Lịch sử tín hiệu mã này <span class="hint">${deals.length} deal</span></div>
+    <table style="font-size:12.5px"><tr><th style="text-align:left">Mua · giá</th><th>Bán</th><th>Kết quả</th></tr>` +
+      deals.slice().reverse().map(x => `<tr><td style="text-align:left"><b>${x.bd}</b> @${x.bp!=null?fmt(x.bp,2):'—'}${x.add?' <span class="chip g" style="font-size:10.5px">+Bồi</span>':''}</td>
+      <td>${x.sd}</td><td class="${x.ret==='đang mở'?'mut':((''+x.ret).indexOf('-')===0?'down':'up')}" style="font-weight:700">${x.ret}</td></tr>`).join('') + '</table>';
+  } else {
+    html += '<div class="mini" style="margin-top:14px">Hệ thống chưa từng có tín hiệu mua với mã này trong dữ liệu hiện có.</div>';
+  }
+  box.innerHTML = html;
 }
 async function loadRecs(){
   const box = document.getElementById('tab-rec'); if (!box || !curT) return;
@@ -569,7 +591,7 @@ function addProBadges(){
       createPointFigures: ({ overlay, coordinates }) => { const c0 = coordinates[0]; if (!c0) return [];
         const ed = overlay.extendData || {};
         return [{ type: 'text', attrs: { x: c0.x, y: below ? c0.y + 7 : c0.y - 7, text: ed.t || '', align: 'center', baseline: below ? 'top' : 'bottom' },
-          styles: { style: 'fill', color: '#fff', backgroundColor: ed.bg || '#128A3E', borderRadius: 4, paddingLeft: 5, paddingRight: 5, paddingTop: 2, paddingBottom: 2, size: 11.5 } }];
+          styles: { style: 'fill', color: '#fff', backgroundColor: ed.bg || '#128A3E', borderRadius: 4, paddingLeft: 5, paddingRight: 5, paddingTop: 2, paddingBottom: 2, size: 11, weight: 'bold' } }];
       } });
     klinecharts.registerOverlay(mk(true)); klinecharts.registerOverlay(mk(false));
     window._kbadgeReg = true;
@@ -578,7 +600,7 @@ function addProBadges(){
   curMarkers.forEach(m => {
     const i = tix[m.time]; if (i == null) return;
     const isBuy = m.position === 'belowBar';
-    const lbl = isBuy ? (m.text === 'ADD' ? '\u25b2 A' : '\u25b2 B') : '\u25bc S ' + m.text;
+    const lbl = isBuy ? (m.text === 'ADD' ? '\u25b2 Add' : (m.text === 'WEAK' ? '\u25b2 Weak' : '\u25b2 B')) : '\u25bc S ' + m.text;
     proChart.createOverlay({ name: isBuy ? 'kafiBadgeB' : 'kafiBadgeA', lock: true,
       extendData: { t: lbl, bg: m.color },
       points: [{ timestamp: m.time*1000, value: isBuy ? curOhlc.l[i] : curOhlc.h[i] }] });
@@ -720,7 +742,7 @@ inits.detail = function(t){
     $('#dTabs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
       $$('#dTabs button').forEach(x=>x.classList.toggle('active', x===b));
       ['ov','fin','sig','rec'].forEach(k => { const d = document.getElementById('tab-'+k); if (d) d.style.display = (b.dataset.t===k?'':'none'); });
-      if (b.dataset.t==='sig') { const sg = document.getElementById('tab-sig'); const src = document.getElementById('dTpn'); if (sg) sg.innerHTML = (src && src.innerHTML) || '<div class="mini">Chưa có tín hiệu.</div>'; }
+      if (b.dataset.t==='sig') renderSigTab();
       if (b.dataset.t==='rec') loadRecs();
     });
     $('#btnLog').onclick = function(){ useLog = !useLog; this.classList.toggle('active', useLog); const b = $('#dRanges .btn.rng.active'); drawPrice(b?+b.dataset.y:14); };
@@ -770,7 +792,7 @@ async function loadDetail(t){
     window._recFor = null;
     const _at = document.querySelector('#dTabs button.active');
     if (_at && _at.dataset.t==='rec') loadRecs();
-    if (_at && _at.dataset.t==='sig') { const sg = document.getElementById('tab-sig'); const src = document.getElementById('dTpn'); if (sg && src) sg.innerHTML = src.innerHTML; }
+    if (_at && _at.dataset.t==='sig') renderSigTab();
   } catch(e){ toast('Lỗi tải dữ liệu '+t+': '+e.message); }
 }
 // ===== Khoa KAFI Signal engine v2 =====
