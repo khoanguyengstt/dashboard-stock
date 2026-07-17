@@ -513,11 +513,11 @@ function updateKpis(i){
     ['+/- 60 phiên', `<span class="${cls(ret(60))}">${pct(ret(60),1)}</span>`]
   ];
   const el = document.getElementById('dSide');
-  if (el) el.innerHTML = `<div style="background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;height:100%">
-    <div style="font-weight:700;font-size:14px;margin-bottom:8px">Chỉ số cơ bản <span class="hint" style="font-weight:500">chạy theo con trỏ</span></div>
-    ${rows.map(k=>`<div style="display:flex;justify-content:space-between;align-items:baseline;padding:5.5px 0;border-bottom:1px solid var(--border);font-size:13px">
-      <span style="color:var(--muted)">${k[0]}</span><span style="font-weight:600">${k[1]}</span></div>`).join('')}
-  </div>`;
+  if (el) el.innerHTML = `<div style="font-weight:700;font-size:14px;margin:2px 0 6px">Chỉ số cơ bản <span class="hint" style="font-weight:500">chạy theo con trỏ</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:18px">
+    ${rows.map(k=>`<div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px;padding:6.5px 0;border-bottom:1px solid var(--border);font-size:12.5px;min-width:0">
+      <span style="color:var(--muted);white-space:nowrap">${k[0]}</span><span style="font-weight:700;text-align:right;white-space:nowrap">${k[1]}</span></div>`).join('')}
+    </div>`;
 }
 function renderDHead(){
   const el = document.getElementById('dHead'); if (!el || !curOhlc) return;
@@ -527,12 +527,18 @@ function renderDHead(){
   const chg = r.chg != null ? r.chg : (n>1 ? (c[n-1]/c[n-2]-1)*100 : 0);
   const col = chg > 0 ? '#089981' : (chg < 0 ? '#F23645' : '#787B86');
   const vol = ((curOhlc.v[n-1]||0)/1e6);
-  el.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-    <div><div style="font-size:20px;font-weight:800">${curT} <span class="mini" style="font-weight:600">${r.b==='HN'?'HNX':'HOSE'}</span></div>
-    <div class="mini" style="max-width:185px">${r.n||''}</div></div>
-    <div style="text-align:right"><div style="font-size:24px;font-weight:800;color:${col};line-height:1.1">${fmt(p,2)}</div>
-    <div style="font-weight:700;color:${col}">${pct(chg,2)}</div>
-    <div class="mini">KL ${fmt(vol,2)} tr</div></div></div>`;
+  const vx = r.vx != null ? Math.round(r.vx*100) : null;
+  el.innerHTML = `<div style="display:flex;align-items:center;gap:10px">
+    <div style="width:42px;height:42px;flex:none;border-radius:50%;background:linear-gradient(135deg,#E7F6EC,#CDEEDb);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${curT.length>3?11:13}px;border:1px solid #B7E4C7">${curT}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:19px;font-weight:800;line-height:1.15">${curT} <span class="mini" style="font-weight:600">${r.b==='HN'?'HNX':'HOSE'}</span></div>
+      <div class="mini" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.n||''}</div>
+    </div>
+  </div>
+  <div style="margin:10px 0 2px;display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+    <div style="font-size:27px;font-weight:800;color:${col};line-height:1">${fmt(p,2)} <span style="font-size:15px;font-weight:700">(${chg>0?'+':''}${fmt(chg,1)}%)</span></div>
+    <div class="mini" style="white-space:nowrap">KL ${fmt(vol,2)} tr${vx!=null?' ('+vx+'%)':''}</div>
+  </div>`;
 }
 async function loadRecs(){
   const box = document.getElementById('tab-rec'); if (!box || !curT) return;
@@ -540,9 +546,11 @@ async function loadRecs(){
   box.innerHTML = '<div class="mini">Đang tải khuyến nghị…</div>';
   try {
     const r = await jget(`https://api-finfo.vndirect.com.vn/v4/recommendations?q=code:${curT}&size=10&sort=reportDate:desc`);
-    const d = (r && r.data) || [];
+    const d0 = (r && r.data) || [];
+    const cut = Date.now() - 240*86400000;
+    const d = d0.filter(x => x.reportDate && new Date(x.reportDate).getTime() >= cut).slice(0, 6);
     window._recFor = curT;
-    if (!d.length) { box.innerHTML = '<div class="mini" style="padding:8px 0">Chưa có báo cáo phân tích nào của các CTCK cho mã này.</div>'; return; }
+    if (!d.length) { box.innerHTML = '<div class="mini" style="padding:8px 0">Chưa có báo cáo phân tích nào của CTCK trong 8 tháng gần đây.</div>'; return; }
     const rr = byT[curT] || {}; const cur = rr.p != null ? rr.p : (curOhlc ? curOhlc.c[curOhlc.c.length-1] : null);
     const chip = ty => ty==='BUY' ? '<span class="chip g">MUA</span>' : (ty==='SELL' ? '<span class="chip r">BÁN</span>' : '<span class="chip a">'+(ty||'—')+'</span>');
     box.innerHTML = '<table style="font-size:12.5px"><tr><th style="text-align:left">CTCK · Ngày</th><th>Loại</th><th>Giá MT</th><th>Upside</th></tr>' +
@@ -561,7 +569,7 @@ function addProBadges(){
       createPointFigures: ({ overlay, coordinates }) => { const c0 = coordinates[0]; if (!c0) return [];
         const ed = overlay.extendData || {};
         return [{ type: 'text', attrs: { x: c0.x, y: below ? c0.y + 7 : c0.y - 7, text: ed.t || '', align: 'center', baseline: below ? 'top' : 'bottom' },
-          styles: { style: 'fill', color: '#fff', backgroundColor: ed.bg || '#128A3E', borderRadius: 4, paddingLeft: 6, paddingRight: 6, paddingTop: 3, paddingBottom: 3, size: 12 } }];
+          styles: { style: 'fill', color: '#fff', backgroundColor: ed.bg || '#128A3E', borderRadius: 4, paddingLeft: 5, paddingRight: 5, paddingTop: 2, paddingBottom: 2, size: 11.5 } }];
       } });
     klinecharts.registerOverlay(mk(true)); klinecharts.registerOverlay(mk(false));
     window._kbadgeReg = true;
@@ -570,8 +578,9 @@ function addProBadges(){
   curMarkers.forEach(m => {
     const i = tix[m.time]; if (i == null) return;
     const isBuy = m.position === 'belowBar';
+    const lbl = isBuy ? (m.text === 'ADD' ? '\u25b2 A' : '\u25b2 B') : '\u25bc S ' + m.text;
     proChart.createOverlay({ name: isBuy ? 'kafiBadgeB' : 'kafiBadgeA', lock: true,
-      extendData: { t: (isBuy ? '\u25b2 ' : '\u25bc ') + m.text, bg: m.color },
+      extendData: { t: lbl, bg: m.color },
       points: [{ timestamp: m.time*1000, value: isBuy ? curOhlc.l[i] : curOhlc.h[i] }] });
   });
 }
@@ -671,13 +680,13 @@ inits.detail = function(t){
             </div>
             <div id="chartProWrap"></div>
           </div>
-          <div style="width:360px;flex:none" id="dPanel">
+          <div style="width:360px;flex:none;border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:#fff" id="dPanel">
             <div id="dHead" style="margin-bottom:10px"></div>
-            <div id="dTabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-              <button class="btn active" data-t="ov" style="padding:5px 10px;font-size:12px">Tổng quan</button>
-              <button class="btn" data-t="fin" style="padding:5px 10px;font-size:12px">Tài chính</button>
-              <button class="btn" data-t="sig" style="padding:5px 10px;font-size:12px">Tín hiệu</button>
-              <button class="btn" data-t="rec" style="padding:5px 10px;font-size:12px">CTCK KN</button>
+            <div id="dTabs" style="display:flex;border-bottom:1px solid var(--border);margin-bottom:10px">
+              <button class="dtab active" data-t="ov">Tổng quan</button>
+              <button class="dtab" data-t="fin">Tài chính</button>
+              <button class="dtab" data-t="sig">Tín hiệu</button>
+              <button class="dtab" data-t="rec">CTCK KN</button>
             </div>
             <div id="tab-ov"><div id="dSide"></div></div>
             <div id="tab-fin" style="display:none">
