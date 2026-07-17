@@ -537,13 +537,7 @@ function loadProChart(){
   const init = () => {
     proLoadedFor = curT;
     const wrap = document.getElementById('chartProWrap');
-    wrap.innerHTML = '<div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;align-items:center" id="proTools">'
-      + '<span class="mini" style="margin-right:4px">Công cụ vẽ:</span>'
-      + [['segment','✏️ Xu hướng'],['horizontalStraightLine','― Ngang'],['rayLine','↗ Tia'],['fibonacciLine','𝑓 Fibonacci'],['priceChannelLine','∥ Kênh giá']]
-        .map(x=>`<button class="btn" style="padding:3px 10px;font-size:12px" data-ov="${x[0]}">${x[1]}</button>`).join('')
-      + '<button class="btn" style="padding:3px 10px;font-size:12px" id="proClear">🗑 Xóa nét vẽ</button>'
-      + '<span class="mini" style="margin-left:auto">Badge B/S = Khoa KAFI Signal</span></div>'
-      + '<div id="proK" style="height:620px"></div>';
+    wrap.innerHTML = '<div id="proK" style="height:520px"></div>';
     try { klinecharts.dispose('proK'); } catch(e){}
     proChart = klinecharts.init('proK');
     // Bang mau TradingView
@@ -566,8 +560,30 @@ function loadProChart(){
                    vertical:   { line: { color: '#9598A1' }, text: { backgroundColor: '#131722' } } }
     });
     proChart.applyNewData(curOhlc.t.map((tt,i)=>({ timestamp: tt*1000, open: curOhlc.o[i], high: curOhlc.h[i], low: curOhlc.l[i], close: curOhlc.c[i], volume: curOhlc.v[i] })));
-    proChart.createIndicator({ name: 'MA', calcParams: [20, 50, 200] }, true, { id: 'candle_pane' });
-    proChart.createIndicator('VOL', false, { height: 110 });
+    proChart.createIndicator({ name: 'MA', calcParams: [20] }, true, { id: 'candle_pane' });
+    if (!window._kvolReg) {
+      klinecharts.registerIndicator({
+        name: 'KVOL', shortName: 'KL', series: 'volume',
+        calc: list => list.map((d, i) => { let s = 0, c = 0; for (let k = Math.max(0, i - 20); k < i; k++) { s += list[k].volume || 0; c++; } return { volume: d.volume, avg: c >= 10 ? s / c : null }; }),
+        figures: [{ key: 'volume', title: 'KL: ', type: 'bar', baseValue: 0,
+          styles: d => { const k = (d.current && d.current.kLineData) || {}; return { color: (k.close >= k.open) ? 'rgba(8,153,129,.55)' : 'rgba(242,54,69,.55)' }; } }],
+        createTooltipDataSource: p => {
+          const list = p.kLineDataList || [], res = (p.indicator && p.indicator.result) || [];
+          const i = (p.crosshair && p.crosshair.dataIndex != null) ? p.crosshair.dataIndex : list.length - 1;
+          const r = res[i] || {};
+          const fv = v => v == null ? '—' : (v >= 1e6 ? (v / 1e6).toFixed(2) + 'tr' : Math.round((v || 0) / 1e3) + 'k');
+          const pct = (r.avg && r.volume != null) ? (r.volume / r.avg - 1) * 100 : null;
+          const pctTxt = pct == null ? '—' : (pct >= 0 ? '+' : '−') + Math.abs(pct).toFixed(0) + '% so với TB 20 phiên';
+          const pcol = pct == null ? '#787B86' : (pct >= 100 ? '#B45309' : (pct >= 0 ? '#089981' : '#787B86'));
+          return { name: '', calcParamsText: '', legends: [
+            { title: { text: 'KL: ', color: '#787B86' }, value: { text: fv(r.volume), color: '#131722' } },
+            { title: { text: 'Đột biến: ', color: '#787B86' }, value: { text: pctTxt, color: pcol } }
+          ] };
+        }
+      });
+      window._kvolReg = true;
+    }
+    proChart.createIndicator('KVOL', false, { height: 96 });
     try { proChart.setBarSpace(9); proChart.setOffsetRightDistance(70); } catch(e){}
     addProBadges();
     // bang so lieu chay theo con tro tren Chart Pro
@@ -576,9 +592,6 @@ function loadProChart(){
       const ts = d && d.kLineData ? d.kLineData.timestamp : null;
       updateKpis(ts != null && tmap[ts] != null ? tmap[ts] : null);
     });
-    wrap.querySelectorAll('[data-ov]').forEach(b => b.onclick = () => proChart.createOverlay(b.dataset.ov));
-    const clr = wrap.querySelector('#proClear');
-    if (clr) clr.onclick = () => { proChart.removeOverlay(); addProBadges(); };
   };
   if (window.klinecharts) init();
   else { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/klinecharts@9/dist/klinecharts.min.js'; s.onload = init; s.onerror = () => toast('Không tải được thư viện chart'); document.head.appendChild(s); }
@@ -599,9 +612,6 @@ inits.detail = function(t){
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center" id="dRanges">
           <button class="btn active" id="btnChartPro">Chart Pro + Tín hiệu</button>
           <button class="btn" id="btnChartSig">Chart Tín hiệu</button>
-          <span style="width:14px"></span>
-
-          <label class="mini" style="margin-left:10px"><input type="checkbox" id="ckBoll"> Bollinger</label>
         </div>
         <div id="chartSigWrap" style="display:none">
           <div style="display:flex;gap:16px;align-items:stretch">
@@ -616,7 +626,7 @@ inits.detail = function(t){
             <div style="width:285px;flex:none" id="dSide"></div>
           </div>
         </div>
-        <div id="chartProWrap" style="height:640px"></div>
+        <div id="chartProWrap"></div>
       </div>
       <div class="card"><h2>Dữ liệu cơ bản <span class="hint">Doanh thu · LNST · P/E · P/B — 12 quý gần nhất</span></h2>
         <div class="mini" id="dFundCur" style="margin-bottom:10px;font-size:13px"></div>
@@ -641,7 +651,6 @@ inits.detail = function(t){
       $('#btnChartPro').classList.add('active'); $('#btnChartSig').classList.remove('active');
       loadProChart();
     };
-    $('#ckBoll').onchange = () => { const b = $('#dRanges .btn.active'); drawPrice(b?+b.dataset.y:14); };
     $('#btnLog').onclick = function(){ useLog = !useLog; this.classList.toggle('active', useLog); const b = $('#dRanges .btn.rng.active'); drawPrice(b?+b.dataset.y:14); };
     $('#btnFull').onclick = () => { const el = $('#chartSigWrap'); if (document.fullscreenElement) document.exitFullscreen(); else { el.style.background='#fff'; el.requestFullscreen(); } };
   }
@@ -850,7 +859,7 @@ function drawPrice(years){
   addLine(ch, T, cut(smaS(cAll,20)), '#2563eb', 'MA20');
   addLine(ch, T, cut(smaS(cAll,50)), '#d97706', 'MA50');
   if (cAll.length>=200) addLine(ch, T, cut(smaS(cAll,200)), '#8b5cf6', 'MA200');
-  if ($('#ckBoll').checked) { const bb = bollS(cAll); addLine(ch, T, cut(bb.map(x=>x[0])), 'rgba(107,114,128,.55)', 'BB+'); addLine(ch, T, cut(bb.map(x=>x[1])), 'rgba(107,114,128,.55)', 'BB-'); }
+  if (false) { const bb = bollS(cAll); addLine(ch, T, cut(bb.map(x=>x[0])), 'rgba(107,114,128,.55)', 'BB+'); addLine(ch, T, cut(bb.map(x=>x[1])), 'rgba(107,114,128,.55)', 'BB-'); }
   // Volume — khung rieng tach khoi chart gia
   const chV = LightweightCharts.createChart($('#chartVol'), chartOpts()); dtCharts.push(chV);
   const vs = chV.addHistogramSeries({priceFormat:{type:'volume'}});
