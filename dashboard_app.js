@@ -636,7 +636,8 @@ function computeTPN(oh, boardCode, qsAv){
     pnl: inPos ? (c[L]/fill-1)*100 : 0, buyDate: inPos ? new Date(t[ei]*1000).toISOString().slice(0,10) : null,
     belowMa20: ma20[L] ? c[L] < ma20[L] : false,
     weakToday: lastWeakIdx === L,
-    v20L: v20[L] || 0, hi10L: hi10[L] || null, ma10L: ma10[L] || null, ma20L: ma20[L] || null,
+    v20L: v20[L] || 0, closePrev: L>0 ? c[L-1] : c[L], v20Prev: L>0 ? (v20[L-1]||v20[L]||0) : (v20[L]||0), lastBarTs: t[L],
+    hi10L: hi10[L] || null, ma10L: ma10[L] || null, ma20L: ma20[L] || null,
     bigPos: inPos ? big : false, addedPos: inPos ? added : false
   };
   return {markers, state};
@@ -679,8 +680,13 @@ function renderTPN(s){
   else if (s.weakToday) { chip = ['TÍN HIỆU YẾU (WEAK) — ĐỨNG NGOÀI', '#fef6e7', '#b45309']; desc = `Có tín hiệu kỹ thuật trong phiên nhưng bộ xếp hạng AI đánh giá độ tin cậy thấp — không khuyến nghị vào lệnh.`; }
   else if (!s.hasCeil && s.rng <= 12 && s.gtgd >= 15) {
     chip = ['VÙNG THEO DÕI — CHỜ ĐIỂM MUA', '#fef9e7', '#b45309'];
-    const buyPx = s.close*(1+s.ceilThr/100);
-    desc = `MUA nếu phiên tới đóng cửa ≥ ${f2(buyPx)} kèm khối lượng tối thiểu ${(2*s.v20L/1e6).toFixed(1)} triệu cp. Ngưỡng trailing tự cập nhật mỗi phiên.`;
+    const nowVN = new Date();
+    const lastBarDay = new Date(s.lastBarTs*1000).toDateString();
+    const isLive = lastBarDay === nowVN.toDateString() && (nowVN.getHours() + nowVN.getMinutes()/60) < 15;
+    const refPx = isLive ? s.closePrev : s.close;
+    const refV20 = isLive ? s.v20Prev : s.v20L;
+    const buyPx = refPx*(1+s.ceilThr/100);
+    desc = `MUA nếu ${isLive ? 'HÔM NAY' : 'phiên tới'} đóng cửa ≥ ${f2(buyPx)} kèm khối lượng tối thiểu ${(2*refV20/1e6).toFixed(1)} triệu cp. Ngưỡng trailing tự cập nhật mỗi phiên.`;
   }
   else { chip = ['CHƯA CÓ TÍN HIỆU', '#f3f5f7', '#6b7280']; desc = ''; }
   el.innerHTML = `<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
