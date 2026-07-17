@@ -156,6 +156,22 @@ function mergeLiveDeals(){
   });
   saveLiveDeals(store);
 }
+function ensureFreshBanner(){
+  try {
+    const meta = document.getElementById('bgeData');
+    if (!meta || document.getElementById('staleBtn')) return;
+    const m = (SUM.updated||'').match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (!m) return;
+    const age = (Date.now() - new Date(m[1]+'-'+m[2]+'-'+m[3]).getTime()) / 86400000;
+    if (age < 5) return;
+    const b = document.createElement('button');
+    b.id = 'staleBtn'; b.className = 'btn';
+    b.style.cssText = 'margin-left:10px;padding:4px 12px;font-size:12px;background:#fdecec;border:1px solid #f0a8ab;color:#c0353a;font-weight:700;border-radius:8px;cursor:pointer';
+    b.textContent = 'Dữ liệu cơ bản đã cũ ' + Math.floor(age) + ' ngày — bấm cập nhật (~2 phút)';
+    b.onclick = () => { b.remove(); document.getElementById('btnRefresh').click(); };
+    meta.parentNode.appendChild(b);
+  } catch(e){}
+}
 function ensureNotifBanner(){
   if (!('Notification' in window)) return;
   if (Notification.permission === 'granted') return;
@@ -1120,6 +1136,6 @@ $('#btnRefresh').onclick = async function(){
 };
 
 // ================= KHỞI ĐỘNG =================
-(async () => { try { await liveQuote(); mergeLiveDeals(); scanNewSignals(); checkWatchAlerts(); } catch(e){} inits.market(); ensureNotifBanner(); retroScanSignals(); })();
+(async () => { try { await liveQuote(); mergeLiveDeals(); scanNewSignals(); checkWatchAlerts(); } catch(e){} inits.market(); ensureNotifBanner(); ensureFreshBanner(); retroScanSignals(); })();
 setInterval(async () => { if (await liveQuote()) { renderTops(); scanNewSignals(); checkWatchAlerts(); renderRecent(); } }, 120000);
 })();
