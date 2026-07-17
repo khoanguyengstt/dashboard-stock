@@ -563,7 +563,7 @@ function loadProChart(){
     proChart.createIndicator({ name: 'MA', calcParams: [20] }, true, { id: 'candle_pane' });
     if (!window._kvolReg) {
       klinecharts.registerIndicator({
-        name: 'KVOL', shortName: 'KL', series: 'volume',
+        name: 'KVOL', shortName: 'KL', series: 'volume', precision: 0, shouldFormatBigNumber: true,
         calc: list => list.map((d, i) => { let s = 0, c = 0; for (let k = Math.max(0, i - 20); k < i; k++) { s += list[k].volume || 0; c++; } return { volume: d.volume, avg: c >= 10 ? s / c : null }; }),
         figures: [{ key: 'volume', title: 'KL: ', type: 'bar', baseValue: 0,
           styles: d => { const k = (d.current && d.current.kLineData) || {}; return { color: (k.close >= k.open) ? 'rgba(8,153,129,.55)' : 'rgba(242,54,69,.55)' }; } }],
@@ -575,10 +575,11 @@ function loadProChart(){
           const pct = (r.avg && r.volume != null) ? (r.volume / r.avg - 1) * 100 : null;
           const pctTxt = pct == null ? '—' : (pct >= 0 ? '+' : '−') + Math.abs(pct).toFixed(0) + '% so với TB 20 phiên';
           const pcol = pct == null ? '#787B86' : (pct >= 100 ? '#B45309' : (pct >= 0 ? '#089981' : '#787B86'));
-          return { name: '', calcParamsText: '', legends: [
+          const items = [
             { title: { text: 'KL: ', color: '#787B86' }, value: { text: fv(r.volume), color: '#131722' } },
             { title: { text: 'Đột biến: ', color: '#787B86' }, value: { text: pctTxt, color: pcol } }
-          ] };
+          ];
+          return { name: '', calcParamsText: '', values: items, legends: items };
         }
       });
       window._kvolReg = true;
