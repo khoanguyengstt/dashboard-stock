@@ -589,6 +589,7 @@ function addProBadges(){
   if (!window._kbadgeReg && window.klinecharts) {
     klinecharts.registerIndicator({
       name: 'KBADGE', calc: list => list, figures: [],
+      createTooltipDataSource: () => ({ name: '', calcParamsText: '', values: [], legends: [] }),
       draw: p => {
         const ctx = p.ctx, vr = p.visibleRange, xAxis = p.xAxis, yAxis = p.yAxis;
         const bs = window._kafiBadges || [];
