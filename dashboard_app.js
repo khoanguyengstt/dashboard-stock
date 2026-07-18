@@ -603,7 +603,7 @@ function addProBadges(){
     const lbl = isBuy ? (m.text === 'ADD' ? '\u25b2 Add' : (m.text === 'WEAK' ? '\u25b2 Weak' : '\u25b2 B')) : '\u25bc S ' + m.text;
     proChart.createOverlay({ name: isBuy ? 'kafiBadgeB' : 'kafiBadgeA', lock: true,
       extendData: { t: lbl, bg: m.color },
-      points: [{ timestamp: m.time*1000, value: isBuy ? curOhlc.l[i] : curOhlc.h[i] }] });
+      points: [{ dataIndex: i, timestamp: m.time*1000, value: isBuy ? curOhlc.l[i] : curOhlc.h[i] }] });
   });
 }
 function loadProChart(){
