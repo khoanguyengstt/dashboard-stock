@@ -591,19 +591,20 @@ function addProBadges(){
       name: 'KBADGE', calc: list => list, figures: [],
       createTooltipDataSource: () => ({ name: '', calcParamsText: '', values: [], legends: [] }),
       draw: p => {
-        const ctx = p.ctx, vr = p.visibleRange, xAxis = p.xAxis, yAxis = p.yAxis;
+        const ctx = p.ctx, yAxis = p.yAxis;
         const bs = window._kafiBadges || [];
-        const bw = xAxis.convertToPixel(1) - xAxis.convertToPixel(0);
-        const rf = vr.realFrom != null ? vr.realFrom : vr.from;
-        const rt = vr.realTo != null ? vr.realTo : vr.to;
-        const shift = (rf - vr.from) * bw;
+        if (!bs.length || !proChart) return true;
+        let vdl = [];
+        try { vdl = proChart.getChartStore().getVisibleDataList() || []; } catch(e){ return true; }
+        const xm = {};
+        vdl.forEach(d => { xm[d.dataIndex] = d.x; });
         ctx.save();
         ctx.font = 'bold 11px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         bs.forEach(b => {
-          if (b.i < rf - 2 || b.i > rt + 2) return;
-          const x = xAxis.convertToPixel(b.i) + shift;
+          const x = xm[b.i];
+          if (x == null) return;
           const y = yAxis.convertToPixel(b.value) + (b.below ? 6 : -6);
           const w = ctx.measureText(b.text).width + 10, h = 17, r = 4;
           const top = b.below ? y : y - h;
