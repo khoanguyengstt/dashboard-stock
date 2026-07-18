@@ -628,6 +628,7 @@ function addProBadges(){
     return { i: i, below: isBuy, text: lbl, color: m.color, value: isBuy ? curOhlc.l[i] : curOhlc.h[i] };
   }).filter(Boolean);
   try { proChart.createIndicator('KBADGE', true, { id: 'candle_pane' }); } catch(e){}
+  window._dbg = { get chart(){ return proChart; }, get markers(){ return curMarkers; }, get oh(){ return curOhlc; }, get badges(){ return window._kafiBadges; } };
 }
 function loadProChart(){
   if (!curT || !curOhlc || proLoadedFor === curT) return;
