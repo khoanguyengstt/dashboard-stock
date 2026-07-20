@@ -603,35 +603,21 @@ function addProBadges(){
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         bs.forEach(b => {
-          const cx = xm[b.i];
-          if (cx == null) return;
-          const yv = yAxis.convertToPixel(b.value);
-          const dir = b.below ? 1 : -1;          // dưới nến (mua) mũi tên chỉ lên, trên nến (bán) chỉ xuống
-          const gap = 3, ah = 7, aw = 5;
-          const tipY = yv + dir * gap;           // đỉnh mũi tên chạm sát cây nến
-          const baseY = tipY + dir * ah;
-          // mũi tên nhọn chỉ đúng vào cây nến (kiểu AmiBroker)
+          const x = xm[b.i];
+          if (x == null) return;
+          const y = yAxis.convertToPixel(b.value) + (b.below ? 6 : -6);
+          const w = ctx.measureText(b.text).width + 10, h = 17, r = 4;
+          const top = b.below ? y : y - h;
           ctx.fillStyle = b.color;
           ctx.beginPath();
-          ctx.moveTo(cx, tipY);
-          ctx.lineTo(cx - aw, baseY);
-          ctx.lineTo(cx + aw, baseY);
-          ctx.closePath();
-          ctx.fill();
-          // nhãn gọn ngay sau mũi tên
-          const lbl = b.text.replace(/^[\u25B2\u25BC]\s*/, '');
-          const h = 16, r = 3, w = ctx.measureText(lbl).width + 10;
-          const top = b.below ? baseY + 1 : baseY - 1 - h;
-          ctx.fillStyle = b.color;
-          ctx.beginPath();
-          ctx.moveTo(cx - w/2 + r, top);
-          ctx.arcTo(cx + w/2, top, cx + w/2, top + h, r);
-          ctx.arcTo(cx + w/2, top + h, cx - w/2, top + h, r);
-          ctx.arcTo(cx - w/2, top + h, cx - w/2, top, r);
-          ctx.arcTo(cx - w/2, top, cx + w/2, top, r);
+          ctx.moveTo(x - w/2 + r, top);
+          ctx.arcTo(x + w/2, top, x + w/2, top + h, r);
+          ctx.arcTo(x + w/2, top + h, x - w/2, top + h, r);
+          ctx.arcTo(x - w/2, top + h, x - w/2, top, r);
+          ctx.arcTo(x - w/2, top, x + w/2, top, r);
           ctx.fill();
           ctx.fillStyle = '#fff';
-          ctx.fillText(lbl, cx, top + h/2 + 0.5);
+          ctx.fillText(b.text, x, top + h/2 + 0.5);
         });
         ctx.restore();
         return true;
@@ -1109,7 +1095,8 @@ const SEC_GROUPS = { bank:['VCB','BID','CTG','TCB','MBB','ACB','STB','SHB','VPB'
 let secCache = {}, secChart = null, secGrp = 'bank';
 async function drawSec(){
   const st = $('#secSt'); const codes = SEC_GROUPS[secGrp];
-  if (!secCache[secGrp]) {
+  const cch = secCache[secGrp];
+  if (!cch || (Date.now() - (cch._ts||0)) > 10*60*1000) {
     if (st) st.innerHTML = '<span class="spin"></span> đang tải…';
     const out = {};
     try { const f = await jget('https://api-finfo.vndirect.com.vn/v4/ratios/latest?filter=ratioCode:PRICE_TO_BOOK&where=code:'+codes.join(',')+'&size=50');
@@ -1119,10 +1106,27 @@ async function drawSec(){
       const pbs = h.map(x=>x.pb).filter(v=>v!=null&&isFinite(v)), roes = h.map(x=>x.roe!=null?x.roe*100:null).filter(v=>v!=null&&isFinite(v));
       out[t] = Object.assign(out[t]||{}, { pbLo:Math.min(...pbs), pbHi:Math.max(...pbs), roeLo:Math.min(...roes), roeHi:Math.max(...roes),
         curRoe: rts.length && rts[rts.length-1].roe!=null ? rts[rts.length-1].roe*100 : null });
-      if (out[t].curPb == null) out[t].curPb = rts.length ? rts[rts.length-1].pb : null;
+      // P/B HIEN TAI theo GIA MOI NHAT: neo BVPS = gia cuoi quy / P/B quy (fix lech 1 phien kieu SHS 1.16 vs 1.06)
+      try { const L = rts.length ? rts[rts.length-1] : null;
+        if (L && L.pb != null && L.pb > 0) {
+          const qEnd = new Date(Date.UTC(L.yearReport, L.quarter*3, 0)).toISOString().slice(0,10);
+          const oh = await api.ohlc(t, 220);
+          if (oh && oh.c && oh.c.length > 1) {
+            let pQ = null;
+            for (let k = oh.t.length-1; k >= 0; k--) {
+              const ds = new Date(oh.t[k]*1000).toISOString().slice(0,10);
+              if (ds <= qEnd) { pQ = oh.c[k]; break; }
+            }
+            const pNow = oh.c[oh.c.length-1];
+            if (pQ > 0 && pNow > 0) out[t].curPb = +(L.pb * pNow / pQ).toFixed(3);
+          }
+        }
+        if (out[t].curPb == null && rts.length) out[t].curPb = rts[rts.length-1].pb;
+      } catch(e){ if (out[t].curPb == null && rts.length) out[t].curPb = rts[rts.length-1].pb; }
     } catch(e){} }));
+    out._ts = Date.now();
     secCache[secGrp] = out;
-    if (st) st.textContent = '';
+    if (st) st.textContent = 'P/B hiện tại đã quy theo giá phiên mới nhất';
   }
   const D = secCache[secGrp];
   const items = codes.filter(c => D[c] && D[c].pbLo!=null && isFinite(D[c].pbLo));
