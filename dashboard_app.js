@@ -69,7 +69,8 @@ const inits = {};
   });
   if (!document.getElementById('lbCss')) {
     const st = document.createElement('style'); st.id = 'lbCss';
-    st.textContent = '#lbGrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;align-items:start;padding:6px 0 8px}'
+    st.textContent = '.wrap,.topbar-in{max-width:min(1800px,96vw)!important}'
+      + '#lbGrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;align-items:start;padding:6px 0 8px}'
       + '#lbGrid .lbCol{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:5px 4px;min-width:0}'
       + '#lbGrid .lbHd{font-weight:700;font-size:9px;line-height:1.15;color:var(--text);padding-bottom:4px;margin-bottom:5px;border-bottom:2px solid var(--green);min-height:23px;display:flex;align-items:flex-end}'
       + '#lbGrid .lbR{display:flex;justify-content:space-between;gap:3px;padding:2px 4px;margin-bottom:1.5px;border-radius:3px;cursor:pointer;font-size:10.5px;line-height:1.4}'
