@@ -95,7 +95,7 @@ const inits = {};
   m.style.cssText = 'display:inline-flex;width:36px;height:36px;border-radius:9px;background:none;box-shadow:none;align-items:center;justify-content:center;overflow:hidden;flex:none';
   const img = document.createElement('img');
   img.src = 'logo.png';
-  img.alt = 'Khoa Nguyen KAFI';
+  img.alt = 'Khoa Nguyen Invest';
   img.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block';
   m.appendChild(img);
 })();
@@ -299,7 +299,7 @@ function drawPerf(){
   if (perfChart) perfChart.destroy();
   perfChart = new Chart(document.getElementById('cvPerf'), { type:'line',
     data:{ labels, datasets:[
-      {label:'Khoa KAFI Signal', data:dsT, borderColor:'#128A3E', backgroundColor:'#128A3E', pointRadius:0, borderWidth:2.5, tension:.35},
+      {label:'Khoa Nguyen Signal', data:dsT, borderColor:'#128A3E', backgroundColor:'#128A3E', pointRadius:0, borderWidth:2.5, tension:.35},
       {label:'VN-Index', data:dsV, borderColor:'#E5484D', backgroundColor:'#E5484D', pointRadius:0, borderWidth:2, tension:.35}]},
     options:{ responsive:true, maintainAspectRatio:false, layout:{padding:{right:70}}, interaction:{mode:'index',intersect:false},
       plugins:{ legend:{labels:{color:'#1F2937', usePointStyle:true, pointStyle:'circle', boxWidth:7, boxHeight:7, font:{weight:600, size:12, family:'Inter'}}},
@@ -427,7 +427,7 @@ function ensureNotifBanner(){
     }
     const p = await Notification.requestPermission();
     if (p === 'granted') {
-      try { new Notification('Khoa KAFI Signal', {body: 'Đã bật thông báo realtime — có tín hiệu mới sẽ báo ngay tại đây, kể cả khi bạn đang mở tab khác.'}); } catch(e){}
+      try { new Notification('Khoa Nguyen Signal', {body: 'Đã bật thông báo realtime — có tín hiệu mới sẽ báo ngay tại đây, kể cả khi bạn đang mở tab khác.'}); } catch(e){}
       b.remove();
     }
   };
@@ -556,7 +556,7 @@ inits.market = async function(){
   <div class="hero">
     <div class="card" style="margin-bottom:0">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
-        <h2 style="margin:0">Hiệu suất Khoa KAFI Signal</h2>
+        <h2 style="margin:0">Hiệu suất Khoa Nguyen Signal</h2>
         <div class="seg" id="perfSeg"><button data-r="all" class="on">Tất cả</button><button data-r="1y">1 năm</button><button data-r="6m">6 tháng</button><button data-r="2025">2025</button><button data-r="2026">2026</button></div>
       </div>
       <div style="height:565px"><canvas id="cvPerf"></canvas></div>
@@ -569,7 +569,7 @@ inits.market = async function(){
   </div>
   <div style="height:16px"></div>
   <div class="stats4">
-    <div class="card" style="margin:0"><h2>Khoa KAFI Signal</h2>
+    <div class="card" style="margin:0"><h2>Khoa Nguyen Signal</h2>
       <div class="perf-row"><span class="l">1 năm</span><span class="v up">${st.y1>=0?'+':''}${st.y1}%</span></div>
       <div class="perf-row"><span class="l">3 năm</span><span class="v up">+${st.y3}%</span></div>
       <div class="perf-row"><span class="l">Từ 2019</span><span class="v up">+${st.all}%</span></div></div>
@@ -1035,7 +1035,7 @@ async function loadDetail(t){
     if (_at && _at.dataset.t==='sig') renderSigTab();
   } catch(e){ toast('Lỗi tải dữ liệu '+t+': '+e.message); }
 }
-// ===== Khoa KAFI Signal engine v2 =====
+// ===== Khoa Nguyen Signal engine v2 =====
 function computeTPN(oh, boardCode, qsAv){
   // xep hang do tin cay tin hieu theo du lieu co ban as-of (chi tiet thuat toan khong cong bo)
   const npYAt = ts => { let y = null; (qsAv||[]).forEach(q => { if (q.pub <= ts) y = q.npY; }); return y; };
@@ -1394,7 +1394,7 @@ inits.watch = function(){
   const H=(k,lb,left)=>`<th ${left?'style="text-align:left"':''}class="${wSortK===k?'on':''}" onclick="event.stopPropagation();sortWatch('${k}')">${lb}${wSortK===k?(wSortD>0?' ▲':' ▼'):''}</th>`;
   el.innerHTML = `<div class="card">
     <h2>Vùng theo dõi — canh phiên bùng nổ <span class="hint">quét cuối phiên · ${ws.length} mã đạt chuẩn nền · ${(SUM.updated||'')}</span></h2>
-    <div class="mini" style="margin-bottom:10px">Danh sách mã đã đạt chuẩn tích lũy + dòng tiền của Khoa KAFI Signal tính đến hết phiên gần nhất. Sáng mai chỉ cần tập trung các mã này: mã nào bùng nổ đạt chuẩn trong phiên là tín hiệu MUA được kích hoạt. Độ nén càng thấp — lò xo càng chặt. Bấm tiêu đề cột để sắp xếp.</div>
+    <div class="mini" style="margin-bottom:10px">Danh sách mã đã đạt chuẩn tích lũy + dòng tiền của Khoa Nguyen Signal tính đến hết phiên gần nhất. Sáng mai chỉ cần tập trung các mã này: mã nào bùng nổ đạt chuẩn trong phiên là tín hiệu MUA được kích hoạt. Độ nén càng thấp — lò xo càng chặt. Bấm tiêu đề cột để sắp xếp.</div>
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
       <button class="btn" id="btnLive">Bật trực chiến trong phiên</button>
       <span class="mini" id="liveSt"></span>
@@ -1429,7 +1429,7 @@ const liveWatch = {
     if (!('Notification' in window)) {
       toast('Thiết bị này không hỗ trợ thông báo đẩy (iPhone/Safari) — hãy giữ tab này mở, bảng lọc vẫn tự cập nhật.');
     } else if (Notification.permission === 'granted') {
-      try { new Notification('Khoa KAFI Signal', {body: 'Trực chiến đã bật — thông báo hoạt động tốt. Có mã bùng nổ sẽ báo ngay tại đây.'}); } catch(e){}
+      try { new Notification('Khoa Nguyen Signal', {body: 'Trực chiến đã bật — thông báo hoạt động tốt. Có mã bùng nổ sẽ báo ngay tại đây.'}); } catch(e){}
     } else if (Notification.permission === 'denied') {
       toast('THÔNG BÁO ĐANG BỊ CHẶN — bấm ổ khóa cạnh thanh địa chỉ, mở Thông báo: Cho phép, rồi bật lại trực chiến.');
       alert('Thông báo của trang đang bị CHẶN nên cảnh báo sẽ không nổi lên.' + String.fromCharCode(10,10) + 'Cách mở: bấm biểu tượng Ổ KHÓA cạnh thanh địa chỉ, chọn Thông báo: Cho phép, tải lại trang và bật lại Trực chiến.');
