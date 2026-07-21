@@ -844,7 +844,7 @@ function loadProChart(){
   const init = () => {
     proLoadedFor = curT;
     const wrap = document.getElementById('chartProWrap');
-    wrap.innerHTML = '<div id="proK" style="height:520px"></div>';
+    wrap.innerHTML = '<div id="proK" style="height:470px"></div>';
     try { klinecharts.dispose('proK'); } catch(e){}
     proChart = klinecharts.init('proK');
     // Bang mau TradingView
@@ -908,21 +908,19 @@ window.openDetail = t => { ga('view_ticker', {ticker: t}); showView('detail', tr
 inits.detail = function(t){
   const el = $('#view-detail');
   if (!dtInit) { dtInit = true;
-    el.innerHTML = `<div class="card">
-      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
-        <h2 style="margin:0">Khoa KAFI Signal <span class="hint">tín hiệu AI độc quyền</span></h2>
-        <div class="search-wrap"><input id="dQ" placeholder="Nhập mã hoặc tên công ty…" style="width:230px"><div id="sugg"></div></div>
-        <div id="dTitle" style="font-size:16px;font-weight:700"></div>
-      </div>
-      <div id="dTpn"></div></div>
-      <div id="dBody" style="display:none">
-      <div class="card"><h2 id="dChartTitle">Biểu đồ giá</h2>
+    el.innerHTML = `<div id="dBody" style="display:none">
+      <div class="card" style="padding:13px 16px 14px">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:9px">
+          <div class="search-wrap"><input id="dQ" placeholder="Nhập mã hoặc tên công ty…" style="width:206px;padding:6px 11px"><div id="sugg"></div></div>
+          <div id="dTitle" style="font-size:15.5px;font-weight:700"></div>
+          <div style="display:flex;gap:6px;margin-left:auto;flex-wrap:wrap" id="dRanges">
+            <button class="btn active" id="btnChartPro">Chart Pro + Tín hiệu</button>
+            <button class="btn" id="btnChartSig">Chart Tín hiệu</button>
+          </div>
+        </div>
+        <div id="dTpn" style="margin-bottom:10px"></div>
         <div style="display:flex;gap:16px;align-items:flex-start" id="dFlex">
           <div style="flex:1;min-width:0">
-            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center" id="dRanges">
-              <button class="btn active" id="btnChartPro">Chart Pro + Tín hiệu</button>
-              <button class="btn" id="btnChartSig">Chart Tín hiệu</button>
-            </div>
             <div id="chartSigWrap" style="display:none">
               <div style="flex:1;min-width:0;position:relative">
                 <div id="ohlcLegend" style="position:absolute;top:6px;left:8px;z-index:20;font-size:12.5px;color:#374151;background:rgba(255,255,255,.85);padding:3px 10px;border-radius:6px;border:1px solid #e4e8ec"></div>
@@ -953,7 +951,9 @@ inits.detail = function(t){
             <div id="tab-rec" style="display:none"></div>
           </div>
         </div>
-      </div>`;
+      </div>
+    </div>
+  `;
       // eslint-disable-next-line
   const dq = $('#dQ');
     dq.addEventListener('input', () => {
