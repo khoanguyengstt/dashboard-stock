@@ -55,7 +55,7 @@ function showView(v, skip){ ga('view_tab', {tab_name: v}); views.forEach(x => { 
 window.showView = showView;
 
 const inits = {};
-// ================= LEADER BOARD (SM = Stoch%K + MFI, 4 chu ky 20/50/100/200) =================
+// ================= LEADER BOARD =================
 (function addLeaderTab(){
   const nav = document.querySelector('nav');
   if (nav && !nav.querySelector('[data-view="leader"]')) {
@@ -64,11 +64,14 @@ const inits = {};
     b.onclick = () => showView('leader');
     nav.appendChild(b);
   }
+  if (nav) ['market','detail','leader','compare','screener','watch'].forEach(v => {
+    const b = nav.querySelector('[data-view="'+v+'"]'); if (b) nav.appendChild(b);
+  });
   if (!document.getElementById('view-leader')) {
     const d = document.createElement('div');
     d.id = 'view-leader'; d.style.display = 'none';
-    const anchor = document.getElementById('view-compare');
-    if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(d, anchor.nextSibling);
+    const a = document.getElementById('view-compare');
+    if (a && a.parentNode) a.parentNode.insertBefore(d, a.nextSibling);
     else { const w = document.querySelector('.wrap'); if (w) w.appendChild(d); }
   }
 })();
@@ -88,60 +91,59 @@ const LB_SECTORS = {
   "VN30": ["GAS","MBB","STB","TCB","CTG","MSN","MWG","HPG","VHM","VIC","VPB","SHB","ACB","VRE","BVH","SSI","BID","VIB","VCB","BCM","VNM","FPT","SAB"]
 };
 const LB_BANDS = [
-  {max:400,  label:'Yếu',       bg:'#BFE6F7', fg:'#0F3D56'},
-  {max:500,  label:'Trung Bình',bg:'#FFFFFF', fg:'#1F2937'},
-  {max:550,  label:'Khá',       bg:'#D9EFD9', fg:'#14532D'},
-  {max:600,  label:'Khỏe',      bg:'#00A550', fg:'#FFFFFF'},
-  {max:1e9,  label:'Rất Khỏe',  bg:'#C77DD6', fg:'#FFFFFF'}
+  {max:400,  label:'Yếu',       rng:'&lt;400',    bg:'#BFE6F7', fg:'#0F3D56'},
+  {max:500,  label:'Trung Bình',rng:'400-500',    bg:'#FFFFFF', fg:'#1F2937'},
+  {max:550,  label:'Khá',       rng:'500-550',    bg:'#D9EFD9', fg:'#14532D'},
+  {max:600,  label:'Khỏe',      rng:'550-600',    bg:'#00A550', fg:'#FFFFFF'},
+  {max:1e9,  label:'Rất Khỏe',  rng:'&gt;600',    bg:'#C77DD6', fg:'#FFFFFF'}
 ];
 const lbBand = v => LB_BANDS.find(b => v < b.max) || LB_BANDS[LB_BANDS.length-1];
 
-function lbStochK(c, L, p){
+function lbRangePos(c, L, p){
   if (L-p+1 < 0) return null;
   const s = c.slice(L-p+1, L+1);
   let hi=-Infinity, lo=Infinity;
   for (const x of s){ if(x.h>hi) hi=x.h; if(x.l<lo) lo=x.l; }
   return hi===lo ? 0 : 100*(c[L].c-lo)/(hi-lo);
 }
-function lbMFI(c, L, p){
+function lbMoneyFlow(c, L, p){
   if (L-p+1 < 0) return null;
   const s = c.slice(L-p+1, L+1);
   let pos=0, neg=0;
   for (let i=1;i<s.length;i++){
     const a=(s[i].h+s[i].l+s[i].c)/3, b=(s[i-1].h+s[i-1].l+s[i-1].c)/3;
-    const rmf=a*s[i].v;
-    if (a>b) pos+=rmf; else if (a<b) neg+=rmf;
+    const f=a*s[i].v;
+    if (a>b) pos+=f; else if (a<b) neg+=f;
   }
   if (neg===0) return 100;
   return 100-(100/(1+pos/neg));
 }
-function lbCalcSM(c, L){
+function lbScore(c, L){
   const P=[20,50,100,200];
-  let S=0, M=0;
+  let t=0;
   for (const p of P){
-    const k=lbStochK(c,L,p), m=lbMFI(c,L,p);
+    const k=lbRangePos(c,L,p), m=lbMoneyFlow(c,L,p);
     if (k===null||m===null) return null;
-    S+=k; M+=m;
+    t += k+m;
   }
-  return {S, M, SM:S+M};
+  return t;
 }
 
-let lbRaw = null, lbMode = 'rt', lbLoading = false, lbTimer = null, lbStamp = '';
+let lbRaw = null, lbLoading = false, lbTimer = null, lbStamp = '';
 const LB_SYMS = [...new Set(Object.values(LB_SECTORS).flat())];
+const lbInSession = () => { const d=new Date(), w=d.getDay(), m=d.getHours()*60+d.getMinutes();
+  return w>=1 && w<=5 && m>=9*60 && m<=15*60; };
 
 async function lbFetchAll(onProg){
   const now = Math.floor(Date.now()/1000);
   const from = now - 86400*500, to = now + 86400;
   const out = {}; let idx = 0, done = 0;
-  const CONC = 8;
-  await Promise.all(Array.from({length:CONC}, async () => {
+  await Promise.all(Array.from({length:8}, async () => {
     while (idx < LB_SYMS.length){
       const sy = LB_SYMS[idx++];
       try {
         const r = await fetch(`https://dchart-api.vndirect.com.vn/dchart/history?symbol=${sy}&resolution=D&from=${from}&to=${to}`).then(x=>x.json());
-        if (r && r.t && r.t.length >= 200) {
-          out[sy] = r.t.map((tt,i)=>({t:tt, h:r.h[i], l:r.l[i], c:r.c[i], v:r.v[i]}));
-        }
+        if (r && r.t && r.t.length >= 200) out[sy] = r.t.map((tt,i)=>({t:tt, h:r.h[i], l:r.l[i], c:r.c[i], v:r.v[i]}));
       } catch(e){}
       done++; onProg && onProg(done, LB_SYMS.length);
     }
@@ -149,36 +151,26 @@ async function lbFetchAll(onProg){
   return out;
 }
 
-function lbIndexFor(candles){
-  const L = candles.length - 1;
-  if (lbMode === 'rt') return L;
-  const d = new Date(candles[L].t*1000).toISOString().slice(0,10);
-  const today = new Date().toISOString().slice(0,10);
-  return d === today ? L-1 : L;   // che do EOD: bo nen dang chay
-}
-
 function lbRender(){
   const grid = document.getElementById('lbGrid');
   if (!grid || !lbRaw) return;
-  const html = Object.entries(LB_SECTORS).map(([name, syms]) => {
+  grid.innerHTML = Object.entries(LB_SECTORS).map(([name, syms]) => {
     const rows = syms.map(sy => {
       const c = lbRaw[sy]; if (!c) return null;
-      const L = lbIndexFor(c); if (L < 0) return null;
-      const r = lbCalcSM(c, L); if (!r) return null;
-      return {t:sy, sm:Math.round(r.SM)};
+      const v = lbScore(c, c.length-1); if (v===null) return null;
+      return {t:sy, sm:Math.round(v)};
     }).filter(Boolean).sort((a,b)=>b.sm-a.sm);
     if (!rows.length) return '';
     const body = rows.map(r => {
       const b = lbBand(r.sm);
       const brd = b.bg === '#FFFFFF' ? ';box-shadow:inset 0 0 0 1px var(--border)' : '';
-      return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 8px;margin-bottom:2px;border-radius:4px;background:${b.bg};color:${b.fg}${brd};cursor:pointer" onclick="openDetail('${r.t}')">
-        <span style="font-weight:700;font-size:12.5px">${r.t}</span><span style="font-weight:600;font-size:12.5px">${r.sm}</span></div>`;
+      return `<div onclick="openDetail('${r.t}')" style="display:flex;justify-content:space-between;gap:4px;padding:2px 5px;margin-bottom:1.5px;border-radius:3px;background:${b.bg};color:${b.fg}${brd};cursor:pointer;font-size:11px;line-height:1.45">
+        <span style="font-weight:700">${r.t}</span><span style="font-weight:600">${r.sm}</span></div>`;
     }).join('');
-    return `<div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 10px 8px">
-      <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--text);padding-bottom:6px;margin-bottom:6px;border-bottom:2px solid var(--green)">${name}</div>
+    return `<div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:6px 6px 5px;min-width:0">
+      <div style="font-weight:700;font-size:9.5px;letter-spacing:.02em;color:var(--text);padding-bottom:4px;margin-bottom:5px;border-bottom:2px solid var(--green);min-height:24px;display:flex;align-items:flex-end">${name}</div>
       ${body}</div>`;
   }).join('');
-  grid.innerHTML = html;
   const st = document.getElementById('lbStatus');
   if (st) st.textContent = lbStamp;
 }
@@ -187,11 +179,14 @@ async function lbLoad(){
   if (lbLoading) return;
   lbLoading = true;
   const st = document.getElementById('lbStatus');
-  if (st) st.innerHTML = '<span class="spin"></span> Đang tải dữ liệu ' + LB_SYMS.length + ' mã…';
+  if (st && !lbRaw) st.innerHTML = '<span class="spin"></span> Đang tải dữ liệu…';
   try {
-    lbRaw = await lbFetchAll((d,n)=>{ if (st && d%20===0) st.innerHTML = '<span class="spin"></span> Đang tính SM… ' + d + '/' + n; });
-    const n = Object.keys(lbRaw).length;
-    lbStamp = (lbMode==='rt' ? 'Realtime — cập nhật ' + new Date().toTimeString().slice(0,5) : 'Cuối phiên đã đóng gần nhất') + ' · ' + n + ' mã';
+    lbRaw = await lbFetchAll((d,n)=>{ if (st && !lbRaw && d%25===0) st.innerHTML = '<span class="spin"></span> Đang xử lý ' + d + '/' + n + ' mã…'; });
+    let ngay = '';
+    const any = Object.values(lbRaw)[0];
+    if (any) { const d = new Date(any[any.length-1].t*1000); ngay = ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2); }
+    lbStamp = (lbInSession() ? 'Trong phiên · giá chạy realtime' : 'Kết phiên ' + ngay)
+            + ' · cập nhật ' + new Date().toTimeString().slice(0,5) + ' · ' + Object.keys(lbRaw).length + ' mã';
     lbRender();
   } catch(e){
     if (st) st.textContent = 'Lỗi tải dữ liệu: ' + e.message;
@@ -203,39 +198,26 @@ inits.leader = function(){
   const el = $('#view-leader');
   if (!el.dataset.built) {
     el.dataset.built = '1';
-    el.innerHTML = `<div class="card">
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
-        <h2 style="margin:0">Leader Board <span class="hint">sức mạnh dòng tiền theo ngành · SM = Stochastic + MFI</span></h2>
-        <div class="seg" id="lbSeg" style="margin-left:auto">
-          <button data-m="rt" class="on">Realtime</button><button data-m="eod">Cuối phiên</button>
-        </div>
-        <button class="btn" id="lbRefresh">Tải lại</button>
+    el.innerHTML = `<div class="card" style="padding:14px 14px 12px">
+      <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:4px">
+        <h2 style="margin:0">Leader Board <span class="hint">sức mạnh dòng tiền theo ngành</span></h2>
+        <div class="mini" id="lbStatus" style="margin-left:auto"></div>
       </div>
-      <div class="mini" id="lbStatus" style="margin-bottom:10px"></div>
-      <div id="lbGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px"></div>
-      <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <span class="mini" style="font-weight:600">Thang SM:</span>
-        ${LB_BANDS.map((b,i)=>{
-          const rng = ['&lt;400','400-500','500-550','550-600','&gt;600'][i];
+      <div id="lbGrid" style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(108px,1fr);gap:6px;overflow-x:auto;align-items:start;padding:6px 0 8px"></div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--border);padding-top:9px">
+        <span class="mini" style="font-weight:600">Thang điểm:</span>
+        ${LB_BANDS.map(b=>{
           const brd = b.bg==='#FFFFFF' ? ';box-shadow:inset 0 0 0 1px var(--border)' : '';
-          return `<span style="border-radius:5px;padding:3px 10px;font-size:11.5px;font-weight:700;background:${b.bg};color:${b.fg}${brd}">${rng} ${b.label}</span>`;
+          return `<span style="border-radius:4px;padding:2px 8px;font-size:10.5px;font-weight:700;background:${b.bg};color:${b.fg}${brd}">${b.rng} ${b.label}</span>`;
         }).join('')}
+        <span class="mini" style="margin-left:auto;font-style:italic">Bấm vào mã để xem chi tiết</span>
       </div>
-      <div class="mini" style="margin-top:10px;font-style:italic">Trong phiên, MFI dùng khối lượng lũy kế nên số buổi sáng còn nhảy, ổn dần về cuối phiên. Bấm vào mã để xem chi tiết.</div>
     </div>`;
-    el.querySelector('#lbSeg').addEventListener('click', e => {
-      const b = e.target.closest('button'); if (!b) return;
-      el.querySelectorAll('#lbSeg button').forEach(x=>x.classList.remove('on'));
-      b.classList.add('on'); lbMode = b.dataset.m;
-      lbStamp = (lbMode==='rt' ? 'Realtime — cập nhật ' + new Date().toTimeString().slice(0,5) : 'Cuối phiên đã đóng gần nhất') + ' · ' + (lbRaw?Object.keys(lbRaw).length:0) + ' mã';
-      lbRender();
-    });
-    el.querySelector('#lbRefresh').onclick = () => lbLoad();
   }
   if (!lbRaw && !lbLoading) lbLoad(); else lbRender();
   if (!lbTimer) lbTimer = setInterval(() => {
     const v = document.getElementById('view-leader');
-    if (v && v.style.display !== 'none' && lbMode === 'rt' && !lbLoading) lbLoad();
+    if (v && v.style.display !== 'none' && lbInSession() && !lbLoading) lbLoad();
   }, 180000);
 };
 
