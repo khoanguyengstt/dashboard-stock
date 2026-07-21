@@ -67,6 +67,16 @@ const inits = {};
   if (nav) ['market','detail','leader','compare','screener','watch'].forEach(v => {
     const b = nav.querySelector('[data-view="'+v+'"]'); if (b) nav.appendChild(b);
   });
+  if (!document.getElementById('lbCss')) {
+    const st = document.createElement('style'); st.id = 'lbCss';
+    st.textContent = '#lbGrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;align-items:start;padding:6px 0 8px}'
+      + '#lbGrid .lbCol{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:5px 4px;min-width:0}'
+      + '#lbGrid .lbHd{font-weight:700;font-size:9px;line-height:1.15;color:var(--text);padding-bottom:4px;margin-bottom:5px;border-bottom:2px solid var(--green);min-height:23px;display:flex;align-items:flex-end}'
+      + '#lbGrid .lbR{display:flex;justify-content:space-between;gap:3px;padding:2px 4px;margin-bottom:1.5px;border-radius:3px;cursor:pointer;font-size:10.5px;line-height:1.4}'
+      + '#lbGrid .lbR b{font-weight:700}'
+      + '@media(max-width:1150px){#lbGrid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(104px,1fr);overflow-x:auto}}';
+    document.head.appendChild(st);
+  }
   if (!document.getElementById('view-leader')) {
     const d = document.createElement('div');
     d.id = 'view-leader'; d.style.display = 'none';
@@ -164,12 +174,9 @@ function lbRender(){
     const body = rows.map(r => {
       const b = lbBand(r.sm);
       const brd = b.bg === '#FFFFFF' ? ';box-shadow:inset 0 0 0 1px var(--border)' : '';
-      return `<div onclick="openDetail('${r.t}')" style="display:flex;justify-content:space-between;gap:4px;padding:2px 5px;margin-bottom:1.5px;border-radius:3px;background:${b.bg};color:${b.fg}${brd};cursor:pointer;font-size:11px;line-height:1.45">
-        <span style="font-weight:700">${r.t}</span><span style="font-weight:600">${r.sm}</span></div>`;
+      return `<div class="lbR" onclick="openDetail('${r.t}')" style="background:${b.bg};color:${b.fg}${brd}"><b>${r.t}</b><span>${r.sm}</span></div>`;
     }).join('');
-    return `<div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:6px 6px 5px;min-width:0">
-      <div style="font-weight:700;font-size:9.5px;letter-spacing:.02em;color:var(--text);padding-bottom:4px;margin-bottom:5px;border-bottom:2px solid var(--green);min-height:24px;display:flex;align-items:flex-end">${name}</div>
-      ${body}</div>`;
+    return `<div class="lbCol"><div class="lbHd">${name}</div>${body}</div>`;
   }).join('');
   const st = document.getElementById('lbStatus');
   if (st) st.textContent = lbStamp;
@@ -203,8 +210,7 @@ inits.leader = function(){
         <h2 style="margin:0">Leader Board <span class="hint">sức mạnh dòng tiền theo ngành</span></h2>
         <div class="mini" id="lbStatus" style="margin-left:auto"></div>
       </div>
-      <div id="lbGrid" style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(108px,1fr);gap:6px;overflow-x:auto;align-items:start;padding:6px 0 8px"></div>
-      <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--border);padding-top:9px">
+      <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--border);padding-bottom:9px;margin-bottom:2px">
         <span class="mini" style="font-weight:600">Thang điểm:</span>
         ${LB_BANDS.map(b=>{
           const brd = b.bg==='#FFFFFF' ? ';box-shadow:inset 0 0 0 1px var(--border)' : '';
@@ -212,6 +218,7 @@ inits.leader = function(){
         }).join('')}
         <span class="mini" style="margin-left:auto;font-style:italic">Bấm vào mã để xem chi tiết</span>
       </div>
+      <div id="lbGrid"></div>
     </div>`;
   }
   if (!lbRaw && !lbLoading) lbLoad(); else lbRender();
