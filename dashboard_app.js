@@ -713,6 +713,25 @@ function updateKpis(i){
     ${rows.map(k=>`<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:9.5px 0;border-bottom:1px solid var(--border);font-size:13.5px">
       <span style="color:var(--muted)">${k[0]}</span><span style="font-weight:700">${k[1]}</span></div>`).join('')}`;
 }
+function updateDPx(i){
+  const el = document.getElementById('dPx'); if (!el || !curOhlc) return;
+  const r = byT[curT] || {};
+  const c = curOhlc.c, v = curOhlc.v, n = c.length;
+  const idx = (i == null || i < 0 || i >= n) ? n-1 : i;
+  const isNow = idx === n-1;
+  const p = isNow && r.p != null ? r.p : c[idx];
+  const chg = isNow && r.chg != null ? r.chg : (idx > 0 ? (c[idx]/c[idx-1]-1)*100 : 0);
+  const col = chg > 0 ? '#089981' : (chg < 0 ? '#F23645' : '#787B86');
+  const vol = (v[idx]||0)/1e6;
+  let vx = null;
+  if (isNow && r.vx != null) vx = Math.round(r.vx*100);
+  else { let sm=0, cnt=0; for (let k=Math.max(0,idx-19); k<=idx; k++){ sm+=(v[k]||0); cnt++; }
+         const tb = cnt ? sm/cnt : 0; if (tb>0) vx = Math.round((v[idx]||0)/tb*100); }
+  const d = new Date(curOhlc.t[idx]*1000);
+  const ngay = isNow ? '' : ' <span class="mini" style="font-weight:600">' + ('0'+d.getUTCDate()).slice(-2)+'/'+('0'+(d.getUTCMonth()+1)).slice(-2)+'/'+String(d.getUTCFullYear()).slice(2) + '</span>';
+  el.innerHTML = `<div style="font-size:27px;font-weight:800;color:${col};line-height:1">${fmt(p,2)} <span style="font-size:15px;font-weight:700">(${chg>0?'+':''}${fmt(chg,1)}%)</span>${ngay}</div>
+    <div style="font-size:14px;font-weight:800;white-space:nowrap">KL ${fmt(vol,2)} tr${vx!=null?` <span style="font-weight:700;color:${vx>=150?'#B45309':'var(--muted)'}">(${vx}%)</span>`:''}</div>`;
+}
 function renderDHead(){
   const el = document.getElementById('dHead'); if (!el || !curOhlc) return;
   const r = byT[curT] || {};
@@ -731,10 +750,8 @@ function renderDHead(){
       <div class="mini" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.n||''}</div>
     </div>
   </div>
-  <div style="margin:10px 0 2px;display:flex;justify-content:space-between;align-items:baseline;gap:8px">
-    <div style="font-size:27px;font-weight:800;color:${col};line-height:1">${fmt(p,2)} <span style="font-size:15px;font-weight:700">(${chg>0?'+':''}${fmt(chg,1)}%)</span></div>
-    <div style="font-size:14px;font-weight:800;white-space:nowrap">KL ${fmt(vol,2)} tr${vx!=null?` <span style="font-weight:700;color:${vx>=150?'#B45309':'var(--muted)'}">(${vx}%)</span>`:''}</div>
-  </div>`;
+  <div id="dPx" style="margin:10px 0 2px;display:flex;justify-content:space-between;align-items:baseline;gap:8px"></div>`;
+  updateDPx(null);
   const img = new Image();
   img.onload = () => { const d = document.getElementById('dLogo'); if (d) { d.innerHTML = ''; img.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#fff'; d.appendChild(img); } };
   img.src = 'https://cdn.simplize.vn/simplizevn/logo/' + curT + '.jpeg';
@@ -911,7 +928,8 @@ function loadProChart(){
     const tmap = {}; curOhlc.t.forEach((tt,i)=>{ tmap[tt*1000] = i; });
     proChart.subscribeAction('onCrosshairChange', d => {
       const ts = d && d.kLineData ? d.kLineData.timestamp : null;
-      updateKpis(ts != null && tmap[ts] != null ? tmap[ts] : null);
+      const ci = ts != null && tmap[ts] != null ? tmap[ts] : null;
+      updateKpis(ci); updateDPx(ci);
     });
   };
   if (window.klinecharts) init();
