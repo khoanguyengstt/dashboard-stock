@@ -951,8 +951,14 @@ function loadProChart(){
       if (key === lastCi) return;        // van o trong cung cay nen -> bo qua
       lastCi = key; pendCi = ci;
       if (rafId) return;                 // da co lich ve trong khung hinh nay
-      rafId = requestAnimationFrame(() => { rafId = 0; updateKpis(pendCi); updateDPx(pendCi); });
+      rafId = requestAnimationFrame(() => { rafId = 0; if (!window.__dHov) return; updateKpis(pendCi); updateDPx(pendCi); });
     });
+    // FIX 22/07: chi nhan hover khi chuot nam tren chart; roi chart -> tra ve gia phien moi nhat (het ket nen cu + het giat)
+    const kEl = document.getElementById("proK");
+    if (kEl && !kEl.dataset.hovfix) { kEl.dataset.hovfix = "1";
+      kEl.addEventListener("pointerenter", () => { window.__dHov = 1; });
+      kEl.addEventListener("pointerleave", () => { window.__dHov = 0; lastCi = -999; pendCi = null; updateKpis(null); updateDPx(null); });
+    }
   };
   if (window.klinecharts) init();
   else { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/klinecharts@9/dist/klinecharts.min.js'; s.onload = init; s.onerror = () => toast('Không tải được thư viện chart'); document.head.appendChild(s); }
